@@ -18,6 +18,29 @@
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+@keyframes glow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5),
+      0 0 10px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 255, 255, 0.5);
+  }
+  50% {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.75),
+      0 0 20px rgba(255, 255, 255, 0.75), 0 0 30px rgba(255, 255, 255, 0.75);
+  }
+}
+
+.link-hover-effect {
+  transition: transform 0.3s ease, color 0.3s ease;
+  animation: none;
+}
+
+.link-hover-effect {
+  transform: translateX(5px); /* Moves text to the right by 5px */
+  color: #fff; /* Optional: Adjust text color on hover */
+  animation: glow 1s ease-in-out infinite alternate;
+}
+
 @keyframes logo-spin {
   from {
     transform: rotate(0deg);
