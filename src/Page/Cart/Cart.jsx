@@ -21,19 +21,25 @@ import BuyNow from "../../Components/BuyNow/BuyNow";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../App";
 import {
+  addFavProduct,
   addReview,
   getReview,
 } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
-import { FaRegStar, FaStar } from "react-icons/fa";
+import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { addItem } from "../../Slice/CartSlice";
 import { useDispatch } from "react-redux";
+import IconDelivery from "../../assets/icon-delivery.svg";
+import IconReturn from "../../assets/Icon-return.svg";
+import IconSecure from "../../assets/Icon-secure.svg";
+import "./Cart.css";
 
 const Cart = () => {
   const { id } = useParams();
   // console.log("id", id);
   const dispatch = useDispatch();
   const Appcontext = useContext(AppContext);
+  const userContext = useContext(AppContext);
   const filterdata = Appcontext.getdata.filter(
     (item) => item.product_id === id
   );
@@ -165,9 +171,34 @@ const Cart = () => {
     }
   };
 
-  const handleAddToCart = (item) => {
-    dispatch(addItem(item));
+  const handleAddToCart = (item, quantity) => {
+    dispatch(addItem({ ...item, quantity }));
     toast.success("Item added to cart");
+  };
+
+  const handleAddToWatchlist = async () => {
+    try {
+      await toast.promise(
+        addFavProduct({
+          id: userContext.user[0].id ? userContext.user[0].id : "11",
+          email: userContext.user[0].email,
+          product_id: location.pathname.split("/").pop(),
+        }),
+        {
+          loading: "Adding product to watchlist...",
+          success: "Product added to watchlist!",
+          error: (err) =>
+            err.response?.status === 409
+              ? "Product already exists in your watchlist!"
+              : "Failed to add product to watchlist.",
+        },
+        {
+          position: "bottom-right", // Set toast position here
+        }
+      );
+    } catch (error) {
+      console.error("Error:", error);
+    }
   };
 
   useEffect(() => {
@@ -223,7 +254,7 @@ const Cart = () => {
                     {item.sale_price}
                   </span>
                   <span className="rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-                    {10}% OFF
+                    {item.discount}% OFF
                   </span>
                 </div>
                 <p className="text-sm font-monserrat font-light mt-3">
@@ -242,11 +273,10 @@ const Cart = () => {
                 <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
                   <p className=" text-sm font-poppins">
-                    Get this for Regular priceSale price{" "}
+                    Get this for Regular priceSale price
                     <span className="text-red-500">Rs. 1,169.10</span> Use Code
-                    :{" "}
+                    :
                     <span className="font-semibold">
-                      {" "}
                       GET10 On minimum order value of Rs.999/-
                     </span>
                   </p>
@@ -254,11 +284,10 @@ const Cart = () => {
                 <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
                   <p className="font-poppins text-sm">
-                    Get this for Regular priceSale price{" "}
+                    Get this for Regular priceSale price
                     <span className="text-red-500">Rs. 1,039.20</span> Use Code
-                    :{" "}
+                    :
                     <span className="font-semibold">
-                      {" "}
                       GET10 On minimum order value of Rs.1999/-
                     </span>
                   </p>
@@ -266,10 +295,9 @@ const Cart = () => {
                 <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
                   <p className="font-poppins text-sm">
-                    Get this for Regular priceSale price{" "}
-                    <span className="text-red-500">Rs. 974.25</span> Use Code :{" "}
+                    Get this for Regular priceSale price
+                    <span className="text-red-500">Rs. 974.25</span> Use Code :
                     <span className="font-semibold">
-                      {" "}
                       GET10 On minimum order value of Rs.2499/-
                     </span>
                   </p>
@@ -316,37 +344,27 @@ const Cart = () => {
                 </div>
                 <div className="flex flex-col font-monserrat gap-y-2">
                   <button
-                    onClick={() => handleAddToCart(item)}
+                    onClick={() => handleAddToCart(item, value)}
                     className="cursor-pointer group relative flex text-black gap-1.5 p-2 items-center justify-center w-full h-12 border border-green-600 bg-opacity-80 rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md"
                   >
                     Add to cart
                   </button>
                   <BuyNow />
-                  <Link
-                    to="/addtowatchlist"
+                  <button
+                    onClick={handleAddToWatchlist}
                     className="cursor-pointer group relative flex flex-row gap-x-3 text-black gap-1.5 p-2 items-center justify-center w-full h-12 border border-green-600 bg-opacity-80 rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md"
                   >
                     <FiHeart size={20} />
                     Add to watchlist
-                  </Link>
-                </div>
-                <div className="mt-7 border font-monserrat outline-dashed p-5">
-                  <div className="flex">
-                    {" "}
-                    <img src={order} alt="" className="w-5 h-5 mt-1 mr-2" />
-                    <p>
-                      {" "}
-                      Order Now 🎁 & Get it Between 🔥
-                      <span className="font-semibold">
-                        Thursday June 13th - Monday June 17th
-                      </span>
-                    </p>
-                  </div>
-                  <h1 className="mt-3">If ordered before today 11:59 PM</h1>
+                  </button>
                 </div>
                 <p className="text-md font-poppins mt-4">
                   {item.product_description}
                 </p>
+                <button className="text-sm flex h-8 items-center font-monserrat gap-x-1 hover:underline mb-5">
+                  <RiShare2Line size={18} />
+                  Share
+                </button>
                 {/* <p className='text-lg font-monserrat mt-5 font-semibold'>Product Specification:</p>
                                     <div className='ml-10 font-poppins mt-7'>
                                         {item.product_specification && item.product_specification.split(/,\r?\n|\r|\n/).filter(spec => spec.trim() !== "").map((spec, index) => (
@@ -358,43 +376,78 @@ const Cart = () => {
                                     <p className='mt-5 font-monserrat font-semibold'>Manufactured, Marketed & Packed By Finch</p>
                                     <p className='mt-5 font-monserrat'>{item.manufacturing_details}</p>
                                     <p className='text-md font-poppins mt-5 '><span className='font-semibold mr-2'>Country Of Origin:</span>{item.country_of_origin}</p> */}
-                <button className="text-sm flex h-8 items-center font-monserrat gap-x-1 hover:underline mb-5">
-                  <RiShare2Line size={18} />
-                  Share
-                </button>
               </div>
             </div>
           </div>
 
-          <div className="mt-10 w-[90%] mx-auto border rounded-md">
-            <div className="flex w-full border-b-[1px]">
-              <button
-                className={buttonStyles("shipping")}
-                onClick={() => setActiveButton("shipping")}
-              >
-                Shipping Information
-              </button>
-              <button
-                className={buttonStyles("returnPolicy")}
-                onClick={() => setActiveButton("returnPolicy")}
-              >
-                Return and Exchange Policy
-              </button>
-              <button
-                className={buttonStyles("placeReturn")}
-                onClick={() => setActiveButton("placeReturn")}
-              >
-                Place Return/exchange
-              </button>
+          <div className="flex gap-7 p-7">
+            <div className="lg:w-[60%]">
+              <div className="flex border-2 border-black border-dashed font-monserrat p-5 w-98 gap-2">
+                <div className="flex flex-col">
+                  <img
+                    src={IconDelivery}
+                    alt=""
+                    className="w-auto h-16 mt-1 mr-2"
+                  />
+                  <p className="font-bold">Delivery</p>
+                </div>
+                <div className="flex flex-col">
+                  <li className="font-bold">
+                    All Orders are usually shipped within 48 hours.
+                  </li>
+                  <li>
+                    COD orders will be shipped only if order confirmation is
+                    given via WhatsApp/Phone.
+                  </li>
+                  <li>
+                    <a href="#">For more details click here</a>
+                  </li>
+                </div>
+              </div>
+
+              <div className="flex border-2 border-black border-dashed border-t-0 font-monserrat p-5 w-98 gap-5">
+                <div className="flex flex-col">
+                  <img
+                    src={IconReturn}
+                    alt=""
+                    className="w-auto h-16 mt-1 mr-2"
+                  />
+                  <p className="font-bold">Returns</p>
+                </div>
+                <div className="flex flex-col">
+                  <li>
+                    We offer 7 days hassle-free returns & exchange from the date
+                    of delivery.
+                  </li>
+                  <li>We DO NOT offer reverse pick-up services.</li>
+                  <li>
+                    You’ll have to courier the product(s) to the following
+                    address: No.7, Ground Floor, Uniform Factory, 6th Cross, H
+                    Siddaiah Road, Sudhamanagar, Bengaluru - 560027
+                  </li>
+                  <li>
+                    <a href="#">
+                      For more about Return & Exchange Policy click here
+                    </a>
+                  </li>
+                </div>
+              </div>
             </div>
-            <div
-              id="content"
-              className="content p-4 flex flex-col gap-y-4 font-serif"
-            >
-              {renderContent()}
+            <div className="flex justify-center items-center h-32 font-monserrat border-2 border-black border-dashed p-5">
+              <img src={IconSecure} alt="" className="w-auto h-16 mt-1 mr-2" />
+              <div>
+                <li>
+                  Order Now 🎁 & Get it Between 🔥
+                  <span className="font-semibold">
+                    Thursday June 13th - Monday June 17th
+                  </span>
+                </li>
+                <li className="mt-3">If ordered before today 11:59 PM</li>
+              </div>
             </div>
           </div>
-          <div className="border-black w-full flex flex-col md:flex-row pl-4 pr-4 lg:pl-10 lg:pr-10 bg-yellow-100 border-b-2 border-t-2">
+
+          <div className="mt-7 border-black w-full flex flex-col md:flex-row pl-4 pr-4 lg:pl-10 lg:pr-10 bg-yellow-100 border-b-2 border-t-2">
             <div className="w-full md:w-[50%] p-4 lg:p-10">
               <p className="text-black text-3xl md:text-4xl lg:text-5xl font-mono font-semibold">
                 <span className="text-yellow-600 mr-3">5000+</span>PEOPLE
@@ -406,11 +459,11 @@ const Cart = () => {
                     Quality
                   </h1>
                   <div className="flex flex-row gap-x-1 ">
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStarHalfAlt size={20} className="md:size-25" />
                   </div>
                   <h1 className="text-xl md:text-2xl font-semibold ml-2">
                     4.8
@@ -421,14 +474,14 @@ const Cart = () => {
                     Durability
                   </h1>
                   <div className="flex flex-row gap-x-1">
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStarHalfAlt size={20} className="md:size-25" />
                     <FaRegStar size={20} className="md:size-25" />
                   </div>
                   <h1 className="text-xl md:text-2xl font-semibold ml-2">
-                    4.7
+                    3.7
                   </h1>
                 </div>
                 <div className="flex flex-row items-center pb-5 pt-5 border-b-[1px] border-black">
@@ -436,11 +489,11 @@ const Cart = () => {
                     Design
                   </h1>
                   <div className="flex flex-row gap-x-1">
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStarHalfAlt size={20} className="md:size-25" />
                   </div>
                   <h1 className="text-xl md:text-2xl font-semibold ml-2">
                     4.5
@@ -451,11 +504,11 @@ const Cart = () => {
                     Value for money
                   </h1>
                   <div className="flex flex-row gap-x-1">
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
-                    <FaRegStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStar size={20} className="md:size-25" />
+                    <FaStarHalfAlt size={20} className="md:size-25" />
                   </div>
                   <h1 className="text-xl md:text-2xl font-semibold ml-2">
                     4.8
@@ -466,9 +519,9 @@ const Cart = () => {
                 Free Shipping | 100% Smile Guarantee
               </h1>
             </div>
-            <div className="w-full md:w-[50%] flex justify-center">
+            {/* <div className="w-full md:w-[50%] flex justify-center">
               <img src={ratingimage} alt="" className="w-full h-auto" />
-            </div>
+            </div> */}
           </div>
           <div className="w-full pt-5 pb-5 px-4 lg:px-10 items-center flex flex-col">
             <div
@@ -506,126 +559,147 @@ const Cart = () => {
             </div>
             {isFormVisible && (
               <form action="" onSubmit={submitHandler}>
-                <div className="p-5 border-t-[1px] border-yellow-400 w-full flex flex-col items-center">
-                  <h1 className="text-2xl font-serif mt-5">Write a review</h1>
-                  <h1 className="mt-3 mb-5 font-serif">Rating</h1>
-                  <div className="flex flex-row gap-x-1">
-                    {[...Array(5)].map((star, index) => {
-                      const ratingValue = index + 1;
-                      return (
-                        <label key={index}>
-                          <input
-                            type="radio"
-                            name="rating"
-                            value={ratingValue}
-                            onClick={() => setRating(ratingValue)}
-                            className="hidden"
-                          />
-                          <div
-                            className={`cursor-pointer ${
-                              ratingValue <= (hover || rating)
-                                ? "text-yellow-500"
-                                : "text-gray-400"
-                            }`}
-                            onMouseEnter={() => setHover(ratingValue)}
-                            onMouseLeave={() => setHover(0)}
-                          >
-                            {ratingValue <= (hover || rating) ? (
-                              <FaStar size={25} />
-                            ) : (
-                              <FaRegStar size={25} />
-                            )}
+                <div className="p-5 border-t-[1px] border-yellow-400 w-full">
+                  <div className="flex flex-row justify-center items-center lg:w-[100%]">
+                    {/* Left side for input fields */}
+                    <div className="flex flex-col w-full md:w-[70%]">
+                      <h1 className="text-2xl font-serif mt-5">
+                        Write a review
+                      </h1>
+                      <h1 className="mt-3 mb-5 font-serif">Rating</h1>
+                      <div className="flex flex-row gap-x-1">
+                        {[...Array(5)].map((star, index) => {
+                          const ratingValue = index + 1;
+                          return (
+                            <label key={index}>
+                              <input
+                                type="radio"
+                                name="rating"
+                                value={ratingValue}
+                                onClick={() => setRating(ratingValue)}
+                                className="hidden"
+                              />
+                              <div
+                                className={`cursor-pointer ${
+                                  ratingValue <= (hover || rating)
+                                    ? "text-black"
+                                    : "text-gray-400"
+                                }`}
+                                onMouseEnter={() => setHover(ratingValue)}
+                                onMouseLeave={() => setHover(0)}
+                              >
+                                {ratingValue <= (hover || rating) ? (
+                                  <FaStar size={25} />
+                                ) : (
+                                  <FaRegStar size={25} />
+                                )}
+                              </div>
+                            </label>
+                          );
+                        })}
+                      </div>
+                      <h1 className="font-serif text-md mt-5">
+                        Review Title (100)
+                      </h1>
+                      <input
+                        className="bg-white px-3 py-2 w-[90%] md:w-[80%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
+                        name="title"
+                        placeholder="Give your review title"
+                        value={formdata.title}
+                        onChange={(e) =>
+                          setFormdata({ ...formdata, title: e.target.value })
+                        }
+                        type="text"
+                      />
+                      <h1 className="font-serif text-md mt-5">Review</h1>
+                      <textarea
+                        className="bg-white resize-none px-3 py-2 w-[90%] md:w-[80%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
+                        name="review"
+                        value={formdata.review}
+                        onChange={(e) =>
+                          setFormdata({ ...formdata, review: e.target.value })
+                        }
+                        placeholder="Give your review title"
+                        type="text"
+                      ></textarea>
+                      <h1 className="font-serif text-md mt-5 mb-2">Name</h1>
+                      <input
+                        className="bg-white px-3 py-2 w-[90%] md:w-[80%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
+                        name="name"
+                        value={formdata.name}
+                        onChange={(e) =>
+                          setFormdata({ ...formdata, name: e.target.value })
+                        }
+                        placeholder="Enter your name (public)"
+                        type="text"
+                      />
+                      <li className="font-serif w-[100%] md:w-[80%] text-justify mt-5 text-[#4B5563]">
+                        How we use your data? We’ll only contact you about the
+                        review you left, and only if necessary.
+                      </li>
+                      <li className="font-serif w-[100%] md:w-[80%] text-justify mt-2 text-[#4B5563]">
+                        By submitting your review, you agree to Judge.me’s terms
+                        and conditions and privacy policy.
+                      </li>
+                    </div>
+
+                    {/* Right side for file upload */}
+                    <div className="w-full md:w-[35%] flex flex-col items-center justify-center">
+                      <h1 className="font-serif text-md mt-5 mb-2">
+                        Picture/Video (optional)
+                      </h1>
+
+                      <label
+                        htmlFor="file"
+                        className="flex flex-col items-center justify-center w-98 h-80 border-2 border-dashed border-[#4B5563] text-center text-gray-600 cursor-pointer p-14" // Increased size and added padding
+                      >
+                        <IoCloudUploadOutline size={80} fill="black" />
+                        {/* Increased icon size */}
+                        <p className="mt-2">
+                          Drag and drop your file here or click to select a
+                          file!
+                        </p>
+                      </label>
+
+                      <input
+                        className="hidden"
+                        name="text"
+                        multiple
+                        id="file"
+                        onChange={handleImageUpload}
+                        type="file"
+                      />
+
+                      <div className="grid grid-cols-3 mt-2 gap-4">
+                        {formdata.reviewimage.map((file, index) => (
+                          <div key={index} className="border p-2">
+                            <img
+                              src={URL.createObjectURL(file)}
+                              alt={`upload-${index}`}
+                              className="h-36 w-26"
+                            />
                           </div>
-                        </label>
-                      );
-                    })}
-                  </div>
-                  <h1 className="font-serif text-md mt-5">
-                    Review Title (100)
-                  </h1>
-                  <input
-                    className="bg-white px-3 py-2 w-[90%] md:w-[50%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
-                    name="title"
-                    placeholder="Give your review title"
-                    value={formdata.title}
-                    onChange={(e) =>
-                      setFormdata({ ...formdata, title: e.target.value })
-                    }
-                    type="text"
-                  />
-                  <h1 className="font-serif text-md mt-5">Review</h1>
-                  <textarea
-                    className="bg-white resize-none px-3 py-2 w-[90%] md:w-[50%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
-                    name="review"
-                    value={formdata.review}
-                    onChange={(e) =>
-                      setFormdata({ ...formdata, review: e.target.value })
-                    }
-                    placeholder="Give your review title"
-                    type="text"
-                  ></textarea>
-                  <h1 className="font-serif text-md mt-5 mb-2">
-                    Picture/Video (optional)
-                  </h1>
-                  <div className="flex flex-col items-center justify-center">
-                    <label
-                      htmlFor="file"
-                      className="flex flex-col items-center justify-center w-64 h-48 border-2 border-dashed border-gray-300 text-center text-gray-600 cursor-pointer"
-                    >
-                      <IoCloudUploadOutline size={70} />
-                      <p>
-                        drag and drop your file here or click to select a file!
-                      </p>
-                    </label>
-                    <input
-                      className="hidden"
-                      name="text"
-                      multiple
-                      id="file"
-                      onChange={handleImageUpload}
-                      type="file"
-                    />
-                    <div className="grid grid-cols-3 mt-2 gap-4">
-                      {formdata.reviewimage.map((file, index) => (
-                        <div key={index} className="border p-2">
-                          <img
-                            src={URL.createObjectURL(file)}
-                            alt={`upload-${index}`}
-                            className="h-36 w-26"
-                          />
-                          {/* <button onClick={() => handleRemoveImage(index)} className="bg-red-500 font-poppins text-white px-2 py-1 rounded mt-2">Remove</button> */}
-                        </div>
-                      ))}
+                        ))}
+                      </div>
                     </div>
                   </div>
-                  <h1 className="font-serif text-md mt-5 mb-2">Name</h1>
-                  <input
-                    className="bg-white px-3 py-2 w-[90%] md:w-[50%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
-                    name="name"
-                    value={formdata.name}
-                    onChange={(e) =>
-                      setFormdata({ ...formdata, name: e.target.value })
-                    }
-                    placeholder="Enter your name (public)"
-                    type="text"
-                  />
 
-                  <p className="mt-5 font-serif w-[90%] md:w-[40%]">
-                    How we use your data: We’ll only contact you about the
-                    review you left, and only if necessary. By submitting your
-                    review, you agree to Judge.me’s terms and conditions and
-                    privacy policy.
-                  </p>
-                  <div className="mt-6 flex flex-row gap-x-3">
-                    <button className="cursor-pointer border-2 border-green-400 group relative flex gap-1.5 p-2 items-center justify-center w-40 md:w-52 h-10 text-black hover:bg-opacity-70 transition font-semibold shadow-md">
-                      Cancel review
-                    </button>
-                    <button
-                      type="submit"
-                      className="cursor-pointer group relative flex gap-1.5 p-2 items-center justify-center w-40 md:w-52 h-10 bg-green-900 bg-opacity-80 text-[#f1f1f1] hover:bg-opacity-70 transition font-semibold shadow-md"
-                    >
-                      Submit Review
-                    </button>
+                  {/* Note and Buttons at the bottom */}
+                  <div className="flex flex-col items-center mt-5 w-full">
+                    <div className="mt-6 flex flex-row gap-x-3 justify-center">
+                      <button
+                        onClick={toggleFormVisibility}
+                        className="cursor-pointer border-2 border-green-400 group relative flex gap-1.5 p-2 items-center justify-center w-40 md:w-52 h-10 text-black hover:bg-opacity-70 transition font-semibold shadow-md"
+                      >
+                        Cancel review
+                      </button>
+                      <button
+                        type="submit"
+                        className="cursor-pointer group relative flex gap-1.5 p-2 items-center justify-center w-40 md:w-52 h-10 bg-green-900 bg-opacity-80 text-[#f1f1f1] hover:bg-opacity-70 transition font-semibold shadow-md"
+                      >
+                        Submit Review
+                      </button>
+                    </div>
                   </div>
                 </div>
               </form>

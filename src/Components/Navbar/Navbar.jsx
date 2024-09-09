@@ -1,23 +1,48 @@
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/no-unescaped-entities */
-import React, { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import logo from "../../assets/logos.jpg";
 import { HiMagnifyingGlass } from "react-icons/hi2";
 import { IoPersonOutline } from "react-icons/io5";
 import { IoMdHeartEmpty } from "react-icons/io";
 import { IoCartSharp, IoCloseOutline } from "react-icons/io5";
 import { RiMenu3Line, RiArrowDownSLine, RiArrowUpSLine } from "react-icons/ri";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import cart1 from "../../assets/cart1.webp";
 import cart2 from "../../assets/cart2.jpg";
 import cart3 from "../../assets/cart3.jpg";
 import { AppContext } from "../../App";
+import "./Navbar.css";
+import MaleIcon from "@mui/icons-material/Male";
+import FemaleIcon from "@mui/icons-material/Female";
 
 const Navbar = () => {
   const context = useContext(AppContext);
   const [dropdownVisible, setDropdownVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState("Men");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const location = useLocation();
+  const items = ["Mens Wear", "Womens Wear"];
+  const dropdownItems = {
+    Men: [
+      { name: "Shirts", link: "/menswear/shirts" },
+      { name: "T-Shirts", link: "/menswear/t-shirts" },
+      { name: "Pants", link: "/menswear/pants" },
+      { name: "Mens Cord Set", link: "/menswear/cordset" },
+    ],
+    Women: [
+      { name: "Shirts", link: "/womenswear/shirts" },
+      { name: "T-Shirts", link: "/womenswear/t-shirts" },
+      { name: "Kurtas", link: "/womenswear/kurtas" },
+      { name: "Womens Cord Set", link: "/womenswear/cordset" },
+    ],
+    Offers: [
+      { name: "Discounts", link: "/offers/discounts" },
+      { name: "Flash Sales", link: "/offers/flashsales" },
+      { name: "Bundles", link: "/offers/bundles" },
+    ],
+  };
 
   // const addItemToCart = (item) => {
   //     setCartItems((prevItems) => {
@@ -31,6 +56,10 @@ const Navbar = () => {
   //     });
   //     setIsDrawerOpen(true);
   // };
+
+  useEffect(() => {
+    dropdownVisible ? setDropdownVisible(!dropdownVisible) : "";
+  }, [location]);
 
   const removeItemFromCart = (id) => {
     context.setCartProducts((prevItems) =>
@@ -73,10 +102,16 @@ const Navbar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const items = ["New Arrivals", "Most Trending", "Bundle Deal"];
-
   const handleShopClick = () => {
     setDropdownVisible(!dropdownVisible);
+  };
+
+  const toggleDropdown = () => {
+    setDropdownVisible(!dropdownVisible);
+  };
+
+  const switchTab = (tab) => {
+    setActiveTab(tab);
   };
 
   console.log(context.CartProducts);
@@ -116,12 +151,11 @@ const Navbar = () => {
               className="flex flex-row h-7 items-center pb-1"
               onClick={handleShopClick}
             >
-              Shop
+              Offers
               <p className={dropdownVisible ? "hidden" : "block"}>
                 <RiArrowDownSLine className="mt-1" size={18} />
               </p>
               <p className={dropdownVisible ? "block" : "hidden"}>
-                {" "}
                 <RiArrowUpSLine className="mt-1" size={18} />
               </p>
             </button>
@@ -133,9 +167,9 @@ const Navbar = () => {
             <Link to={context.token && context.user ? "/account" : "/login"}>
               <IoPersonOutline size={25} />
             </Link>
-            <button>
+            <Link to={context.token && context.user ? "/watchlist" : "/login"}>
               <IoMdHeartEmpty size={25} />
-            </button>
+            </Link>
             <Link to="/cart">
               <IoCartSharp size={25} />
             </Link>
@@ -221,10 +255,10 @@ const Navbar = () => {
                     Estimated total: Rs.{estimatedTotal}
                   </p>
                   <p className="text-sm">
-                    Tax included.{" "}
+                    Tax included.
                     <a href="#" className="text-blue-500">
                       Shipping
-                    </a>{" "}
+                    </a>
                     and discounts calculated at checkout.
                   </p>
                   <button className="w-full mt-4 py-2 bg-green-600 text-white font-semibold rounded">
@@ -242,7 +276,7 @@ const Navbar = () => {
                       alt="New Arrivals"
                     />
                     <h1 className="mt-2 font-semibold w-full ml-5">
-                      New Arrivals
+                      Mens Wear
                     </h1>
                   </Link>
                   <Link to="/mosttrending" className="flex flex-col p-2">
@@ -252,7 +286,7 @@ const Navbar = () => {
                       alt="Most Trending"
                     />
                     <h1 className="mt-2 font-semibold w-full ml-5">
-                      Most trending
+                      Womens Wear
                     </h1>
                   </Link>
                   <div className="flex flex-col p-2">
@@ -313,31 +347,40 @@ const Navbar = () => {
 
       {dropdownVisible && (
         <div className="mt-1 absolute z-50 w-full border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y">
-          <div className="flex flex-row p-5 w-full justify-start gap-x-28 font-serif text-sm ml-10">
-            <div className="flex flex-col gap-y-1">
-              <h1 className="mb-3 hover:underline text-green-900 font-monserrat font-semibold">
-                Man
-              </h1>
-              <Link
-                to="/newarrivals"
-                className="hover:underline font-poppins"
-                onClick={handleShopClick}
-              >
-                Shirts
-              </Link>
-            </div>
-            <div className="flex flex-col gap-y-1">
-              <h1 className="mb-3 hover:underline text-green-900 font-monserrat font-semibold">
-                Woman
-              </h1>
-              <Link
-                to="/newarrivals"
-                className="hover:underline font-poppins"
-                onClick={handleShopClick}
-              >
-                Shirts
-              </Link>
-            </div>
+          <div className="btn-container flex justify-center items-center gap-x-4 p-5">
+            <MaleIcon sx={{ color: "#007BFF" }} />
+            <label className="switch btn-color-mode-switch">
+              <input
+                value={activeTab}
+                id="color_mode"
+                name="color_mode"
+                type="checkbox"
+                onChange={(e) => switchTab(e.target.checked ? "Women" : "Men")}
+              />
+              <label
+                className="btn-color-mode-switch-inner"
+                data-off="Men"
+                data-on="Women"
+                htmlFor="color_mode"
+              ></label>
+            </label>
+            <FemaleIcon sx={{ color: "#ff69b4" }} />
+          </div>
+          <div className="flex flex-row p-5 gap-x-4 ">
+            {dropdownItems[activeTab].map((item, index) => (
+              <>
+                <Link
+                  key={index}
+                  to={item.link}
+                  className="hover:underline font-poppins"
+                >
+                  {item.name}
+                </Link>
+                {index < dropdownItems[activeTab].length - 1 && (
+                  <div className="w-[0.5px] h-6 bg-black"></div>
+                )}
+              </>
+            ))}
           </div>
         </div>
       )}
@@ -373,7 +416,6 @@ const Navbar = () => {
               <RiArrowDownSLine className="ml-2" size={18} />
             </p>
             <p className={dropdownVisible ? "block" : "hidden"}>
-              {" "}
               <RiArrowUpSLine className="ml-2" size={18} />
             </p>
           </button>

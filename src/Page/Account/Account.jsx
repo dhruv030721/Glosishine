@@ -17,6 +17,7 @@ const Account = () => {
     const token = cookies.get("Access-Token");
     setIsLogin(!!token);
     console.log(isLogin);
+    console.log(context);
   }, [isLogin]);
 
   useEffect(() => {
@@ -66,7 +67,7 @@ const Account = () => {
                   </h3>
                   <div className="grid grid-cols-2 font-poppins gap-2 text-sm mt-4">
                     <div className="text-gray-500">Phone:</div>
-                    <div>{user.phone}</div>
+                    <div>{user.mobile_number}</div>
                     <div className="text-gray-500">Address:</div>
                     <div className="flex items-center gap-2">
                       <span>{user.address}</span>

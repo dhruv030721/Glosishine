@@ -38,8 +38,14 @@ export const CartPage = () => {
     toast.success("Item removed from cart");
   };
 
+  const totalDiscount = cartItems.reduce(
+    (acc, item) =>
+      acc + (item.regular_price - item.sale_price) * (item.quantity || 1),
+    0
+  );
+
   const cartTotal = cartItems.reduce(
-    (acc, item) => acc + item.sale_price * (item.quantity || 1),
+    (acc, item) => acc + item.regular_price * (item.quantity || 1),
     0
   );
 
@@ -75,76 +81,92 @@ export const CartPage = () => {
 
             {/* Cart Items */}
             {cartItems.length > 0 ? (
-              cartItems.map((item) => (
-                <div
-                  key={item.product_id}
-                  className="flex justify-between items-center mb-6 p-4 bg-white rounded-md h-auto flex-wrap md:flex-nowrap"
-                >
-                  <div className="flex-1 flex items-center text-left">
-                    <img
-                      src={
-                        (item.images && item.images[0]) || "default-image-url"
-                      } // Replace with a default image URL
-                      alt={item.product_name}
-                      className="w-24 object-cover rounded-md h-full"
-                    />
-                    <div className="ml-4">
-                      <h3 className="font-semibold text-base md:text-lg">
-                        {item.product_name}
-                      </h3>
-                      <p className="text-gray-500 text-sm md:text-base">
-                        Size: {item.size}
-                      </p>
-                      <p className="text-gray-500 text-sm md:text-base">
-                        Color: {item.color}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-1/5 text-center mt-4 md:mt-0">
-                    <p className="text-lg font-semibold">₹{item.sale_price}</p>
-                  </div>
-                  <div className="w-1/5 text-center mt-4 md:mt-0">
-                    <div className="flex justify-center items-center px-2 py-1 rounded w-auto">
-                      <div className="flex justify-between items-center w-28">
-                        <button
-                          className="text-gray-500 border-black border-solid border-0"
-                          onClick={() =>
-                            handleQuantityChange(item.product_id, -1)
-                          }
-                        >
-                          -
-                        </button>
-                        <span className="px-2">{item.quantity || 1}</span>
-                        <button
-                          className="text-gray-500"
-                          onClick={() =>
-                            handleQuantityChange(item.product_id, 1)
-                          }
-                        >
-                          +
-                        </button>
+              cartItems.map((item) => {
+                const salePrice = item.sale_price;
+                const discountAmount =
+                  ((item.discount || 0) / 100) * item.regular_price;
+                const discountedPrice = item.regular_price - discountAmount;
+                const totalDiscountedPrice =
+                  discountedPrice * (item.quantity || 1);
+
+                return (
+                  <div
+                    key={item.product_id}
+                    className="flex justify-between items-center mb-6 p-4 bg-white rounded-md h-auto flex-wrap md:flex-nowrap"
+                  >
+                    <div className="flex-1 flex items-center text-left">
+                      <img
+                        src={
+                          (item.images && item.images[0]) || "default-image-url"
+                        } // Replace with a default image URL
+                        alt={item.product_name}
+                        className="w-24 object-cover rounded-md h-full"
+                      />
+                      <div className="ml-4">
+                        <h3 className="font-semibold text-base md:text-lg">
+                          {item.product_name}
+                        </h3>
+                        <p className="text-gray-500 text-sm md:text-base">
+                          Size: {item.size}
+                        </p>
+                        <p className="text-gray-500 text-sm md:text-base">
+                          Color: {item.color}
+                        </p>
                       </div>
                     </div>
+                    <div className="w-1/5 text-center mt-4 md:mt-0">
+                      <p className="text-lg font-semibold">
+                        ₹{item.regular_price}
+                      </p>
+                      {item.discount > 0 && (
+                        <p className="text-sm text-red-500">
+                          (Sale Price: ₹{salePrice})
+                        </p>
+                      )}
+                    </div>
+                    <div className="w-1/5 text-center mt-4 md:mt-0">
+                      <div className="flex justify-center items-center px-2 py-1 rounded w-auto">
+                        <div className="flex justify-between items-center w-28">
+                          <button
+                            className="text-gray-500 border-black border-solid border-0"
+                            onClick={() =>
+                              handleQuantityChange(item.product_id, -1)
+                            }
+                          >
+                            -
+                          </button>
+                          <span className="px-2">{item.quantity || 1}</span>
+                          <button
+                            className="text-gray-500"
+                            onClick={() =>
+                              handleQuantityChange(item.product_id, 1)
+                            }
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="w-1/5 text-center mt-4 md:mt-0">
+                      <p className="text-lg font-semibold text-orange-400">
+                        ₹{(item.regular_price * item.quantity).toFixed(2)}
+                      </p>
+                      <p className="text-sm text-red-500">
+                        (Sale Total: ₹
+                        {(item.sale_price * item.quantity).toFixed(2)})
+                      </p>
+                    </div>
+                    <div className="text-center mt-4 md:mt-0">
+                      <button
+                        onClick={() => handleDeleteItem(item.product_id)}
+                        className="border-2 border-red-500 border-dashed rounded-lg p-2"
+                      >
+                        <FaTrash size={20} color="red" />
+                      </button>
+                    </div>
                   </div>
-                  <div className="w-1/5 text-center mt-4 md:mt-0">
-                    <p className="text-lg font-semibold text-orange-400">
-                      ₹
-                      {(
-                        (parseFloat(item.sale_price) || 0) *
-                        (item.quantity || 1)
-                      ).toFixed(2)}
-                    </p>
-                  </div>
-                  <div className="text-center mt-4 md:mt-0">
-                    <button
-                      onClick={() => handleDeleteItem(item.product_id)}
-                      className="border-2 border-red-500 border-dashed rounded-lg p-2"
-                    >
-                      <FaTrash size={20} color="red" />
-                    </button>
-                  </div>
-                </div>
-              ))
+                );
+              })
             ) : (
               <div className="p-4 text-center text-gray-500">
                 Your cart is empty.
@@ -175,12 +197,17 @@ export const CartPage = () => {
             </div>
             <div className="flex justify-between mb-2">
               <p>Discount</p>
-              <p>−₹{cartItems.length === 0 ? "0.00" : "4.00"}</p>
+              <p>
+                −₹{cartItems.length === 0 ? "0.00" : totalDiscount.toFixed(2)}
+              </p>
             </div>
             <div className="flex justify-between text-lg font-semibold">
               <p>Cart Total</p>
               <p>
-                ₹{cartItems.length === 0 ? "0.00" : (cartTotal - 4).toFixed(2)}
+                ₹
+                {cartItems.length === 0
+                  ? "0.00"
+                  : (cartTotal - totalDiscount).toFixed(2)}
               </p>
             </div>
             <button

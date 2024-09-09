@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .card::after {
+    @apply absolute top-8 left-0 right-0 z-[-1] h-full w-full scale-75 blur-[25px] transition-opacity duration-500;
+    background: linear-gradient(to left, #064c3a 0%, #33b786 100%);
+    content: "";
+  }
+
+  .card:hover::after {
+    @apply opacity-0;
+  }
+
+  .card:hover .card-info {
+    @apply text-[#064C3A] transition-colors duration-1000;
+  }
+  /* Custom CSS for hover text change */
+  .card-info:hover .default-text {
+    @apply hidden;
+  }
+
+  .card-info:hover .hover-text {
+    @apply block;
+  }
+}

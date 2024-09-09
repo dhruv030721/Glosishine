@@ -1,120 +1,105 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import Dialog from '@mui/material/Dialog';
-import { addProduct, deleteProduct } from "../../Services/Operations/ProductServices.js"
+import React, { useCallback, useContext } from "react";
+import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { InputFunc } from '../../Functions/InputFun.jsx';
-import { TextArea } from '../../Functions/InputFun.jsx';
 import { AppContext } from "../../App.jsx";
-import { useId } from 'react';
-import EditProduct from './EditProduct.jsx';
-import { content } from 'flowbite-react/tailwind';
+import EditProduct from "./EditProduct.jsx";
 
 const Product = () => {
+  const Appcontext = useContext(AppContext);
 
-    const Appcontext = useContext(AppContext);
+  const deleteProductHandler = useCallback(
+    async (id) => {
+      await toast.promise(deleteProduct(id), {
+        loading: "Processing....",
+        success: (response) => {
+          Appcontext.setGetdata((product) =>
+            product.filter((product) => product.product_id !== id)
+          );
+          return `${response.data.message}`;
+        },
+        error: (error) => {
+          return `${error.response.data.message}`;
+        },
+      });
+    },
+    [Appcontext.setGetdata]
+  );
 
+  return (
+    <div className="w-full h-full p-6 bg-gray-100">
+      <h1 className="text-2xl font-bold mb-4">Products</h1>
 
-
-    const deleteProductHandler = useCallback(async (id) => {
-        await toast.promise(
-            deleteProduct(id),
-            {
-                loading: "Processing....",
-                success: (response) => {
-                    Appcontext.setGetdata((product) => product.filter((product) => product.product_id !== id))
-                    return `${response.data.message}`
-                },
-                error: (error) => {
-                    // console.log(error.response.data.message)
-                    return `${error.respones.data.message}`
-                }
-            }
-        )
-    }, [Appcontext.setGetdata]);
-
-
-
-    return (
-        <div className=" mx-auto px-4  ">
-            <div className="flex items-center justify-between mb-6 ">
-                <h1 className="text-2xl font-poppins font-bold">Products</h1>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="md:col-span-3">
+          <div className="p-6 bg-white shadow-lg rounded-md">
+            <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 rounded-md">
+              <div className="flex-1 text-left">
+                <h3 className="font-semibold">Product</h3>
+              </div>
+              <div className="w-1/5 text-center">
+                <h3 className="font-semibold">Price</h3>
+              </div>
+              <div className="w-1/5 text-center">
+                <h3 className="font-semibold">Size</h3>
+              </div>
+              <div className="w-1/7 text-center">
+                <h3 className="font-semibold">Actions</h3>
+              </div>
             </div>
-            <div className="font-poppins">
-                <table className="divide-y divide-gray-200 bg-white shadow-md">
-                    <thead className="bg-gray-50">
-                        <tr>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Image
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Product Id
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Name
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Brand
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Mrp
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Size
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Price
-                            </th>
-                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                Actions
-                            </th>
-                        </tr>
-                    </thead>
-                    {
-                        Appcontext.getdata.length >= 0 ? Appcontext.getdata.map((product) => (
-                            <tbody key={useId} className="divide-y divide-gray-200">
-                                <tr>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <img className="text-sm text-gray-900" src={product.images[0]} alt="" />
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{product.product_id}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="flex items-center">
-                                            <div className="text-sm font-medium text-gray-900">
-                                                {product.product_name}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{product.brand_name}</div>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap">
-                                        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ">
-                                            {product.regular_price}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.size}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {product.sale_price}
-                                    </td>
-                                    <td className="px-6 py-4 gap-x-1 flex mt-4  whitespace-nowrap text-sm font-medium">
-                                        <EditProduct id={product.product_id} />
-                                        <button className="ml-2 text-red-600 hover:text-red-900" onClick={() => deleteProductHandler(product.product_id)}>Delete</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        )) : (
-                            <tr>
-                                <td colSpan="11" className="py-2 px-4 border text-center">No data found</td>
-                            </tr>
-                        )}
-                </table>
-            </div>
+
+            {Appcontext.getdata.length > 0 ? (
+              Appcontext.getdata.map((product) => (
+                <div
+                  key={product.product_id}
+                  className="flex justify-between items-center mb-6 p-4 bg-white rounded-md h-auto flex-wrap md:flex-nowrap"
+                >
+                  <div className="flex-1 flex items-center text-left">
+                    <img
+                      src={product.images[0] || "default-image-url"} // Replace with a default image URL
+                      alt={product.product_name}
+                      className="w-24 object-cover rounded-md h-full"
+                    />
+                    <div className="ml-4">
+                      <h3 className="font-semibold text-base md:text-lg">
+                        {product.product_name}
+                      </h3>
+                      <p className="text-gray-500 text-sm md:text-base">
+                        Brand: {product.brand_name}
+                      </p>
+                      <p className="text-gray-500 text-sm md:text-base">
+                        Product ID: {product.product_id}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-1/5 text-center mt-4 md:mt-0">
+                    <p className="text-lg font-semibold">
+                      ₹{product.sale_price}
+                    </p>
+                  </div>
+                  <div className="w-1/5 text-center mt-4 md:mt-0">
+                    <p className="text-lg font-semibold">{product.size}</p>
+                  </div>
+                  <div className="text-center mt-4 md:mt-0">
+                    <EditProduct id={product.product_id} />
+                    <button
+                      onClick={() => deleteProductHandler(product.product_id)}
+                      className="border-2 border-red-500 border-dashed rounded-lg p-2 ml-2"
+                    >
+                      <FaTrash size={20} color="red" />
+                    </button>
+                  </div>
+                </div>
+              ))
+            ) : (
+              <div className="p-4 text-center text-gray-500">
+                No products found.
+              </div>
+            )}
+          </div>
         </div>
-    );
+      </div>
+    </div>
+  );
 };
 
 export default Product;

@@ -104,11 +104,10 @@ const Login = () => {
             </div>
           </form>
           <div className="text-center font-poppins">
-            {" "}
-            No account?{" "}
+            No account?
             <Link className="underline text-black" to="/register">
               Create one
-            </Link>{" "}
+            </Link>
           </div>
         </div>
       </div>

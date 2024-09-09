@@ -33,6 +33,11 @@ import { getContentItem } from "../../Services/Operations/ContentItem";
 const Home = () => {
   const Appcontext = useContext(AppContext);
   const [imageSlider1, setImageSlider1] = useState(null);
+  const [imageSlider2, setImageSlider2] = useState(null);
+  const [seasonalVideos, setSeasonalVideos] = useState(null);
+  const [feed, setFeed] = useState(null);
+  const [advertisement, setAdvertisement] = useState(null);
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -45,7 +50,20 @@ const Home = () => {
         const imageslider1 = data.filter(
           (item) => item.type === "ImageSlider-1"
         );
+        const imageslider2 = data.filter(
+          (item) => item.type === "ImageSlider-2"
+        );
+        const feed = data.filter((item) => item.type === "Feed");
+        const advertisement = data.filter(
+          (item) => item.type === "Advertisement"
+        );
+        const video1 = data.filter((item) => item.type === "Video-1");
+        const video2 = data.filter((item) => item.type === "Video-2");
         setImageSlider1(imageslider1);
+        setImageSlider2(imageslider2);
+        setFeed(feed);
+        setAdvertisement(advertisement);
+        setSeasonalVideos({ video1, video2 });
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -76,20 +94,23 @@ const Home = () => {
     }
   };
 
-  const photos = [
-    photo1,
-    photo2,
-    photo2,
-    photo4,
-    photo5,
-    photo5,
-    photo7,
-    photo8,
-    photo9,
-    photo10,
-    photo11,
-    photo12,
-  ];
+  // const photos = [
+  //   photo1,
+  //   photo2,
+  //   photo2,
+  //   photo4,
+  //   photo5,
+  //   photo5,
+  //   photo7,
+  //   photo8,
+  //   photo9,
+  //   photo10,
+  //   photo11,
+  //   photo12,
+  // ];
+
+  const photos = feed.map((feed) => feed.url);
+
   return (
     <div className="w-full h-full">
       <Carousel className="h-[75%]">
@@ -102,13 +123,18 @@ const Home = () => {
           />
         ))}
       </Carousel>
-      <Link to="/bundledeal">
-        <img
-          src={image4}
-          alt="image 4"
-          className="h-full w-full mt-5 object-cover"
-        />
-      </Link>
+      {advertisement.length > 0 && (
+        <Carousel className="h-[75%] mt-5">
+          {advertisement.map((ad, index) => (
+            <img
+              key={index}
+              src={ad.url}
+              alt={`advertisement ${index + 1}`}
+              className="h-full w-full object-cover"
+            />
+          ))}
+        </Carousel>
+      )}
       <div className="pt-4">
         <div data-aos="fade-up" data-aos-duration="1000">
           <h1 className="w-full font-poppins text-2xl sm:text-xl md:text-2xl lg:text-3xl flex pl-5 pr-5 justify-center mb-6">
@@ -198,7 +224,12 @@ const Home = () => {
         </div>
       </div>
       <div className="w-full">
-        <video src={video} autoPlay muted className="w-full" />
+        <video
+          src={seasonalVideos.video2[0].url}
+          autoPlay
+          muted
+          className="w-full"
+        />
       </div>
       <div className="w-full pl-16 pr-16 pt-5 pb-5">
         <div className="grid grid-cols-3 gap-x-10 gap-y-2">
@@ -210,10 +241,15 @@ const Home = () => {
         </div>
       </div>
       <div className="w-full">
-        <video src={video1} autoPlay muted className="w-full" />
+        <video
+          src={seasonalVideos.video1[0].url}
+          autoPlay
+          muted
+          className="w-full"
+        />
       </div>
       <Carousel className="h-[75%]">
-        {[onit, onit1].map((image, index) => (
+        {imageSlider2.map((image, index) => (
           <div
             key={index}
             data-aos="fade-zoom-in"
@@ -222,7 +258,7 @@ const Home = () => {
             data-aos-offset="0"
           >
             <img
-              src={image}
+              src={image.url}
               alt={`onit ${index + 1}`}
               className="h-full w-full object-cover"
             />
@@ -237,7 +273,7 @@ const Home = () => {
         </div>
         <div className="w-full grid grid-cols-6">
           {photos.map((photo, index) => (
-            <img key={index} src={photo} alt="" />
+            <img key={index} src={photo} alt={`feed ${index + 1}`} />
           ))}
         </div>
       </div>

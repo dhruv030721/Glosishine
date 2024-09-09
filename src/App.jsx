@@ -33,6 +33,8 @@ import { getProduct } from "./Services/Operations/ProductServices";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
 import { CartPage } from "./Page/CartPage/CartPage";
+import NotFound from "./Components/NotFound/NotFound";
+import { WatchList } from "./Page/WatchList/WatchList";
 
 export const AppContext = createContext();
 
@@ -123,6 +125,8 @@ function App() {
             <Route path="newarrivals" element={<NewArrivals />} />
             <Route path="mosttrending" element={<MostTrending />} />
             <Route path="bundledeal" element={<BundleDeal />} />
+            <Route path="watchlist" element={<WatchList />} />
+            <Route path="*" element={<NotFound />} />
           </Route>
 
           <Route path="/admin" element={<Adminlayout />}>
