@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
 import { Form, Link } from "react-router-dom";
@@ -23,27 +24,33 @@ import { AppContext } from "../../App";
 import {
   addFavProduct,
   addReview,
+  deleteFavProduct,
+  getFavProduct,
   getReview,
 } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
 import { addItem } from "../../Slice/CartSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addProduct,
+  removeProduct,
+  setWatchlist,
+} from "../../Slice/watchlistSlice"; // Adjust the path as needed
 import IconDelivery from "../../assets/icon-delivery.svg";
 import IconReturn from "../../assets/Icon-return.svg";
 import IconSecure from "../../assets/Icon-secure.svg";
 import "./Cart.css";
+import { FaHeart } from "react-icons/fa6";
 
 const Cart = () => {
   const { id } = useParams();
-  // console.log("id", id);
   const dispatch = useDispatch();
   const Appcontext = useContext(AppContext);
   const userContext = useContext(AppContext);
   const filterdata = Appcontext.getdata.filter(
     (item) => item.product_id === id
   );
-  // console.log("filterdata", filterdata);
 
   const [value, setValue] = useState(1);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -59,7 +66,9 @@ const Cart = () => {
     review: "",
     reviewimage: [],
   });
-  console.log("formdata", formdata);
+  const watchlist = useSelector((state) => state.watchlist);
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const [favProductId, setFavProductId] = useState(null);
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -73,12 +82,10 @@ const Cart = () => {
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    console.log("data is1 ->", formdata);
     try {
       await toast.promise(addReview({ productData: formdata }, id, rating), {
         loading: "Processing....",
         success: (response) => {
-          console.log("response", response);
           return `${response.data.message}`;
         },
         error: (error) => {
@@ -176,30 +183,7 @@ const Cart = () => {
     toast.success("Item added to cart");
   };
 
-  const handleAddToWatchlist = async () => {
-    try {
-      await toast.promise(
-        addFavProduct({
-          id: userContext.user[0].id ? userContext.user[0].id : "11",
-          email: userContext.user[0].email,
-          product_id: location.pathname.split("/").pop(),
-        }),
-        {
-          loading: "Adding product to watchlist...",
-          success: "Product added to watchlist!",
-          error: (err) =>
-            err.response?.status === 409
-              ? "Product already exists in your watchlist!"
-              : "Failed to add product to watchlist.",
-        },
-        {
-          position: "bottom-right", // Set toast position here
-        }
-      );
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  const handleAddToWatchlist = async () => {};
 
   useEffect(() => {
     (async () => {
@@ -207,14 +191,96 @@ const Cart = () => {
         const data = await getReview(id);
         setReviewData(data.data.data);
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     })();
   }, [id]);
 
+  useEffect(() => {}, [reviewData]);
+
+  // Check if the product is in the watchlist on component mount or when watchlist changes
   useEffect(() => {
-    console.log("reviewData", reviewData);
-  }, [reviewData]);
+    const checkIfInWatchlist = async () => {
+      try {
+        const favProducts = await getFavProduct();
+
+        // Check if favProducts.data is an array and then use find method
+        if (Array.isArray(favProducts.data.data)) {
+          const favProduct = favProducts.data.data.find(
+            (favItem) => favItem.product_id === filterdata[0].product_id
+          );
+
+          if (favProduct) {
+            setIsInWatchlist(true);
+            setFavProductId(favProduct.id); // Set the 'id' of the favorite product
+          } else {
+            setIsInWatchlist(false);
+          }
+        } else {
+          console.error("Expected an array for favorite products data.");
+        }
+      } catch (error) {
+        console.error("Error fetching favorite products:", error);
+      }
+    };
+
+    checkIfInWatchlist();
+  }, [filterdata, userContext.user]);
+
+  const handleClick = async () => {
+    if (isInWatchlist) {
+      // If the product is already in the watchlist, remove it
+      try {
+        await toast.promise(
+          deleteFavProduct(favProductId), // Call the delete API with the 'id' from favProductId
+          {
+            loading: "Removing product from watchlist...",
+            success: "Product removed from watchlist!",
+            error: "Failed to remove product from watchlist.",
+          },
+          {
+            position: "bottom-right", // Set toast position here
+          }
+        );
+        dispatch(removeProduct(filterdata[0].product_id)); // Remove from watchlist in Redux state
+        setIsInWatchlist(false);
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      // If the product is not in the watchlist, add it
+      try {
+        await toast.promise(
+          addFavProduct({
+            id: userContext.user[0].id
+              ? userContext.user[0].id
+              : filterdata[0].product_id,
+            email: userContext.user[0].email,
+            product_id: location.pathname.split("/").pop(),
+          }),
+          {
+            loading: "Adding product to watchlist...",
+            success: "Product added to watchlist!",
+            error: (err) =>
+              err.response?.status === 409
+                ? "Product already exists in your watchlist!"
+                : "Failed to add product to watchlist.",
+          },
+          {
+            position: "bottom-right", // Set toast position here
+          }
+        );
+
+        dispatch(addProduct(filterdata[0])); // Add to watchlist in Redux state
+        setIsInWatchlist(true);
+      } catch (error) {
+        toast.error("Are you sure you're logged in?", {
+          position: "bottom-right",
+        });
+        console.error("Error:", error);
+      }
+    }
+  };
 
   return (
     <div className="w-full">
@@ -351,11 +417,22 @@ const Cart = () => {
                   </button>
                   <BuyNow />
                   <button
-                    onClick={handleAddToWatchlist}
-                    className="cursor-pointer group relative flex flex-row gap-x-3 text-black gap-1.5 p-2 items-center justify-center w-full h-12 border border-green-600 bg-opacity-80 rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md"
+                    onClick={handleClick}
+                    className={`cursor-pointer group relative flex flex-row gap-x-3 text-black gap-1.5 p-2 items-center justify-center w-full h-12 border ${
+                      isInWatchlist ? "border-red-600" : "border-green-600"
+                    } bg-opacity-80 rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md`}
                   >
-                    <FiHeart size={20} />
-                    Add to watchlist
+                    {isInWatchlist ? (
+                      <>
+                        <FaHeart size={20} />
+                        Remove from Watchlist
+                      </>
+                    ) : (
+                      <>
+                        <FiHeart size={20} />
+                        Add to Watchlist
+                      </>
+                    )}
                   </button>
                 </div>
                 <p className="text-md font-poppins mt-4">
@@ -386,7 +463,7 @@ const Cart = () => {
                 <div className="flex flex-col">
                   <img
                     src={IconDelivery}
-                    alt=""
+                    alt="IconDelivery"
                     className="w-auto h-16 mt-1 mr-2"
                   />
                   <p className="font-bold">Delivery</p>
@@ -649,26 +726,28 @@ const Cart = () => {
                         Picture/Video (optional)
                       </h1>
 
-                      <label
-                        htmlFor="file"
-                        className="flex flex-col items-center justify-center w-98 h-80 border-2 border-dashed border-[#4B5563] text-center text-gray-600 cursor-pointer p-14" // Increased size and added padding
-                      >
-                        <IoCloudUploadOutline size={80} fill="black" />
-                        {/* Increased icon size */}
-                        <p className="mt-2">
-                          Drag and drop your file here or click to select a
-                          file!
-                        </p>
-                      </label>
-
-                      <input
-                        className="hidden"
-                        name="text"
-                        multiple
-                        id="file"
-                        onChange={handleImageUpload}
-                        type="file"
-                      />
+                      <div className="border-2 border-dashed border-[#4B5563]">
+                        <div className="hover:transform hover:scale-105 hover:translate-x-2 hover:translate-y-[-2] hover:shadow-2xl transition-transform duration-300">
+                          <label
+                            htmlFor="file"
+                            className="flex flex-col items-center justify-center w-98 h-80 text-center text-gray-600 cursor-pointer p-14"
+                          >
+                            <IoCloudUploadOutline size={80} fill="black" />
+                            <p className="mt-2">
+                              Drag and drop your file here or click to select a
+                              file!
+                            </p>
+                          </label>
+                          <input
+                            className="hidden"
+                            name="text"
+                            multiple
+                            id="file"
+                            onChange={handleImageUpload}
+                            type="file"
+                          />
+                        </div>
+                      </div>
 
                       <div className="grid grid-cols-3 mt-2 gap-4">
                         {formdata.reviewimage.map((file, index) => (

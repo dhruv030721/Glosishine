@@ -186,8 +186,8 @@ export async function addFavProduct({ id, email, product_id }) {
 
 export async function deleteFavProduct(product_id) {
   const response = await apiConnector(
-    "DELETE",
-    `${favproductendpoints.DELETEFAVPRODUCT_API}?product_id=${product_id}`
+    "GET",
+    `${favproductendpoints.DELETEFAVPRODUCT_API}?id=${product_id}`
   );
   return response;
 }

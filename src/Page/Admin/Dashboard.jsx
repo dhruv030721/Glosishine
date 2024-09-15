@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useState } from "react";
 import { LuHome, LuLogOut } from "react-icons/lu";
 import { IoBagHandle } from "react-icons/io5";
@@ -31,7 +32,7 @@ const Dashboard = () => {
 
   return (
     <div className="flex h-screen w-full bg-white">
-      <div className="flex flex-col w-[23%] bg-green-800 border-r dark:bg-gray-800 dark:border-gray-600">
+      <div className="flex flex-col w-[23%] bg-green-800 border-r dark:bg-bg-green dark:border-bg-green">
         <div className="flex flex-col h-screen">
           <div className="flex items-center justify-center h-14 border-b dark:border-gray-600">
             <span className="text-xl font-dm-sans font-bold text-white dark:text-white">

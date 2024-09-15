@@ -1,21 +1,220 @@
-import React, { useState } from "react";
-import {
-  TextField,
-  Select,
-  MenuItem,
-  FormControl,
-  InputLabel,
-  Checkbox,
-  Button,
-  Box,
-  Grid,
-  Input,
-} from "@mui/material";
+/* eslint-disable no-unused-vars */
+import { useState } from "react";
 import { addProduct } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
 
+import Box from "@mui/material/Box";
+import Stepper from "@mui/material/Stepper";
+import Step from "@mui/material/Step";
+import StepLabel from "@mui/material/StepLabel";
+import Grid from "@mui/material/Grid";
+
+import BasicInformation from "../../Components/AddProduct/BasicInformation";
+import PricingStock from "../../Components/AddProduct/PricingStock";
+import ProductDetails from "../../Components/AddProduct/ProductDetails";
+import ImagesUpload from "../../Components/AddProduct/ImagesUpload";
+
+import PropTypes from "prop-types";
+import { styled } from "@mui/material/styles";
+import Check from "@mui/icons-material/Check";
+import InfoRoundedIcon from "@mui/icons-material/InfoRounded";
+import WarehouseRoundedIcon from "@mui/icons-material/WarehouseRounded";
+import ProductionQuantityLimitsRoundedIcon from "@mui/icons-material/ProductionQuantityLimitsRounded";
+import CollectionsRoundedIcon from "@mui/icons-material/CollectionsRounded";
+import StepConnector, {
+  stepConnectorClasses,
+} from "@mui/material/StepConnector";
+
 const AddProduct = () => {
-  // const [selectedSizes, setSelectedSizes] = useState([]);
+  const QontoConnector = styled(StepConnector)(({ theme }) => ({
+    [`&.${stepConnectorClasses.alternativeLabel}`]: {
+      top: 10,
+      left: "calc(-50% + 16px)",
+      right: "calc(50% + 16px)",
+    },
+    [`&.${stepConnectorClasses.active}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: "#784af4",
+      },
+    },
+    [`&.${stepConnectorClasses.completed}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: "#784af4",
+      },
+    },
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: "#eaeaf0",
+      borderTopWidth: 3,
+      borderRadius: 1,
+      ...theme.applyStyles("dark", {
+        borderColor: theme.palette.grey[800],
+      }),
+    },
+  }));
+
+  const QontoStepIconRoot = styled("div")(({ theme }) => ({
+    color: "#eaeaf0",
+    display: "flex",
+    height: 22,
+    alignItems: "center",
+    "& .QontoStepIcon-completedIcon": {
+      color: "#784af4",
+      zIndex: 1,
+      fontSize: 18,
+    },
+    "& .QontoStepIcon-circle": {
+      width: 8,
+      height: 8,
+      borderRadius: "50%",
+      backgroundColor: "currentColor",
+    },
+    ...theme.applyStyles("dark", {
+      color: theme.palette.grey[700],
+    }),
+    variants: [
+      {
+        props: ({ ownerState }) => ownerState.active,
+        style: {
+          color: "#784af4",
+        },
+      },
+    ],
+  }));
+
+  function QontoStepIcon(props) {
+    const { active, completed, className } = props;
+
+    return (
+      <QontoStepIconRoot ownerState={{ active }} className={className}>
+        {completed ? (
+          <Check className="QontoStepIcon-completedIcon" />
+        ) : (
+          <div className="QontoStepIcon-circle" />
+        )}
+      </QontoStepIconRoot>
+    );
+  }
+
+  QontoStepIcon.propTypes = {
+    /**
+     * Whether this step is active.
+     * @default false
+     */
+    active: PropTypes.bool,
+    className: PropTypes.string,
+    /**
+     * Mark the step as completed. Is passed to child components.
+     * @default false
+     */
+    completed: PropTypes.bool,
+  };
+
+  const ColorlibConnector = styled(StepConnector)(({ theme }) => ({
+    [`&.${stepConnectorClasses.alternativeLabel}`]: {
+      top: 22,
+    },
+    [`&.${stepConnectorClasses.active}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        backgroundImage:
+          "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
+      },
+    },
+    [`&.${stepConnectorClasses.completed}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        backgroundImage:
+          "linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)",
+      },
+    },
+    [`& .${stepConnectorClasses.line}`]: {
+      height: 3,
+      border: 0,
+      backgroundColor: "#eaeaf0",
+      borderRadius: 1,
+      ...theme.applyStyles("dark", {
+        backgroundColor: theme.palette.grey[800],
+      }),
+    },
+  }));
+
+  const ColorlibStepIconRoot = styled("div")(({ theme }) => ({
+    backgroundColor: "#ccc",
+    zIndex: 1,
+    color: "#fff",
+    width: 50,
+    height: 50,
+    display: "flex",
+    borderRadius: "50%",
+    justifyContent: "center",
+    alignItems: "center",
+    ...theme.applyStyles("dark", {
+      backgroundColor: theme.palette.grey[700],
+    }),
+    variants: [
+      {
+        props: ({ ownerState }) => ownerState.active,
+        style: {
+          backgroundImage:
+            "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+          boxShadow: "0 4px 10px 0 rgba(0,0,0,.25)",
+        },
+      },
+      {
+        props: ({ ownerState }) => ownerState.completed,
+        style: {
+          backgroundImage:
+            "linear-gradient( 136deg, rgb(242,113,33) 0%, rgb(233,64,87) 50%, rgb(138,35,135) 100%)",
+        },
+      },
+    ],
+  }));
+
+  function ColorlibStepIcon(props) {
+    const { active, completed, className } = props;
+
+    const icons = {
+      1: <InfoRoundedIcon />,
+      2: <WarehouseRoundedIcon />,
+      3: <ProductionQuantityLimitsRoundedIcon />,
+      4: <CollectionsRoundedIcon />,
+    };
+
+    return (
+      <ColorlibStepIconRoot
+        ownerState={{ completed, active }}
+        className={className}
+      >
+        {icons[String(props.icon)]}
+      </ColorlibStepIconRoot>
+    );
+  }
+
+  ColorlibStepIcon.propTypes = {
+    /**
+     * Whether this step is active.
+     * @default false
+     */
+    active: PropTypes.bool,
+    className: PropTypes.string,
+    /**
+     * Mark the step as completed. Is passed to child components.
+     * @default false
+     */
+    completed: PropTypes.bool,
+    /**
+     * The label displayed in the step icon.
+     */
+    icon: PropTypes.node,
+  };
+
+  const steps = [
+    "Basic Information",
+    "Pricing and Stock",
+    "Product Details",
+    "Image Upload",
+  ];
+
+  const [activeStep, setActiveStep] = useState(0);
+  const [completed, setCompleted] = useState({});
   const [formdata, setFormdata] = useState({
     name: "",
     prize: "",
@@ -53,18 +252,66 @@ const AddProduct = () => {
     productphoto: [],
   });
 
+  const totalSteps = () => steps.length;
+  const completedSteps = () => Object.keys(completed).length;
+  const isLastStep = () => activeStep === totalSteps() - 1;
+  const allStepsCompleted = () => completedSteps() === totalSteps();
+
+  const handleNext = () => {
+    const newActiveStep =
+      isLastStep() && !allStepsCompleted()
+        ? steps.findIndex((step, i) => !(i in completed))
+        : activeStep + 1;
+    setActiveStep(newActiveStep);
+  };
+
+  const handleBack = () =>
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+
+  const handleStep = (step) => () => setActiveStep(step);
+
+  const handleComplete = () => {
+    setCompleted({
+      ...completed,
+      [activeStep]: true,
+    });
+    handleNext();
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+    setCompleted({});
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      await toast.promise(addProduct({ productData: formdata }), {
+        loading: "Processing....",
+        success: (response) => `${response.data.message}`,
+        error: (error) => `${error.message}`,
+      });
+    } catch (error) {
+      console.error("Submit failed:", error);
+    }
+  };
+
   const handleImageUpload = (event) => {
     const files = event.target.files;
     const imagesArray = Array.from(files);
-
     setFormdata((prevProduct) => ({
       ...prevProduct,
       productphoto: prevProduct.productphoto.concat(imagesArray),
     }));
   };
 
+  const handleRemoveImage = (index) => {
+    const updatedImages = [...formdata.productphoto];
+    updatedImages.splice(index, 1);
+    setFormdata({ ...formdata, productphoto: updatedImages });
+  };
+
   const handleSizeChange = (event) => {
-    // console.log(event)
     const {
       target: { value },
     } = event;
@@ -74,517 +321,76 @@ const AddProduct = () => {
     });
   };
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    console.log("data is1 ->", formdata);
-    try {
-      await toast.promise(addProduct({ productData: formdata }), {
-        loading: "Processing....",
-        success: (response) => {
-          console.log(response);
-          return `${response.data.message}`;
-        },
-        error: (error) => {
-          return `${error.message}`;
-        },
-      });
-    } catch (error) {
-      console.error("Loggedin failed:", error);
-    }
-  };
-
-  const handleRemoveImage = (index) => {
-    const updatedImages = [...formdata.productphoto];
-    updatedImages.splice(index, 1);
-    setFormdata({ ...formdata, productphoto: updatedImages });
-  };
-
   return (
-    <Box maxWidth="76%" mx="auto" p={4}>
-      <form onSubmit={submitHandler}>
+    <Box className="w-full h-[93vh] flex flex-col">
+      {/* Stepper at the top */}
+      <Box className="sticky top-0 z-[1000] bg-white mb-10">
+        <Stepper
+          alternativeLabel
+          activeStep={activeStep}
+          connector={<ColorlibConnector />}
+        >
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel StepIconComponent={ColorlibStepIcon}>
+                {label}
+              </StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
+
+      {/* Scrollable content in the middle */}
+      <Box className="grow-[1] overflow-y-auto p-4">
         <Grid container spacing={2}>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Product Name"
-              type="text"
-              name="name"
-              value={formdata.name}
-              onChange={(e) =>
-                setFormdata({ ...formdata, name: e.target.value })
-              }
-              variant="outlined"
+          {activeStep === 0 && (
+            <BasicInformation
+              formdata={formdata}
+              setFormdata={setFormdata}
+              handleSizeChange={handleSizeChange}
             />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Size</InputLabel>
-              <Select
-                multiple
-                name="size"
-                value={formdata.size}
-                onChange={handleSizeChange}
-                input={<Input />}
-                label="Size"
-                renderValue={(selected) => selected.join(", ")}
-              >
-                {["S", "M", "L", "XL", "XXL", "XXXL"].map((size) => (
-                  <MenuItem key={size} value={size}>
-                    <Checkbox checked={formdata.size.includes(size)} />
-                    {size}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Prize"
-              type="number"
-              name="prize"
-              value={formdata.prize}
-              onChange={(e) =>
-                setFormdata({ ...formdata, prize: e.target.value })
-              }
-              variant="outlined"
+          )}
+          {activeStep === 1 && (
+            <PricingStock formdata={formdata} setFormdata={setFormdata} />
+          )}
+          {activeStep === 2 && (
+            <ProductDetails formdata={formdata} setFormdata={setFormdata} />
+          )}
+          {activeStep === 3 && (
+            <ImagesUpload
+              formdata={formdata}
+              handleImageUpload={handleImageUpload}
+              handleRemoveImage={handleRemoveImage}
             />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Regular Prize"
-              type="number"
-              name="regularprize"
-              value={formdata.regularprize}
-              onChange={(e) =>
-                setFormdata({ ...formdata, regularprize: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Sale Prize"
-              type="number"
-              name="saleprize"
-              value={formdata.saleprize}
-              onChange={(e) =>
-                setFormdata({ ...formdata, saleprize: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="GST %"
-              type="number"
-              name="gst"
-              value={formdata.gst}
-              onChange={(e) =>
-                setFormdata({ ...formdata, gst: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          {/* <Grid item xs={12} md={6}>
-                        <TextField fullWidth label="HSN ID"
-                        type=''
-                         variant="outlined" />
-                    </Grid> */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Weight (gram)"
-              name="weight"
-              value={formdata.weight}
-              onChange={(e) =>
-                setFormdata({ ...formdata, weight: e.target.value })
-              }
-              type="number"
-              variant="outlined"
-            />
-          </Grid>
-          {/* <Grid item xs={12} md={6}>
-                        <TextField fullWidth label="Inventory"
-                         type="number"
-                         name='' variant="outlined" />
-                    </Grid> */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Stock (No of pieces)"
-              type="number"
-              name="stock"
-              value={formdata.stock}
-              onChange={(e) =>
-                setFormdata({ ...formdata, stock: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Country & Origin"
-              type="text"
-              name="countryorigin"
-              value={formdata.countryorigin}
-              onChange={(e) =>
-                setFormdata({ ...formdata, countryorigin: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Color"
-              type="text"
-              name="color"
-              value={formdata.color}
-              onChange={(e) =>
-                setFormdata({ ...formdata, color: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Fabric"
-              type="text"
-              name="fabric"
-              value={formdata.fabric}
-              onChange={(e) =>
-                setFormdata({ ...formdata, fabric: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Fit / Shape"
-              type="text"
-              name="fitshape"
-              value={formdata.fitshape}
-              onChange={(e) =>
-                setFormdata({ ...formdata, fitshape: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Neck"
-              type="text"
-              name="nack"
-              value={formdata.nack}
-              onChange={(e) =>
-                setFormdata({ ...formdata, nack: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Net Quantity"
-              type="number"
-              name="quantity"
-              value={formdata.quantity}
-              onChange={(e) =>
-                setFormdata({ ...formdata, quantity: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Occupation"
-              type="text"
-              name="occupation"
-              value={formdata.occupation}
-              onChange={(e) =>
-                setFormdata({ ...formdata, occupation: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Patent"
-              type="text"
-              name="patent"
-              value={formdata.patent}
-              onChange={(e) =>
-                setFormdata({ ...formdata, patent: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Print of Patent Type"
-              type="text"
-              name="patenttype"
-              value={formdata.patenttype}
-              onChange={(e) =>
-                setFormdata({ ...formdata, patenttype: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Sleeve Length"
-              type="text"
-              name="sleevelength"
-              value={formdata.sleevelength}
-              onChange={(e) =>
-                setFormdata({ ...formdata, sleevelength: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Chest Size"
-              type="text"
-              name="chestsize"
-              value={formdata.chestsize}
-              onChange={(e) =>
-                setFormdata({ ...formdata, chestsize: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Length Size"
-              type="text"
-              name="lengthsize"
-              value={formdata.lengthsize}
-              onChange={(e) =>
-                setFormdata({ ...formdata, lengthsize: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          {/* <Grid item xs={12} md={6}>
-                        <TextField fullWidth type="file" variant="outlined"
-                            name="productphoto"
-                            value={formdata.productphoto}
-                            inputProps={{ multiple: true }}
-                            onChange={(e) => setFormdata({ ...formdata, productphoto: e.target.value })}
-                            label="Product Photos" InputLabelProps={{ shrink: true }} />
-                    </Grid> */}
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Design Name"
-              type="text"
-              name="designname"
-              value={formdata.designname}
-              onChange={(e) =>
-                setFormdata({ ...formdata, designname: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="SKU1"
-              type="text"
-              name="sku1"
-              value={formdata.sku1}
-              onChange={(e) =>
-                setFormdata({ ...formdata, sku1: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="SKU2"
-              type="text"
-              name="sku2"
-              value={formdata.sku2}
-              onChange={(e) =>
-                setFormdata({ ...formdata, sku2: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Brand Name"
-              type="text"
-              name="brandname"
-              value={formdata.brandname}
-              onChange={(e) =>
-                setFormdata({ ...formdata, brandname: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Group ID"
-              type="text"
-              name="groupid"
-              value={formdata.groupid}
-              onChange={(e) =>
-                setFormdata({ ...formdata, groupid: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Product Description"
-              type="text"
-              name="productdesc"
-              value={formdata.productdesc}
-              onChange={(e) =>
-                setFormdata({ ...formdata, productdesc: e.target.value })
-              }
-              multiline
-              rows={4}
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Headline"
-              type="text"
-              name="headline"
-              value={formdata.headline}
-              onChange={(e) =>
-                setFormdata({ ...formdata, headline: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Length"
-              type="text"
-              name="length"
-              value={formdata.length}
-              onChange={(e) =>
-                setFormdata({ ...formdata, length: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Number of Pockets"
-              type="number"
-              name="numberofpockets"
-              value={formdata.numberofpockets}
-              onChange={(e) =>
-                setFormdata({ ...formdata, numberofpockets: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Sleeve Style"
-              type="text"
-              name="sleevestyle"
-              value={formdata.sleevestyle}
-              onChange={(e) =>
-                setFormdata({ ...formdata, sleevestyle: e.target.value })
-              }
-              variant="outlined"
-            />
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <FormControl fullWidth variant="outlined">
-              <InputLabel>Stretchability</InputLabel>
-              <Select
-                label="Stretchability"
-                name="stretchability"
-                value={formdata.stretchability}
-                onChange={(e) =>
-                  setFormdata({ ...formdata, stretchability: e.target.value })
-                }
-              >
-                <MenuItem value="Yes">Yes</MenuItem>
-                <MenuItem value="No">No</MenuItem>
-              </Select>
-            </FormControl>
-          </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              fullWidth
-              label="Order ID"
-              name="orderid"
-              value={formdata.orderid}
-              onChange={(e) =>
-                setFormdata({ ...formdata, orderid: e.target.value })
-              }
-              type="number"
-              variant="outlined"
-            />
-          </Grid>
-          <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-poppins font-bold mb-4">
-              Upload Multiple Images
-            </h2>
-            <input
-              type="file"
-              multiple
-              onChange={handleImageUpload}
-              className="border p-2 mb-4"
-            />
-            <div className="grid grid-cols-3 gap-4">
-              {formdata.productphoto.map((file, index) => (
-                <div key={index} className="border p-2">
-                  <img
-                    src={URL.createObjectURL(file)}
-                    alt={`upload-${index}`}
-                    className="max-w-full h-auto"
-                  />
-                  <button
-                    onClick={() => handleRemoveImage(index)}
-                    className="bg-red-500 font-poppins text-white px-2 py-1 rounded mt-2"
-                  >
-                    Remove
-                  </button>
-                </div>
-              ))}
-            </div>
-          </div>
-          <Grid item xs={12}>
-            <Button fullWidth variant="contained" type="submit" color="success">
-              Submit
-            </Button>
-          </Grid>
+          )}
         </Grid>
-      </form>
+      </Box>
+
+      {/* Button section at the bottom */}
+      <Box className="sticky bottom-0 z-[1000] bg-white p-4 flex justify-between">
+        <button
+          disabled={activeStep <= 0}
+          onClick={() => setActiveStep((prevStep) => prevStep - 1)}
+          className="bg-red-700 text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-red-700 shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-red-700 active:bg-white active:text-red-600"
+        >
+          Back
+        </button>
+        {activeStep === steps.length - 1 ? (
+          <button
+            onClick={submitHandler}
+            className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+          >
+            Submit
+          </button>
+        ) : (
+          <button
+            onClick={() => setActiveStep((prevStep) => prevStep + 1)}
+            className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+          >
+            Next
+          </button>
+        )}
+      </Box>
     </Box>
   );
 };

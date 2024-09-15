@@ -1,0 +1,25 @@
+/* Chrome, Safari, Edge, Opera */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+#file-input::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #064e3b;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+}
+
+#file-input::file-selector-button:hover {
+  background: #064e3b;
+}

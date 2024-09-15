@@ -10,6 +10,13 @@ const watchlistSlice = createSlice({
       state.push(action.payload);
     },
     removeProduct: (state, action) => {
+      const productId = action.payload;
+
+      if (!productId) {
+        console.error("Invalid product ID:", productId);
+        return; // Return early if the product ID is invalid
+      }
+
       return state.filter(
         (product) => product.product_id !== action.payload.product_id
       );

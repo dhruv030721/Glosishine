@@ -114,8 +114,6 @@ const Navbar = () => {
     setActiveTab(tab);
   };
 
-  console.log(context.CartProducts);
-
   return (
     <>
       <div className="w-full h-full">
@@ -366,7 +364,7 @@ const Navbar = () => {
             </label>
             <FemaleIcon sx={{ color: "#ff69b4" }} />
           </div>
-          <div className="flex flex-row p-5 gap-x-4 ">
+          <div className="w-full flex flex-row p-5 gap-x-4 justify-center items-center text-center">
             {dropdownItems[activeTab].map((item, index) => (
               <>
                 <Link

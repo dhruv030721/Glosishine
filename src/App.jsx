@@ -35,6 +35,7 @@ import { jwtDecode } from "jwt-decode";
 import { CartPage } from "./Page/CartPage/CartPage";
 import NotFound from "./Components/NotFound/NotFound";
 import { WatchList } from "./Page/WatchList/WatchList";
+import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 
 export const AppContext = createContext();
 
@@ -99,6 +100,7 @@ function App() {
           setCartProducts,
         }}
       >
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Mainlayout />}>
             <Route index element={<Home />} />

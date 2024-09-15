@@ -12,6 +12,7 @@ export default {
         montserrat: ["Montserrat"],
         jost: ["Jost"],
         outfit: ["Outfit"],
+        caveat: ["Caveat, cursive"],
       },
       colors: {
         primary: "#9C9C9C",

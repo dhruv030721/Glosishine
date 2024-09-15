@@ -25,7 +25,7 @@ export const favproductendpoints = {
   ADDFAVPRODUCTS_API: BASE_URL + "favorite-products/add-favoriteproduct.php",
   GETFAVPRODUCT_API: BASE_URL + "favorite-products/get-favoriteproduct.php",
   DELETEFAVPRODUCT_API:
-    BASE_URL + "favorite-products/remove-favoriteproduct.php?id=1",
+    BASE_URL + "favorite-products/remove-favoriteproduct.php",
 };
 
 export const adminendpoints = {
