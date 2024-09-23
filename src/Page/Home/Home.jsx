@@ -32,6 +32,9 @@ import CircularLoader from "../../Components/CircularLoader/CircularLoader";
 import { AppContext } from "../../App";
 import { getContentItem } from "../../Services/Operations/ContentItem";
 import tvFrameSvg from "../../assets/TVFrame.png";
+import ScribbleLineImg from "../../assets/ScribbleLineImg.png";
+import ProductList from "../../Components/ProductList/ProductList";
+import { hourglass } from "ldrs";
 
 const Home = () => {
   const Appcontext = useContext(AppContext);
@@ -41,6 +44,8 @@ const Home = () => {
   const [feed, setFeed] = useState([]);
   const [advertisement, setAdvertisement] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  hourglass.register();
 
   // Create a ref to track the active slide
   const activeSlideRef = useRef(null);
@@ -117,8 +122,21 @@ const Home = () => {
   if (loading) {
     return (
       <>
-        <div className="flex justify-center items-center h-screen">
-          <CircularLoader />
+        <div className="w-auto flex flex-col justify-center items-center h-screen relative overflow-hidden over">
+          <l-hourglass
+            size="60"
+            bg-opacity="0.2"
+            speed="2"
+            color="rgb(6,68,59)"
+          ></l-hourglass>
+          <img
+            src={ScribbleLineImg}
+            alt="ScribbleLineImg"
+            className="absolute top-[15px] left-[-1%] z-[-1] scale-[1]"
+          />
+          <p className="font-caveat mt-10 text-[34px] text-orange-50 text-center">
+            Loading...
+          </p>
           {/* <Lottie animationData={Loadinganimation} loop={true} className='w-[50%] h-[50%]' /> */}
         </div>
       </>
@@ -245,81 +263,25 @@ const Home = () => {
           </Carousel>
         </div>
       )}
-      <div className="pt-4">
+      <div className="pt-4 relative">
         <div data-aos="fade-up" data-aos-duration="1000">
-          <h1 className="w-full font-[caveat] text-5xl sm:text-xl md:text-2xl lg:text-5xl flex pl-5 pr-5 justify-center mb-6">
+          <img
+            src={ScribbleLineImg}
+            alt="ScribbleLineImg"
+            className="h-[800px] absolute top-[-375px] left-[1%] z-[-1] scale-[1.25]"
+          />
+          <h1 className="z-[999] w-full text-orange-50 font-[caveat] text-5xl sm:text-xl md:text-2xl lg:text-5xl flex pl-5 pr-5 justify-center mb-6">
             New Drops
           </h1>
         </div>
         <div className="w-full p-5 ">
           <div className="grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 justify-center">
-            {Appcontext.getdata.map((product) => (
-              <>
-                {
-                  <div
-                    data-aos="fade-zoom-in"
-                    data-aos-easing="ease-in-back"
-                    data-aos-delay="200"
-                    data-aos-offset="0"
-                    className="relative cursor-pointer w-full h-[full] rounded-lg bg-white bg-opacity-30 backdrop-blur-lg shadow-[5px_5px_2px_1px_rgba(6,78,59,0.3)] transition-all duration-200 flex flex-col overflow-hidden"
-                  >
-                    <div className="flex flex-col overflow-hidden">
-                      <a
-                        className="relative flex h-96 overflow-hidden"
-                        href={`/${product.product_id}`}
-                      >
-                        <img
-                          className="peer absolute top-0 right-0 h-full w-full object-cover"
-                          src={product.product_img || product.images[0]} // Main image
-                          alt={product.product_name}
-                        />
-                        {product.images.length > 1 && (
-                          <img
-                            className="peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-                            src={product.images[1]} // Secondary image on hover
-                            alt={product.product_name}
-                          />
-                        )}
-                        <svg
-                          className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-                          />
-                        </svg>
-                        <span className="absolute top-0 left-0 m-2 rounded-full bg-bg-green px-2 text-center text-sm font-medium text-white">
-                          {product.discountPercentage}% OFF
-                        </span>
-                      </a>
-                      <div className="mt-4">
-                        <a href={product.product_id}>
-                          <h5 className="text-sm font-mono font-semibold flex justify-center w-full text-black">
-                            {product.product_name}
-                          </h5>
-                        </a>
-                        <div className="mt-2 mb-5 flex items-center justify-between">
-                          <p className="w-full flex justify-evenly">
-                            <span className="text-sm text-black font-bold line-through">
-                              Rs. {product.regular_price}
-                            </span>
-                            <span className="text-sm text-green-700 font-bold">
-                              Rs. {product.sale_price}
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                }
-              </>
+            {Appcontext.getdata.map((product, index) => (
+              <ProductList
+                key={product.product_id}
+                product={product}
+                index={index}
+              />
             ))}
           </div>
           <div className="mt-10 w-full flex justify-center">
@@ -328,7 +290,7 @@ const Home = () => {
                 to="/newarrivals"
                 className="cursor-pointer font-monserrat group relative flex gap-1.5 p-2 items-center justify-center w-32 h-12  rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md"
               > */}
-              <button className="bg-white bg-opacity-80 text-bg-green border border-green-900 rounded-full text-lg font-semibold px-8 py-4 cursor-pointer transition-transform duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:-translate-y-1 hover:-translate-x-0.5 active:shadow-bg-green active:translate-y-0.5 active:translate-x-0.5">
+              <button className="bg-white bg-opacity-80 text-bg-green border-2 border-bg-green rounded-full text-lg font-semibold px-8 py-4 cursor-pointer transition-transform duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:-translate-y-1 hover:-translate-x-0.5 active:shadow-bg-green active:translate-y-0.5 active:translate-x-0.5">
                 View all
               </button>
               {/* </Link> */}
@@ -384,7 +346,7 @@ const Home = () => {
           prevArrow={({ handlePrev }) => (
             <button
               onClick={handlePrev}
-              className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
+              className="z-[999] absolute top-1/2 left-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
             >
               {/* Left Arrow Icon */}
               <svg
@@ -406,7 +368,7 @@ const Home = () => {
           nextArrow={({ handleNext }) => (
             <button
               onClick={handleNext}
-              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
+              className="z-[999] absolute top-1/2 right-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
             >
               {/* Right Arrow Icon */}
               <svg
@@ -437,15 +399,20 @@ const Home = () => {
               <img
                 src={image.url}
                 alt={`onit ${index + 1}`}
-                className="max-h-full max-w-full object-contain object-center"
+                className="max-h-full max-w-full object-contain object-center "
               />
             </div>
           ))}
         </Carousel>
       </div>
-      <div className="pt-4">
+      <div className="pt-4 relative">
         <div data-aos="fade-up" data-aos-duration="1000">
-          <h1 className="w-full font-[caveat] text-5xl flex pl-5 pr-5 justify-center mb-6">
+          <img
+            src={ScribbleLineImg}
+            alt="ScribbleLineImg"
+            className="w-[800px] absolute top-[-195px] left-[22%] z-[-1] scale-[2.75]"
+          />
+          <h1 className="w-full font-[caveat] text-5xl text-orange-50 flex pl-5 pr-5 justify-center mb-6">
             Follow Our Feeds
           </h1>
         </div>

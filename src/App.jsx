@@ -128,6 +128,8 @@ function App() {
             <Route path="mosttrending" element={<MostTrending />} />
             <Route path="bundledeal" element={<BundleDeal />} />
             <Route path="watchlist" element={<WatchList />} />
+            <Route path="menswear" element={<NotFound />} />
+            <Route path="womenswear" element={<NotFound />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 

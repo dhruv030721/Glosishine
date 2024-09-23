@@ -1,26 +1,28 @@
-import React, { useContext, useState, useEffect } from "react";
+/* eslint-disable no-unused-vars */
+import { useContext, useState, useEffect } from "react";
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   IconButton,
-  TextField,
   Box,
   Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  Checkbox,
-  Input,
+  Stepper,
+  StepLabel,
+  Step,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import {
-  addProduct,
-  updateProduct,
-} from "../../Services/Operations/ProductServices";
+import { updateProduct } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App";
+import {
+  ColorlibConnector,
+  ColorlibStepIcon,
+} from "../../Components/AddProduct/StepperFormIcons";
+import BasicInformation from "../../Components/AddProduct/BasicInformation";
+import PricingStock from "../../Components/AddProduct/PricingStock";
+import ProductDetails from "../../Components/AddProduct/ProductDetails";
+import ImagesUpload from "../../Components/AddProduct/ImagesUpload";
 
 const EditProduct = ({ id }) => {
   const context = useContext(AppContext);
@@ -36,7 +38,14 @@ const EditProduct = ({ id }) => {
     }
   }, [context, id]);
   // console.log("filteredProduct", filteredProduct);
+  const steps = [
+    "Basic Information",
+    "Pricing and Stock",
+    "Product Details",
+    "Image Upload",
+  ];
 
+  const [activeStep, setActiveStep] = useState(0);
   const [formdata, setFormdata] = useState(() => {
     return filteredProduct
       ? {
@@ -158,8 +167,7 @@ const EditProduct = ({ id }) => {
   };
 
   const handleImageUpload = (e) => {
-    const files = Array.from(e.target.files);
-    const fileUrls = files.map((file) => URL.createObjectURL(file));
+    const files = e.target.files;
 
     setFormdata((prevData) => ({
       ...prevData,
@@ -218,7 +226,7 @@ const EditProduct = ({ id }) => {
       >
         Edit
       </button>
-      <Dialog open={open} onClose={handleClose} maxWidth="md" fullWidth>
+      <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
         <DialogTitle>
           Edit Product
           <IconButton
@@ -234,392 +242,84 @@ const EditProduct = ({ id }) => {
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <DialogContent dividers>
-          <Box mx="auto" p={2}>
-            <form onSubmit={submitHandler}>
-              <Grid container spacing={2}>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Product Name"
-                    type="text"
-                    name="name"
-                    value={formdata.name}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <FormControl fullWidth variant="outlined">
-                    <InputLabel>Size</InputLabel>
-                    <Select
-                      multiple
-                      name="size"
-                      value={formdata.size}
-                      onChange={handleSizeChange}
-                      input={<Input />}
-                    >
-                      {["S", "M", "L", "XL", "XXL", "XXXL"].map((size) => (
-                        <MenuItem key={size} value={size}>
-                          <Checkbox checked={formdata.size.includes(size)} />
-                          {size}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Prize"
-                    type="number"
-                    name="prize"
-                    value={formdata.prize}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Regular Prize"
-                    type="number"
-                    name="regularprize"
-                    value={formdata.regularprize}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Sale Prize"
-                    type="number"
-                    name="saleprize"
-                    value={formdata.saleprize}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="GST"
-                    type="text"
-                    name="gst"
-                    value={formdata.gst}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                {/* Repeat similar Grid items for other fields */}
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Weight"
-                    type="text"
-                    name="weight"
-                    value={formdata.weight}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Stock"
-                    type="text"
-                    name="stock"
-                    value={formdata.stock}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Country Origin"
-                    type="text"
-                    name="countryorigin"
-                    value={formdata.countryorigin}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Color"
-                    type="text"
-                    name="color"
-                    value={formdata.color}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Fabric"
-                    type="text"
-                    name="fabric"
-                    value={formdata.fabric}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Fit Shape"
-                    type="text"
-                    name="fitshape"
-                    value={formdata.fitshape}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Nack"
-                    type="text"
-                    name="nack"
-                    value={formdata.nack}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Quantity"
-                    type="text"
-                    name="quantity"
-                    value={formdata.quantity}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Occupation"
-                    type="text"
-                    name="occupation"
-                    value={formdata.occupation}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Patent"
-                    type="text"
-                    name="patent"
-                    value={formdata.patent}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Patent Type"
-                    type="text"
-                    name="patenttype"
-                    value={formdata.patenttype}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Sleeve Length"
-                    type="text"
-                    name="sleevelength"
-                    value={formdata.sleevelength}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Chest Size"
-                    type="text"
-                    name="chestsize"
-                    value={formdata.chestsize}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Length Size"
-                    type="text"
-                    name="lengthsize"
-                    value={formdata.lengthsize}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Design Name"
-                    type="text"
-                    name="designname"
-                    value={formdata.designname}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="SKU1"
-                    type="text"
-                    name="sku1"
-                    value={formdata.sku1}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="SKU2"
-                    type="text"
-                    name="sku2"
-                    value={formdata.sku2}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Brand Name"
-                    type="text"
-                    name="brandname"
-                    value={formdata.brandname}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Product Description"
-                    type="text"
-                    name="productdesc"
-                    value={formdata.productdesc}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Length"
-                    type="text"
-                    name="length"
-                    value={formdata.length}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Number of Pockets"
-                    type="text"
-                    name="noofpocket"
-                    value={formdata.noofpocket}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Sleeve Style"
-                    type="text"
-                    name="sleevestyle"
-                    value={formdata.sleevestyle}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Order ID"
-                    type="text"
-                    name="orderid"
-                    value={formdata.orderid}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                  <TextField
-                    fullWidth
-                    label="Stretchability"
-                    type="text"
-                    name="stretchability"
-                    value={formdata.stretchability}
-                    onChange={handleInputChange}
-                    variant="outlined"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <div className="container mx-auto p-4">
-                    <h2 className="text-2xl font-poppins font-bold mb-4">
-                      Upload Multiple Images
-                    </h2>
-                    <input
-                      type="file"
-                      multiple
-                      onChange={handleImageUpload}
-                      className="border p-2 mb-4"
-                    />
-                    <div className="grid grid-cols-3 gap-4">
-                      {formdata.productphoto.map((url, index) => (
-                        <div key={index} className="border p-2">
-                          <img
-                            src={
-                              typeof url === "string"
-                                ? url
-                                : URL.createObjectURL(url)
-                            }
-                            alt={`upload-${index}`}
-                            className="max-w-full h-auto"
-                          />
-                          <button
-                            onClick={() => handleRemoveImage(index)}
-                            className="bg-red-500 font-poppins text-white p-2 mt-2"
-                          >
-                            Remove
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </Grid>
-              </Grid>
-              <button
-                type="submit"
-                className="mt-4 p-2 w-24 bg-green-500 font-poppins text-white rounded"
+        <DialogContent dividers sx={{ paddingBlock: "0px" }}>
+          <Box className="w-full h-full flex flex-col">
+            {/* Stepper at the top */}
+            <Box
+              className="sticky top-0 z-[1000] bg-white mb-10 pt-4
+            "
+            >
+              <Stepper
+                alternativeLabel
+                activeStep={activeStep}
+                connector={<ColorlibConnector />}
+                className="mt-4"
               >
-                Submit
+                {steps.map((label) => (
+                  <Step key={label}>
+                    <StepLabel StepIconComponent={ColorlibStepIcon}>
+                      {label}
+                    </StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+            </Box>
+
+            {/* Scrollable content in the middle */}
+            <Box className="grow-[1] overflow-y-auto p-4">
+              <Grid container spacing={2}>
+                {activeStep === 0 && (
+                  <BasicInformation
+                    formdata={formdata}
+                    setFormdata={setFormdata}
+                    handleSizeChange={handleSizeChange}
+                  />
+                )}
+                {activeStep === 1 && (
+                  <PricingStock formdata={formdata} setFormdata={setFormdata} />
+                )}
+                {activeStep === 2 && (
+                  <ProductDetails
+                    formdata={formdata}
+                    setFormdata={setFormdata}
+                  />
+                )}
+                {activeStep === 3 && (
+                  <ImagesUpload
+                    formdata={formdata}
+                    handleImageUpload={handleImageUpload}
+                    handleRemoveImage={handleRemoveImage}
+                    popup={true}
+                  />
+                )}
+              </Grid>
+            </Box>
+
+            {/* Button section at the bottom */}
+            <Box className="sticky bottom-0 z-[1000] bg-white p-4 flex justify-between">
+              <button
+                disabled={activeStep <= 0}
+                onClick={() => setActiveStep((prevStep) => prevStep - 1)}
+                className="bg-red-700 text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-red-700 shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-red-700 active:bg-white active:text-red-600"
+              >
+                Back
               </button>
-            </form>
+              {activeStep === steps.length - 1 ? (
+                <button
+                  onClick={submitHandler}
+                  className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+                >
+                  Update
+                </button>
+              ) : (
+                <button
+                  onClick={() => setActiveStep((prevStep) => prevStep + 1)}
+                  className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+                >
+                  Next
+                </button>
+              )}
+            </Box>
           </Box>
         </DialogContent>
       </Dialog>

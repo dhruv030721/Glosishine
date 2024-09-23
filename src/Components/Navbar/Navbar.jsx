@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unknown-property */
 /* eslint-disable react/no-unescaped-entities */
 import { useContext, useEffect, useState } from "react";
@@ -59,6 +60,7 @@ const Navbar = () => {
 
   useEffect(() => {
     dropdownVisible ? setDropdownVisible(!dropdownVisible) : "";
+    isSearchOpen ? setIsSearchOpen(!isSearchOpen) : "";
   }, [location]);
 
   const removeItemFromCart = (id) => {
@@ -315,7 +317,7 @@ const Navbar = () => {
         </div>
         <div
           className={`fixed top-0 left-0 w-full bg-white shadow-lg transition-all duration-300 ${
-            isSearchOpen ? "translate-y-0" : "-translate-y-full"
+            isSearchOpen ? "translate-y-0 block" : "-translate-y-full hidden"
           }`}
         >
           <div className="flex items-center px-4 py-3 md:px-6">
@@ -370,13 +372,10 @@ const Navbar = () => {
                 <Link
                   key={index}
                   to={item.link}
-                  className="hover:underline font-poppins"
+                  className="hover:underline hover:text-bg-green font-poppins"
                 >
                   {item.name}
                 </Link>
-                {index < dropdownItems[activeTab].length - 1 && (
-                  <div className="w-[0.5px] h-6 bg-black"></div>
-                )}
               </>
             ))}
           </div>

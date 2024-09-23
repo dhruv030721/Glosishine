@@ -1,7 +1,8 @@
-import React, { useCallback, useContext } from "react";
+import { useCallback, useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App.jsx";
+import { deleteProduct } from "../../Services/Operations/ProductServices.js";
 import EditProduct from "./EditProduct.jsx";
 
 const Product = () => {

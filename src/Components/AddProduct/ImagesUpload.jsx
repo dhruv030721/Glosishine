@@ -1,6 +1,11 @@
 import "../../Components/AddProduct/inputStyles.css";
 
-const ImagesUpload = ({ formdata, handleImageUpload, handleRemoveImage }) => {
+const ImagesUpload = ({
+  formdata,
+  handleImageUpload,
+  handleRemoveImage,
+  popup,
+}) => {
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-poppins font-bold mb-4">
@@ -32,24 +37,28 @@ const ImagesUpload = ({ formdata, handleImageUpload, handleRemoveImage }) => {
       </form>
 
       <div className="grid grid-cols-3 gap-4">
-        {formdata.productphoto.map((file, index) => (
-          <div
-            key={index}
-            className="border border-gray-300 p-2 rounded-lg shadow"
-          >
-            <img
-              src={URL.createObjectURL(file)}
-              alt={`upload-${index}`}
-              className="w-full h-auto rounded-lg"
-            />
-            <button
-              onClick={() => handleRemoveImage(index)}
-              className="bg-red-500 text-white font-poppins px-3 py-1 rounded-lg mt-2 hover:bg-red-600 transition"
+        {formdata.productphoto.length > 0 ? (
+          formdata.productphoto.map((file, index) => (
+            <div
+              key={index}
+              className="border border-gray-300 p-2 rounded-lg shadow"
             >
-              Remove
-            </button>
-          </div>
-        ))}
+              <img
+                src={popup ? file : URL.createObjectURL(file)}
+                alt={`upload-${index}`}
+                className="w-full h-auto rounded-lg"
+              />
+              <button
+                onClick={() => handleRemoveImage(index)}
+                className="bg-red-500 text-white font-poppins px-3 py-1 rounded-lg mt-2 hover:bg-red-600 transition"
+              >
+                Remove
+              </button>
+            </div>
+          ))
+        ) : (
+          <p className="text-gray-500">No images uploaded yet</p>
+        )}
       </div>
     </div>
   );
