@@ -123,21 +123,25 @@ const Home = () => {
   if (loading) {
     return (
       <>
-        <div className="w-auto flex flex-col justify-center items-center h-screen relative overflow-hidden over">
+        <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
           <l-hourglass
             size="60"
             bg-opacity="0.2"
             speed="2"
             color="rgb(6,68,59)"
+            className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24" // Adjust size for larger screens
           ></l-hourglass>
+
           <img
             src={ScribbleLineImg}
             alt="ScribbleLineImg"
-            className="absolute top-[15px] left-[-1%] z-[-1] scale-[1]"
+            className="absolute top-[15px] left-[-1%] z-[-1] scale-[1] w-full h-auto max-w-none xl:top-[-3%] xl:scale-[1.25] 2xl:top-[-5%]"
           />
-          <p className="font-caveat mt-10 text-[34px] text-orange-50 text-center">
+
+          <p className="font-caveat mt-10 text-[24px] sm:text-[28px] md:text-[34px] lg:text-[40px] xl:text-[40px] 2xl:text-[70px] text-orange-50 text-center">
             Loading...
           </p>
+
           {/* <Lottie animationData={Loadinganimation} loop={true} className='w-[50%] h-[50%]' /> */}
         </div>
       </>
