@@ -35,6 +35,7 @@ import tvFrameSvg from "../../assets/TVFrame.png";
 import ScribbleLineImg from "../../assets/ScribbleLineImg.png";
 import ProductList from "../../Components/ProductList/ProductList";
 import { hourglass } from "ldrs";
+import TVVideoSection from "../../Components/TVSection/TvSection";
 
 const Home = () => {
   const Appcontext = useContext(AppContext);
@@ -153,7 +154,6 @@ const Home = () => {
               onClick={handlePrev}
               className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
             >
-              {/* Left Arrow Icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -175,7 +175,6 @@ const Home = () => {
               onClick={handleNext}
               className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
             >
-              {/* Right Arrow Icon */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -198,7 +197,7 @@ const Home = () => {
               key={index}
               src={image.url}
               alt={`image ${index + 1}`}
-              className="max-h-full max-w-full object-contain "
+              className="max-h-full max-w-full object-contain w-full"
             />
           ))}
         </Carousel>
@@ -212,7 +211,6 @@ const Home = () => {
                 onClick={handlePrev}
                 className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
               >
-                {/* Left Arrow Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -234,7 +232,6 @@ const Home = () => {
                 onClick={handleNext}
                 className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
               >
-                {/* Right Arrow Icon */}
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -257,20 +254,20 @@ const Home = () => {
                 key={index}
                 src={ad.url}
                 alt={`advertisement ${index + 1}`}
-                className="max-h-full max-w-full object-contain object-center"
+                className="max-h-full max-w-full object-contain object-center w-full"
               />
             ))}
           </Carousel>
         </div>
       )}
-      <div className="pt-4 relative">
+      <div className="pt-4 relative xl:pt-16 2xl:pt-16 4xl:pt-24">
         <div data-aos="fade-up" data-aos-duration="1000">
           <img
             src={ScribbleLineImg}
             alt="ScribbleLineImg"
-            className="h-[800px] absolute top-[-375px] left-[1%] z-[-1] scale-[1.25]"
+            className="h-[800px] absolute top-[-375px] left-[1%] z-[-1] scale-[1.25] xl:top-[-375px] xl:left-[1%] 2xl:top-[-330px] 2xl:left-[22%] 4xl:top-[-330px] 4xl:left-[22%] "
           />
-          <h1 className="z-[999] w-full text-orange-50 font-[caveat] text-5xl sm:text-xl md:text-2xl lg:text-5xl flex pl-5 pr-5 justify-center mb-6">
+          <h1 className="z-[999] w-full text-orange-50 font-[caveat] text-5xl sm:text-xl md:text-2xl lg:text-5xl flex pl-5 pr-5 justify-center mb-6 xl:pt-10 2xl:pt-10 4xl:pt-10">
             New Drops
           </h1>
         </div>
@@ -298,22 +295,11 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div
-        data-aos="fade-left"
-        data-aos-easing="ease-in-back"
-        data-aos-delay="100"
-        data-aos-offset="0"
-        className="w-full flex flex-col justify-center items-center relative mt-10"
-      >
-        <img src={tvFrameSvg} alt={tvFrameSvg} />
-        <video
-          src={seasonalVideos.video2[0].url}
-          autoPlay
-          muted
-          className="w-full h-full absolute top-[-7.5%] left-[-6.25%] rounded scale-[0.7]"
-        />
-      </div>
-      <div className="w-full pl-16 pr-16 pt-5 pb-5 flex justify-center items-center">
+      <TVVideoSection
+        videoUrl={seasonalVideos.video1[0].url}
+        videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
+      />
+      <div className="w-full pl-16 pr-16 pt-5 pb-5 flex justify-center items-center 2xl:my-10">
         <div className="flex justify-center items-center gap-x-10 gap-y-2">
           {[mansshirt, womensshirts].map((image, index) => (
             <img
@@ -325,21 +311,10 @@ const Home = () => {
           ))}
         </div>
       </div>
-      <div
-        data-aos="fade-right"
-        data-aos-easing="ease-in-back"
-        data-aos-delay="100"
-        data-aos-offset="0"
-        className="w-full flex flex-col justify-center items-center relative mt-10"
-      >
-        <img src={tvFrameSvg} alt={tvFrameSvg} />
-        <video
-          src={seasonalVideos.video1[0].url}
-          autoPlay
-          muted
-          className="w-full h-full absolute top-[-7.5%] left-[-6.25%] rounded scale-[0.7]"
-        />
-      </div>
+      <TVVideoSection
+        videoUrl={seasonalVideos.video2[0].url}
+        videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
+      />
       <div className="relative">
         <Carousel
           className="h-[75%]"
@@ -395,11 +370,12 @@ const Home = () => {
               data-aos-easing="ease-in-back"
               data-aos-delay="100"
               data-aos-offset="0"
+              className="w-full"
             >
               <img
                 src={image.url}
                 alt={`onit ${index + 1}`}
-                className="max-h-full max-w-full object-contain object-center "
+                className="max-h-full max-w-full object-cover w-full"
               />
             </div>
           ))}
@@ -410,9 +386,9 @@ const Home = () => {
           <img
             src={ScribbleLineImg}
             alt="ScribbleLineImg"
-            className="w-[800px] absolute top-[-195px] left-[22%] z-[-1] scale-[2.75]"
+            className="w-[800px] absolute top-[-195px] left-[22%] z-[-1] scale-[2.75] xl:left-[34%] xl:top-[-160px] xl:cale-[3] 2xl:left-[34%] 2xl:top-[-160px] 2xl:cale-[3] 4xl:left-[22%] "
           />
-          <h1 className="w-full font-[caveat] text-5xl text-orange-50 flex pl-5 pr-5 justify-center mb-6">
+          <h1 className="w-full font-[caveat] text-5xl text-orange-50 flex pl-5 pr-5 justify-center mb-6 xl:py-10 2xl:py-10 4xl:py-10">
             Follow Our Feeds
           </h1>
         </div>
