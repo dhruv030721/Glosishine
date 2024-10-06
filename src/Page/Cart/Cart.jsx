@@ -34,7 +34,7 @@ import { addItem } from "../../Slice/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
-  removeProduct,
+  removeFromWatchlist,
   setWatchlist,
 } from "../../Slice/watchlistSlice"; // Adjust the path as needed
 import IconDelivery from "../../assets/icon-delivery.svg";
@@ -242,7 +242,7 @@ const Cart = () => {
             position: "bottom-right", // Set toast position here
           }
         );
-        dispatch(removeProduct(filterdata[0].product_id)); // Remove from watchlist in Redux state
+        dispatch(removeFromWatchlist(filterdata[0].product_id)); // Remove from watchlist in Redux state
         setIsInWatchlist(false);
       } catch (error) {
         console.error("Error:", error);

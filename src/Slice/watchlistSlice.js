@@ -1,32 +1,21 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState = [];
-
 const watchlistSlice = createSlice({
   name: "watchlist",
-  initialState,
+  initialState: [],
   reducers: {
+    setWatchlist: (state, action) => {
+      return action.payload;
+    },
     addProduct: (state, action) => {
       state.push(action.payload);
     },
-    removeProduct: (state, action) => {
-      const productId = action.payload;
-
-      if (!productId) {
-        console.error("Invalid product ID:", productId);
-        return; // Return early if the product ID is invalid
-      }
-
-      return state.filter(
-        (product) => product.product_id !== action.payload.product_id
-      );
-    },
-    setWatchlist: (state, action) => {
-      return action.payload;
+    removeFromWatchlist: (state, action) => {
+      return state.filter((product) => product.product_id !== action.payload);
     },
   },
 });
 
-export const { addProduct, removeProduct, setWatchlist } =
+export const { setWatchlist, addProduct, removeFromWatchlist } =
   watchlistSlice.actions;
 export default watchlistSlice.reducer;

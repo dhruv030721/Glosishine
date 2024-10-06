@@ -7,9 +7,9 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
       data-aos-easing="ease-in-back"
       data-aos-delay="100"
       data-aos-offset="0"
-      className="w-full flex flex-col justify-center items-center relative xl:my-[6.5%] 2xl:my-[6.5%]"
+      className="w-full flex flex-col justify-center items-center relative "
     >
-      <img src={tvFrameSvg} alt="TV Frame" className="2xl:scale-150" />
+      <img src={tvFrameSvg} alt="TV Frame" />
       <video
         src={videoUrl}
         autoPlay

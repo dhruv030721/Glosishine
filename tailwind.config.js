@@ -13,6 +13,7 @@ export default {
         jost: ["Jost"],
         outfit: ["Outfit"],
         caveat: ["Caveat, cursive"],
+        PM: ["Permanent Marker, cursive"],
       },
       colors: {
         primary: "#9C9C9C",

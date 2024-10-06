@@ -34,7 +34,7 @@ import { getContentItem } from "../../Services/Operations/ContentItem";
 import tvFrameSvg from "../../assets/TVFrame.png";
 import ScribbleLineImg from "../../assets/ScribbleLineImg.png";
 import ProductList from "../../Components/ProductList/ProductList";
-import { hourglass } from "ldrs";
+import { hourglass, tailChase } from "ldrs";
 import TVVideoSection from "../../Components/TVSection/TvSection";
 
 const Home = () => {
@@ -46,7 +46,7 @@ const Home = () => {
   const [advertisement, setAdvertisement] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  hourglass.register();
+  tailChase.register();
 
   // Create a ref to track the active slide
   const activeSlideRef = useRef(null);
@@ -124,23 +124,13 @@ const Home = () => {
     return (
       <>
         <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
-          <l-hourglass
+          <l-tail-chase
             size="60"
             bg-opacity="0.2"
             speed="2"
             color="rgb(6,68,59)"
             className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24" // Adjust size for larger screens
-          ></l-hourglass>
-
-          <img
-            src={ScribbleLineImg}
-            alt="ScribbleLineImg"
-            className="absolute top-[15px] left-[-1%] z-[-1] scale-[1] w-full h-auto max-w-none xl:top-[-3%] xl:scale-[1.25] 2xl:top-[-5%]"
-          />
-
-          <p className="font-caveat mt-10 text-[24px] sm:text-[28px] md:text-[34px] lg:text-[40px] xl:text-[40px] 2xl:text-[70px] text-orange-50 text-center">
-            Loading...
-          </p>
+          ></l-tail-chase>
 
           {/* <Lottie animationData={Loadinganimation} loop={true} className='w-[50%] h-[50%]' /> */}
         </div>
@@ -264,18 +254,21 @@ const Home = () => {
           </Carousel>
         </div>
       )}
-      <div className="pt-4 relative xl:pt-16 2xl:pt-16 4xl:pt-24">
-        <div data-aos="fade-up" data-aos-duration="1000">
-          <img
-            src={ScribbleLineImg}
-            alt="ScribbleLineImg"
-            className="h-[800px] absolute top-[-375px] left-[1%] z-[-1] scale-[1.25] xl:top-[-375px] xl:left-[1%] 2xl:top-[-330px] 2xl:left-[22%] 4xl:top-[-330px] 4xl:left-[22%] "
-          />
-          <h1 className="z-[999] w-full text-orange-50 font-[caveat] text-5xl sm:text-xl md:text-2xl lg:text-5xl flex pl-5 pr-5 justify-center mb-6 xl:pt-10 2xl:pt-10 4xl:pt-10">
+      <div
+        data-aos="fade-up"
+        data-aos-duration="800"
+        className="pt-4 relative xl:pt-0 2xl:py-5 4xl:py-24 w-f"
+      >
+        <div
+          // data-aos="fade-up"
+          // data-aos-duration="1000"
+          className="w-full h-full bg-bg-green xl:mb-2 xl:mt-12 2xl:my-4 4xl:my-6"
+        >
+          <h1 className="z-[999] w-full text-orange-50 font-PM text-center text-5xl sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl flex pl-5 pr-5 justify-center xl:py-4 2xl:py-7 4xl:py-10">
             New Drops
           </h1>
         </div>
-        <div className="w-full p-5 ">
+        <div className="w-full p-5 pt-0">
           <div className="grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 justify-center">
             {Appcontext.getdata.map((product, index) => (
               <ProductList
@@ -291,7 +284,7 @@ const Home = () => {
                 to="/newarrivals"
                 className="cursor-pointer font-monserrat group relative flex gap-1.5 p-2 items-center justify-center w-32 h-12  rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md"
               > */}
-              <button className="bg-white bg-opacity-80 text-bg-green border-2 border-bg-green rounded-full text-lg font-semibold px-8 py-4 cursor-pointer transition-transform duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:-translate-y-1 hover:-translate-x-0.5 active:shadow-bg-green active:translate-y-0.5 active:translate-x-0.5">
+              <button className="bg-white bg-opacity-80 text-bg-green border-2 border-bg-green rounded-lg text-lg font-semibold px-4 py-2 cursor-pointer transition-transform duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:-translate-y-1 hover:-translate-x-0.5 active:shadow-bg-green active:translate-y-0.5 active:translate-x-0.5">
                 View all
               </button>
               {/* </Link> */}
@@ -306,12 +299,9 @@ const Home = () => {
       <div className="w-full pl-16 pr-16 pt-5 pb-5 flex justify-center items-center 2xl:my-10">
         <div className="flex justify-center items-center gap-x-10 gap-y-2">
           {[mansshirt, womensshirts].map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt=""
-              className="w-[450px] h-[550px]"
-            />
+            <a href={index === 0 ? "/menswear" : "/womenswear"} key={index}>
+              <img src={image} alt="" className="w-[450px] h-[550px]" />
+            </a>
           ))}
         </div>
       </div>
@@ -385,14 +375,13 @@ const Home = () => {
           ))}
         </Carousel>
       </div>
-      <div className="pt-4 relative">
-        <div data-aos="fade-up" data-aos-duration="1000">
-          <img
-            src={ScribbleLineImg}
-            alt="ScribbleLineImg"
-            className="w-[800px] absolute top-[-195px] left-[22%] z-[-1] scale-[2.75] xl:left-[34%] xl:top-[-160px] xl:cale-[3] 2xl:left-[34%] 2xl:top-[-160px] 2xl:cale-[3] 4xl:left-[22%] "
-          />
-          <h1 className="w-full font-[caveat] text-5xl text-orange-50 flex pl-5 pr-5 justify-center mb-6 xl:py-10 2xl:py-10 4xl:py-10">
+      <div className="relative">
+        <div
+          data-aos="fade-up"
+          data-aos-duration="1000"
+          className="w-full h-full bg-bg-green xl:my-2 2xl:my-4 4xl:my-6"
+        >
+          <h1 className="w-full xl:text-3xl text-orange-50 font-PM text-center text-5xl flex pl-5 pr-5 justify-center xl:py-4 2xl:py-7 4xl:py-10">
             Follow Our Feeds
           </h1>
         </div>

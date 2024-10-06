@@ -9,32 +9,39 @@ import { useNavigate } from "react-router-dom";
 const cookies = new Cookies();
 const Account = () => {
   const [open, setOpen] = React.useState(false);
-  const [isLogin, setIsLogin] = useState(!!cookies.get("Access-Token"));
+  const [loading, setLoading] = useState(true);
   const context = useContext(AppContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = cookies.get("Access-Token");
-    setIsLogin(!!token);
-    console.log(isLogin);
-    console.log(context);
-  }, [isLogin]);
 
-  useEffect(() => {
-    if (isLogin) {
-      console.log("Login");
-    } else {
-      console.log("Failed");
+    if (!token) {
       navigate("/Login");
+      return;
     }
-  }, [isLogin, navigate]);
+
+    if (!context.user) {
+      // If token exists but user data is not loaded, wait for a short time and then reload
+      const timer = setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+
+    setLoading(false);
+  }, [context.user, navigate]);
 
   const logoutHandler = () => {
-    // context.token = null;
     cookies.remove("Access-Token");
     setOpen(false);
     navigate("/");
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen p-5 bg-gray-100">

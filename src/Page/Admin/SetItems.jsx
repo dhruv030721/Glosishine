@@ -1,16 +1,17 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from "react";
-import image1 from "../../assets/image1.jpg";
 import toast from "react-hot-toast";
 import {
   deleteContentItem,
   setContentItem,
+  getContentItem,
 } from "../../Services/Operations/ContentItem";
 import { v4 as uuidv4 } from "uuid";
-import { getContentItem } from "../../Services/Operations/ContentItem";
-import { FaTrash } from "react-icons/fa6";
+import { FaTrash, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Lottie from "lottie-react";
 import Loadinganimation from "../../assets/Loadinganimation.json";
+import { Carousel } from "react-responsive-carousel";
+import "react-responsive-carousel/lib/styles/carousel.min.css";
 
 const SetItems = () => {
   const initialImageArray = [
@@ -111,20 +112,79 @@ const SetItems = () => {
     }
   };
 
-  // In the JSX
-  {
-    Object.keys(errors).map(
-      (angle) =>
-        errors[angle] && (
-          <>
-            {console.log(angle, "angle")}
-            <p key={angle} className="text-red-500 text-sm">
-              {errors[angle]}
-            </p>
-          </>
-        )
+  const renderCarousel = (images, type) => {
+    if (!images || images.length === 0) return <p>No images found</p>;
+
+    return (
+      <Carousel
+        showThumbs={false}
+        showStatus={false}
+        infiniteLoop={true}
+        renderArrowPrev={(onClickHandler, hasPrev, label) =>
+          hasPrev && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              title={label}
+              className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+            >
+              <FaChevronLeft className="text-white text-2xl" />
+            </button>
+          )
+        }
+        renderArrowNext={(onClickHandler, hasNext, label) =>
+          hasNext && (
+            <button
+              type="button"
+              onClick={onClickHandler}
+              title={label}
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-bg-green  bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+            >
+              <FaChevronRight className="text-white text-2xl" />
+            </button>
+          )
+        }
+      >
+        {images.map((img, index) => (
+          <div key={index} className="relative">
+            <img
+              src={img.url}
+              alt={img.angle || "Content Image"}
+              className="w-full h-64 object-cover"
+            />
+            <button
+              onClick={() => deleteContentItemHandler(img.id)}
+              className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors duration-200"
+            >
+              <FaTrash size={16} />
+            </button>
+          </div>
+        ))}
+      </Carousel>
     );
-  }
+  };
+
+  const renderSection = (
+    title,
+    images,
+    type,
+    uploadComponent,
+    confirmAction
+  ) => (
+    <div className="mb-10 bg-white shadow-md rounded-lg p-6">
+      <h2 className="text-2xl font-bold mb-4">{title}</h2>
+      <div className="mb-6">{renderCarousel(images, type)}</div>
+      <div className="mb-4">{uploadComponent}</div>
+      <div className="flex justify-end">
+        <button
+          className="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+          onClick={confirmAction}
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  );
 
   const addContentItem = async (Array, type, section_id) => {
     await toast.promise(setContentItem(Array, type, section_id), {
@@ -168,15 +228,13 @@ const SetItems = () => {
 
   if (loading) {
     return (
-      <>
-        <div className="flex justify-center items-center h-screen">
-          <Lottie
-            animationData={Loadinganimation}
-            loop={true}
-            className="w-[50%] h-[50%]"
-          />
-        </div>
-      </>
+      <div className="flex justify-center items-center h-screen">
+        <Lottie
+          animationData={Loadinganimation}
+          loop={true}
+          className="w-1/2 h-1/2"
+        />
+      </div>
     );
   }
 
@@ -194,236 +252,122 @@ const SetItems = () => {
   };
 
   return (
-    <div className="w-full">
-      <h1 className="w-full h-10 flex items-center justify-center bg-slate-300 text-xl font-poppins rounded-md">
-        Slider Items 1
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 w-[90%] gap-4">
-        {slider1.map((img, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <img
-              src={img.preview || image1}
-              alt={img.angle || "Product Img"}
-              className="w-full h-52 mt-2 object-cover rounded-md"
-            />
-            <label className="text-sm font-medium leading-none mt-2 mb-2">
-              {img.angle}
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => productImageHandler(img.angle, e, 1610, 810)}
-              className="appearance-none relative block w-full px-3 py-2 text-sm leading-tight rounded-md bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
-            {img.error && (
-              <p className="text-red-500 text-sm mt-1">{img.error}</p>
-            )}
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1  w-[90%] gap-4">
-        {imagesSlider1 == null
-          ? "No any images found"
-          : imagesSlider1.map((img, index) => (
-              <div key={index} className="flex gap-x-5 items-center">
+    <div className="container mx-auto px-4 py-8">
+      {renderSection(
+        "Slider Items 1 (1610x810)",
+        imagesSlider1,
+        "ImageSlider-1",
+        <div className="grid grid-cols-1 gap-4">
+          {slider1.map((img, index) => (
+            <div key={index} className="flex flex-col items-center">
+              {img.preview && (
                 <img
-                  src={img.url || image1}
+                  src={img.preview}
                   alt={img.angle || "Product Img"}
-                  className="w-full h-52 mt-2 object-cover rounded-md"
+                  className="w-full h-52 object-cover rounded-md mb-2"
                 />
-                <label className="text-sm font-medium leading-none mt-2 mb-2">
-                  {img.angle}
-                </label>
-                <button
-                  onClick={() => deleteContentItemHandler(img.id)}
-                  className="border-2 border-red-500 border-dashed rounded-lg p-2"
-                >
-                  <FaTrash size={20} color="red" />
-                </button>
-              </div>
-            ))}
-      </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => productImageHandler(img.angle, e, 1610, 810)}
+                className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {img.error && (
+                <p className="text-red-500 text-sm mt-1">{img.error}</p>
+              )}
+            </div>
+          ))}
+        </div>,
+        () => addContentItem(slider1, "ImageSlider-1", 1)
+      )}
 
-      <div className="mt-2 flex gap-x-5 justify-end">
-        <button
-          className="bg-green-700 text-white font-poppins font-bold py-2 px-4 rounded"
-          onClick={() => addContentItem(slider1, "ImageSlider-1", 1)}
-        >
-          Confirm
-        </button>
-      </div>
-
-      <h1 className="w-full mt-5 h-10 flex items-center justify-center bg-slate-300 text-xl font-poppins rounded-md">
-        Advertisement Item
-      </h1>
-      <div className="mt-2 w-[67%] flex">
-        {advertiseImages.map((img, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <img
-              src={img.preview || image1}
-              alt={img.angle || "Product Img"}
-              className="w-full h-52 mt-2 object-cover rounded-md"
-            />
-            <label className="text-sm font-medium leading-none mt-2 mb-2">
-              {img.angle}
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => productImageHandler(img.angle, e, 1600, 800)}
-              className="appearance-none relative block w-full px-3 py-2 text-sm leading-tight rounded-md bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
-            {img.error && (
-              <p className="text-red-500 text-sm mt-1">{img.error}</p>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1  w-[90%] gap-4">
-        {advertisement == null
-          ? "No any images found"
-          : advertisement.map((img, index) => (
-              <div key={index} className="flex gap-x-5 items-center">
+      {renderSection(
+        "Advertisement Item (1600x800)",
+        advertisement,
+        "Advertisement",
+        <div className="flex flex-col items-center">
+          {advertiseImages.map((img, index) => (
+            <div key={index} className="w-full mb-4">
+              {img.preview && (
                 <img
-                  src={img.url || image1}
-                  alt={img.angle || "Product Img"}
-                  className="w-full h-52 mt-2 object-cover rounded-md"
+                  src={img.preview}
+                  alt={img.angle || "Advertisement Img"}
+                  className="w-full h-52 object-cover rounded-md mb-2"
                 />
-                <label className="text-sm font-medium leading-none mt-2 mb-2">
-                  {img.angle}
-                </label>
-                <button
-                  onClick={() => deleteContentItemHandler(img.id)}
-                  className="border-2 border-red-500 border-dashed rounded-lg p-2"
-                >
-                  <FaTrash size={20} color="red" />
-                </button>
-              </div>
-            ))}
-      </div>
-      <div className="mt-2 flex gap-x-5 justify-end">
-        <button
-          className="bg-green-700 text-white font-poppins font-bold py-2 px-4 rounded"
-          onClick={() => addContentItem(advertiseImages, "Advertisement", 3)}
-        >
-          Confirm
-        </button>
-      </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => productImageHandler(img.angle, e, 1600, 800)}
+                className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {img.error && (
+                <p className="text-red-500 text-sm mt-1">{img.error}</p>
+              )}
+            </div>
+          ))}
+        </div>,
+        () => addContentItem(advertiseImages, "Advertisement", 3)
+      )}
 
-      <h1 className="w-full mt-5 h-10 flex items-center justify-center bg-slate-300 text-xl font-poppins rounded-md">
-        Slider Items 2
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 w-[67%] lg:grid-cols-1 gap-4">
-        {slider2.map((img, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <img
-              src={img.preview || image1}
-              alt={img.angle || "Product Img"}
-              className="w-full h-52 mt-2 object-cover rounded-md"
-            />
-            <label className="text-sm font-medium leading-none mt-2 mb-2">
-              {img.angle}
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => productImageHandler(img.angle, e, 1600, 534)}
-              className="appearance-none relative block w-full px-3 py-2 text-sm leading-tight rounded-md bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
-            {img.error && (
-              <p className="text-red-500 text-sm mt-1">{img.error}</p>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1  w-[90%] gap-4">
-        {imagesSlider2 == null
-          ? "No any images found"
-          : imagesSlider2.map((img, index) => (
-              <div key={index} className="flex gap-x-5 items-center">
+      {renderSection(
+        "Slider Items 2 (1600x534)",
+        imagesSlider2,
+        "ImageSlider-2",
+        <div className="grid grid-cols-1 gap-4">
+          {slider2.map((img, index) => (
+            <div key={index} className="flex flex-col items-center">
+              {img.preview && (
                 <img
-                  src={img.url || image1}
+                  src={img.preview}
                   alt={img.angle || "Product Img"}
-                  className="w-full h-52 mt-2 object-cover rounded-md"
+                  className="w-full h-52 object-cover rounded-md mb-2"
                 />
-                <label className="text-sm font-medium leading-none mt-2 mb-2">
-                  {img.angle}
-                </label>
-                <button
-                  onClick={() => deleteContentItemHandler(img.id)}
-                  className="border-2 border-red-500 border-dashed rounded-lg p-2"
-                >
-                  <FaTrash size={20} color="red" />
-                </button>
-              </div>
-            ))}
-      </div>
-      <div className="mt-2 flex gap-x-5 justify-end">
-        <button
-          className="bg-green-700 text-white font-poppins font-bold py-2 px-4 rounded"
-          onClick={() => addContentItem(slider2, "ImageSlider-2", 4)}
-        >
-          Confirm
-        </button>
-      </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => productImageHandler(img.angle, e, 1600, 534)}
+                className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {img.error && (
+                <p className="text-red-500 text-sm mt-1">{img.error}</p>
+              )}
+            </div>
+          ))}
+        </div>,
+        () => addContentItem(slider2, "ImageSlider-2", 4)
+      )}
 
-      <h1 className="w-full mt-5 h-10 flex items-center justify-center bg-slate-300 text-xl font-poppins rounded-md">
-        Feed Items
-      </h1>
-      <div className="grid grid-cols-1 md:grid-cols-2 w-[67%] lg:grid-cols-1 gap-4">
-        {feedImages.map((img, index) => (
-          <div key={index} className="flex flex-col items-center">
-            <img
-              src={img.preview || image1}
-              alt={img.angle || "Feed Img"}
-              className="w-full h-52 mt-2 object-cover rounded-md"
-            />
-            <label className="text-sm font-medium leading-none mt-2 mb-2">
-              {img.angle}
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => productImageHandler(img.angle, e, 1600, 900)}
-              className="appearance-none relative block w-full px-3 py-2 text-sm leading-tight rounded-md bg-white border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
-            />
-            {img.error && (
-              <p className="text-red-500 text-sm mt-1">{img.error}</p>
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1  w-[90%] gap-4">
-        {feedImg == null
-          ? "No any images found"
-          : feedImg.map((img, index) => (
-              <div key={index} className="flex gap-x-5 items-center">
+      {renderSection(
+        "Feed Items (1600x900)",
+        feedImg,
+        "Feed",
+        <div className="grid grid-cols-1 gap-4">
+          {feedImages.map((img, index) => (
+            <div key={index} className="flex flex-col items-center">
+              {img.preview && (
                 <img
-                  src={img.url || image1}
-                  alt={img.angle || "Product Img"}
-                  className="w-full h-52 mt-2 object-cover rounded-md"
+                  src={img.preview}
+                  alt={img.angle || "Feed Img"}
+                  className="w-full h-52 object-cover rounded-md mb-2"
                 />
-                <label className="text-sm font-medium leading-none mt-2 mb-2">
-                  {img.angle}
-                </label>
-                <button
-                  onClick={() => deleteContentItemHandler(img.id)}
-                  className="border-2 border-red-500 border-dashed rounded-lg p-2"
-                >
-                  <FaTrash size={20} color="red" />
-                </button>
-              </div>
-            ))}
-      </div>
-      <div className="mt-2 flex gap-x-5 justify-end">
-        <button
-          className="bg-green-700 text-white font-poppins font-bold py-2 px-4 rounded"
-          onClick={() => addContentItem(feedImages, "Feed", 5)}
-        >
-          Confirm
-        </button>
-      </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => productImageHandler(img.angle, e, 1600, 900)}
+                className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+              />
+              {img.error && (
+                <p className="text-red-500 text-sm mt-1">{img.error}</p>
+              )}
+            </div>
+          ))}
+        </div>,
+        () => addContentItem(feedImages, "Feed", 5)
+      )}
     </div>
   );
 };

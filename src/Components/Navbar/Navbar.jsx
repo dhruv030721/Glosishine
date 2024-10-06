@@ -346,7 +346,7 @@ const Navbar = () => {
       </div>
 
       {dropdownVisible && (
-        <div className="mt-1 absolute z-50 w-full border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y">
+        <div className="absolute z-50 w-full border-gray-200 shadow-sm bg-gray-50 md:bg-white border-y">
           <div className="btn-container flex justify-center items-center gap-x-4 p-5">
             <MaleIcon sx={{ color: "#007BFF" }} />
             <label className="switch btn-color-mode-switch">

@@ -1,35 +1,135 @@
 import default_product_img from "../../assets/fation1.webp";
 import default_product_img_1 from "../../assets/howtostyle.webp";
+import { useDispatch, useSelector } from "react-redux";
+import { addProduct, removeFromWatchlist } from "../../Slice/watchlistSlice";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { AppContext } from "../../App";
+import {
+  addFavProduct,
+  deleteFavProduct,
+  getFavProduct,
+} from "../../Services/Operations/ProductServices";
+import toast from "react-hot-toast";
+import { useContext, useEffect, useState } from "react";
 
-const ProductList = ({ product, className, index }) => {
+const ProductList = ({ product, className, index, onRemove }) => {
+  const dispatch = useDispatch();
+  const watchlist = useSelector((state) => state.watchlist);
+  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const [favProductId, setFavProductId] = useState(null);
+  const userContext = useContext(AppContext);
+
+  useEffect(() => {
+    const checkIfInWatchlist = async () => {
+      try {
+        const favProducts = await getFavProduct();
+        if (Array.isArray(favProducts.data.data)) {
+          const favProduct = favProducts.data.data.find(
+            (favItem) => favItem.product_id === product.product_id
+          );
+          if (favProduct) {
+            setIsInWatchlist(true);
+            setFavProductId(favProduct.id);
+          } else {
+            setIsInWatchlist(false);
+          }
+        } else {
+          console.error("Expected an array for favorite products data.");
+        }
+      } catch (error) {
+        console.error("Error fetching favorite products:", error);
+      }
+    };
+
+    checkIfInWatchlist();
+  }, [product, userContext.user]);
+
+  const handleWatchlistToggle = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (isInWatchlist) {
+      try {
+        await toast.promise(
+          deleteFavProduct(favProductId),
+          {
+            loading: "Removing product from watchlist...",
+            success: "Product removed from watchlist!",
+            error: "Failed to remove product from watchlist.",
+          },
+          {
+            position: "bottom-right",
+          }
+        );
+        dispatch(removeFromWatchlist(product.product_id));
+        setIsInWatchlist(false);
+        if (onRemove) {
+          onRemove(product.product_id);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    } else {
+      try {
+        await toast.promise(
+          addFavProduct({
+            id: userContext.user[0].id
+              ? userContext.user[0].id
+              : product.product_id,
+            email: userContext.user[0].email,
+            product_id: product.product_id,
+          }),
+          {
+            loading: "Adding product to watchlist...",
+            success: "Product added to watchlist!",
+            error: (err) =>
+              err.response?.status === 409
+                ? "Product already exists in your watchlist!"
+                : "Failed to add product to watchlist.",
+          },
+          {
+            position: "bottom-right",
+          }
+        );
+        dispatch(addProduct(product));
+        setIsInWatchlist(true);
+      } catch (error) {
+        toast.error("Are you sure you're logged in?", {
+          position: "bottom-right",
+        });
+        console.error("Error:", error);
+      }
+    }
+  };
+
   return (
     <div
-      data-aos="fade-zoom-in"
-      data-aos-easing="ease-in-back"
-      data-aos-delay="200"
-      data-aos-offset="0"
-      className={`relative cursor-pointer w-full h-full rounded-lg bg-white bg-opacity-30 backdrop-blur-lg border-2 border-bg-green transition-all duration-200 flex flex-col overflow-hidden ${className}`}
+      // data-aos="fade-zoom-in"
+      // data-aos-easing="ease-in-back"
+      // data-aos-delay="200"
+      // data-aos-offset="0"
+      className={`relative w-full h-full rounded-lg bg-white bg-opacity-30 backdrop-blur-lg border-2 border-bg-green transition-all duration-200 flex flex-col overflow-hidden ${className}`}
     >
-      <div className="flex flex-col overflow-hidden">
+      <div className="relative flex flex-col overflow-hidden">
         <a
           className="relative flex h-72 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[36rem] 4xl:h-[50rem] overflow-hidden"
           href={`/${product.product_id}`}
         >
           <img
             className="peer absolute top-0 right-0 h-full w-full object-cover"
-            src={product.images?.[0] || default_product_img} // Main image
+            src={product.images?.[0] || default_product_img}
             alt={product.product_name}
           />
           {product.images && product.images.length > 1 ? (
             <img
               className="peer-hover:right-0 absolute top-0 -right-[400px] md:-right-[500px] lg:-right-[700px] xl:-right-[800px] 2xl:-right-[900px] 4xl:-right-[1000px] h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-              src={product.images?.[index] || product.images?.[1]} // Secondary image on hover
+              src={product.images?.[index] || product.images?.[1]}
               alt={product.product_name}
             />
           ) : (
             <img
               className="peer-hover:right-0 absolute top-0 -right-[400px] md:-right-[500px] lg:-right-[700px] xl:-right-[800px] 2xl:-right-[900px] 4xl:-right-[1000px] h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-              src={default_product_img_1} // Default secondary image on hover
+              src={default_product_img_1}
               alt={product.product_name}
             />
           )}
@@ -53,7 +153,19 @@ const ProductList = ({ product, className, index }) => {
             {product.discountPercentage}% OFF
           </span>
         </a>
-        <div className="mt-4">
+        <button
+          onClick={handleWatchlistToggle}
+          className="absolute top-2 right-2 p-2 rounded-full bg-white bg-opacity-70 hover:bg-opacity-100 transition-all duration-200"
+          style={{ zIndex: 100 }} // Increase the z-index
+        >
+          {isInWatchlist ? (
+            <FaHeart className="text-red-500 text-xl" />
+          ) : (
+            <FaRegHeart className="text-gray-600 text-xl" />
+          )}
+        </button>
+
+        <div className="mt-4 z-10">
           <a href={`/${product.product_id}`}>
             <h5 className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl font-mono font-semibold flex justify-center w-full text-black">
               {product.product_name}

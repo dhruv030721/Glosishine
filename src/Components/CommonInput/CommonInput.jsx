@@ -11,7 +11,7 @@ const CommonInput = ({
   options = [], // New prop for select options
 }) => {
   return (
-    <div className="relative w-full mb-6">
+    <div className="relative w-full mb-6 font-poppins">
       <div className="input-group w-full">
         {type === "select" ? (
           <div className="relative">
@@ -20,10 +20,10 @@ const CommonInput = ({
               name={name}
               value={value}
               onChange={onChange}
-              className="w-full peer border-2 border-solid border-bg-green rounded-lg bg-transparent p-4 pr-8 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none appearance-none"
+              className="w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 pr-8 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none appearance-none font-poppins"
             >
               <option value="" disabled hidden>
-                {label} {/* Placeholder within select */}
+                {label}
               </option>
               {options.map((option) => (
                 <option key={option.value} value={option.value}>
@@ -43,7 +43,7 @@ const CommonInput = ({
             <label
               className={`absolute left-4 text-[16px] pointer-events-none transform translate-y-4 transition-all ${
                 value ? "translate-y-[-50%] scale-75" : ""
-              } peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white`}
+              } peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white font-poppins`}
             >
               {label}
             </label>
@@ -55,7 +55,7 @@ const CommonInput = ({
             value={value}
             onChange={onChange}
             rows={rows}
-            className="w-full peer border-2 border-solid border-bg-green rounded-lg bg-transparent p-4 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none"
+            className="w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none font-poppins"
           />
         ) : (
           <input
@@ -64,9 +64,9 @@ const CommonInput = ({
             name={name}
             value={value}
             onChange={onChange}
-            className={`w-full peer border-2 border-solid border-bg-green rounded-lg bg-transparent p-4 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none ${
+            className={`w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none ${
               type === "number" ? "appearance-none" : ""
-            }`}
+            } font-poppins`}
             style={
               type === "number"
                 ? { MozAppearance: "textfield", WebkitAppearance: "none" }
@@ -74,9 +74,8 @@ const CommonInput = ({
             }
           />
         )}
-        {/* Improved label styling */}
         {type != "select" && (
-          <label className="absolute left-4 text-[16px] pointer-events-none transform translate-y-4 transition-all peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white">
+          <label className="absolute left-4 text-[16px] pointer-events-none transform translate-y-4 transition-all peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white font-poppins">
             {label}
           </label>
         )}
