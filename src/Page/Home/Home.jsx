@@ -259,7 +259,7 @@ const Home = () => {
         data-aos-duration="800"
         className="relative xl:pt-0 2xl:py-5 4xl:py-24 w-full"
       >
-        <div className="my-5 w-full h-full bg-bg-green sm:my-5 xl:mb-2 xl:mt-12 2xl:my-4 4xl:my-6">
+        <div className="my-5 w-full h-full bg-bg-green sm:my-5 lg:my-0 xl:mb-2 xl:mt-2 2xl:my-4 4xl:my-6">
           <h1 className="z-[999] w-full text-orange-50 font-PM text-center text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl flex pl-5 pr-5 justify-center py-4 xl:py-4 2xl:py-7 4xl:py-10">
             New Drops
           </h1>
@@ -311,7 +311,7 @@ const Home = () => {
         videoUrl={seasonalVideos.video2[0].url}
         videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
       />
-      <div className="relative mb-5">
+      <div className="relative">
         <Carousel
           className="h-[75%]"
           prevArrow={({ handlePrev }) => (
@@ -381,7 +381,7 @@ const Home = () => {
         <div
           data-aos="fade-up"
           data-aos-duration="1000"
-          className="mb-5 w-full h-full bg-bg-green xl:my-2 2xl:my-4 4xl:my-6"
+          className="mb-5 w-full h-full bg-bg-green sm:my-5 lg:my-2 xl:my-2 2xl:my-4 4xl:my-6"
         >
           <h1 className="w-full text-orange-50 font-PM text-center text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl flex pl-5 pr-5 justify-center py-4 xl:py-4 2xl:py-7 4xl:py-10">
             Follow Our Feeds
