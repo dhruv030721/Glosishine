@@ -1,37 +1,85 @@
-import React from 'react'
+import React from "react";
 
 const Bulkinquiry = () => {
-    return (
-        <div className='w-full  flex  justify-center'>
-            <div className='w-[60%]'>
-                <h1 className='pt-5 mb-10 flex justify-start text-4xl font-mono'>
-                    Bulk Inquiry
-                </h1>
-                <div data-aos="fade-up"
-                    data-aos-duration="1000">
-                    <div className='w-full flex flex-row gap-x-2 mb-5'>
-                        <div className="space-y-2 w-[50%]">
-                            <label className="text-sm font-medium leading-none font-serif peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="name">Name</label>
-                            <input type='name' className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-12 w-full rounded-md border px-3 py-2 text-md file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="name" placeholder="Name" name="name" />
-                        </div>
-                        <div className="space-y-2 w-[50%]">
-                            <label className="text-sm font-medium leading-none font-serif peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="email">Email</label>
-                            <input type='email' className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-12 w-full rounded-md border px-3 py-2 text-md file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="email" placeholder="Email *" name="email" />
-                        </div>
-                    </div>
-                    <div className="space-y-2 w-full mb-5">
-                        <label className="text-sm font-medium leading-none font-serif peer-disabled:cursor-not-allowed peer-disabled:opacity-70" for="name">Phone number</label>
-                        <input type='name' className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-12 w-full rounded-md border px-3 py-2 text-md file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50" id="name" placeholder="Phone number" name="name" />
-                    </div>
-                    <div className="space-y-2 w-full mb-5">
-                        <label for="message" className="block mb-2 text-lg font-medium font-serif text-gray-900 dark:text-white">Comment</label>
-                        <textarea id="message" rows="4" className="block p-2.5 w-full h-28 resize-none text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Write your thoughts here..."></textarea>
-                    </div>
-                    <button className="ring-offset-background focus-visible:ring-ring flex h-12 w-[13%] font-mono items-center justify-center whitespace-nowrap rounded-md bg-green-900 px-4 py-2 text-lg font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 mb-5" type="submit">Send</button>
-                </div>
+  return (
+    <div className="w-full min-h-screen bg-gray-100 flex justify-center items-center p-4">
+      <div className="w-full max-w-4xl bg-white rounded-lg shadow-md p-6 md:p-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+          Bulk Inquiry
+        </h1>
+        <div data-aos="fade-up" data-aos-duration="1000">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div className="space-y-2">
+              <label
+                className="text-sm font-medium text-gray-700"
+                htmlFor="name"
+              >
+                Name
+              </label>
+              <input
+                type="text"
+                className="w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                id="name"
+                placeholder="Your name"
+                name="name"
+              />
             </div>
+            <div className="space-y-2">
+              <label
+                className="text-sm font-medium text-gray-700"
+                htmlFor="email"
+              >
+                Email
+              </label>
+              <input
+                type="email"
+                className="w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+                id="email"
+                placeholder="Your email *"
+                name="email"
+                required
+              />
+            </div>
+          </div>
+          <div className="space-y-2 mb-4">
+            <label
+              className="text-sm font-medium text-gray-700"
+              htmlFor="phone"
+            >
+              Phone number
+            </label>
+            <input
+              type="tel"
+              className="w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400"
+              id="phone"
+              placeholder="Your phone number"
+              name="phone"
+            />
+          </div>
+          <div className="space-y-2 mb-6">
+            <label
+              htmlFor="message"
+              className="text-sm font-medium text-gray-700"
+            >
+              Comment
+            </label>
+            <textarea
+              id="message"
+              rows="4"
+              className="w-full px-3 py-2 text-gray-700 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 resize-none"
+              placeholder="Write your thoughts here..."
+            ></textarea>
+          </div>
+          <button
+            className="w-full md:w-auto px-6 py-3 bg-green-600 text-white font-medium rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition-colors"
+            type="submit"
+          >
+            Send Inquiry
+          </button>
         </div>
-    )
-}
+      </div>
+    </div>
+  );
+};
 
-export default Bulkinquiry
+export default Bulkinquiry;

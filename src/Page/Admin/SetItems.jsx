@@ -187,16 +187,22 @@ const SetItems = () => {
   );
 
   const addContentItem = async (Array, type, section_id) => {
-    await toast.promise(setContentItem(Array, type, section_id), {
-      loading: "Processing....",
-      success: (response) => {
-        setReloadCounter((prev) => prev + 1);
-        return `${response.data.message}`;
+    await toast.promise(
+      setContentItem(Array, type, section_id),
+      {
+        loading: "Processing....",
+        success: (response) => {
+          setReloadCounter((prev) => prev + 1);
+          return `${response.data.message}`;
+        },
+        error: (error) => {
+          return `${error.response.data.message}`;
+        },
       },
-      error: (error) => {
-        return `${error.response.data.message}`;
-      },
-    });
+      {
+        position: "bottom-right", // Set toast position here
+      }
+    );
   };
 
   useEffect(() => {
@@ -239,16 +245,22 @@ const SetItems = () => {
   }
 
   const deleteContentItemHandler = async (id) => {
-    await toast.promise(deleteContentItem(id), {
-      loading: "Processing....",
-      success: (response) => {
-        setReloadCounter((prev) => prev + 1); // Increment reload counter
-        return `${response.data.message}`;
+    await toast.promise(
+      deleteContentItem(id),
+      {
+        loading: "Processing....",
+        success: (response) => {
+          setReloadCounter((prev) => prev + 1); // Increment reload counter
+          return `${response.data.message}`;
+        },
+        error: (error) => {
+          return `${error.response.data.message}`;
+        },
       },
-      error: (error) => {
-        return `${error.response.data.message}`;
-      },
-    });
+      {
+        position: "bottom-right", // Set toast position here
+      }
+    );
   };
 
   return (

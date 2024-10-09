@@ -10,18 +10,33 @@ const Product = () => {
 
   const deleteProductHandler = useCallback(
     async (id) => {
-      await toast.promise(deleteProduct(id), {
-        loading: "Processing....",
-        success: (response) => {
-          Appcontext.setGetdata((product) =>
-            product.filter((product) => product.product_id !== id)
-          );
-          return `${response.data.message}`;
+      await toast.promise(
+        deleteProduct(id),
+        {
+          loading: "Processing....",
+          success: (response) => {
+            Appcontext.setGetdata((product) =>
+              product.filter((product) => product.product_id !== id)
+            );
+            return `${response.data.message}`;
+          },
+          error: (error) => {
+            return `${error.response.data.message}`;
+          },
         },
-        error: (error) => {
-          return `${error.response.data.message}`;
+        {
+          position: "bottom-right", // Set toast position here
         },
-      });
+        {
+          style: {
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "1.5",
+            color: "#333333",
+          },
+        }
+      );
     },
     [Appcontext.setGetdata]
   );

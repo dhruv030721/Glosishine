@@ -1,10 +1,50 @@
+/* eslint-disable no-unused-vars */
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
 import CommonInput from "../CommonInput/CommonInput";
+import { useState } from "react";
 
 const ProductDetails = ({ formdata, setFormdata }) => {
+  const [errors, setErrors] = useState({});
+
   const handleChange = (e) => {
-    setFormdata({ ...formdata, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormdata({ ...formdata, [name]: value });
+    setErrors((prev) => ({ ...prev, [name]: "" }));
   };
+
+  const validateField = (name, value) => {
+    let error = "";
+    switch (name) {
+      case "countryorigin":
+      case "nack":
+      case "occupation":
+      case "patent":
+      case "patenttype":
+      case "sleevelength":
+      case "chestsize":
+      case "lengthsize":
+      case "sku1":
+      case "sku2":
+      case "groupid":
+      case "length":
+      case "sleevestyle":
+        if (!value.trim()) error = `${name} is required`;
+        break;
+      case "numberofpockets":
+        if (!value) error = "Number of pockets is required";
+        if (isNaN(value) || value < 0)
+          error = "Number of pockets must be a non-negative number";
+        break;
+    }
+    return error;
+  };
+
+  const handleBlur = (e) => {
+    const { name, value } = e.target;
+    const error = validateField(name, value);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
   return (
     <>
       <Grid item xs={12} md={6}>
@@ -16,6 +56,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.countryorigin}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -27,6 +69,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.nack}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -38,6 +82,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.occupation}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -49,6 +95,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.patent}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -60,6 +108,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.patenttype}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -71,6 +121,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.sleevelength}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -82,6 +134,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.chestsize}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -93,6 +147,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.lengthsize}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       {/* <Grid item xs={12} md={6}>
@@ -113,6 +169,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.sku1}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -124,6 +182,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.sku2}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -135,6 +195,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.groupid}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
 
@@ -147,6 +209,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.length}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -158,6 +222,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.numberofpockets}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -169,6 +235,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.sleevestyle}
           onChange={handleChange}
           variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
       <Grid item xs={12} md={6}>
@@ -182,6 +250,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
             { value: "Yes", label: "Yes" },
             { value: "No", label: "No" },
           ]}
+          className="font-poppins"
+          onBlur={handleBlur}
         />
       </Grid>
     </>

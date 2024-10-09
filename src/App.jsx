@@ -1,5 +1,12 @@
+/* eslint-disable no-unused-vars */
 import Home from "./Page/Home/Home";
-import { Routes, Route } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import NewArrivals from "./Page/NewArrivals/NewArrivals";
 import MostTrending from "./Page/MostTrending/MostTrending";
 import BundleDeal from "./Page/BundleDeal/BundleDeal";
@@ -21,7 +28,7 @@ import Account from "./Page/Account/Account";
 import Cart from "./Page/Cart/Cart";
 import AOS from "aos";
 import "aos/dist/aos.css";
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import ForgotPassword from "./Components/Login/ForgotPassword";
 import Admin from "./Page/Admin/Admin";
 import Mainlayout from "./Page/Layout/Mainlayout";
@@ -36,6 +43,7 @@ import { CartPage } from "./Page/CartPage/CartPage";
 import NotFound from "./Components/NotFound/NotFound";
 import { WatchList } from "./Page/WatchList/WatchList";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
+import "./App.css";
 
 export const AppContext = createContext();
 
@@ -48,8 +56,8 @@ function App() {
   const [adminToken, setAdminToken] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [CartProducts, setCartProducts] = useState([]);
-  // const navigate = useNavigate();
-  // const requiredpath=[""];
+  const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     (async () => {
@@ -79,11 +87,44 @@ function App() {
       setUser(null);
     }
 
+    if (admintoken) {
+      setIsAdminAuthenticated(true);
+    } else {
+      setIsAdminAuthenticated(false);
+      setAdminToken(null);
+    }
+
     if (!admintoken) {
       setAdminToken(null);
       // navigate('/admin');
     }
   }, []);
+
+  // Updated ProtectedAdminRoute component
+  const ProtectedAdminRoute = ({ children }) => {
+    const { adminToken } = useContext(AppContext);
+    const location = useLocation();
+
+    useEffect(() => {
+      if (
+        !isAdminAuthenticated &&
+        location.pathname.startsWith("/admin") &&
+        location.pathname !== "/admin"
+      ) {
+        navigate("/admin");
+      }
+    }, [isAdminAuthenticated, location.pathname]);
+
+    if (
+      !isAdminAuthenticated &&
+      location.pathname.startsWith("/admin") &&
+      location.pathname !== "/admin"
+    ) {
+      return null; // Render nothing while redirecting
+    }
+
+    return children;
+  };
 
   return (
     <>
@@ -98,6 +139,7 @@ function App() {
           isDrawerOpen,
           setIsDrawerOpen,
           setCartProducts,
+          isAdminAuthenticated,
         }}
       >
         <ScrollToTop />
@@ -133,7 +175,14 @@ function App() {
             <Route path="*" element={<NotFound />} />
           </Route>
 
-          <Route path="/admin" element={<Adminlayout />}>
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedAdminRoute>
+                <Adminlayout />
+              </ProtectedAdminRoute>
+            }
+          >
             <Route index element={<Admin />} />
             <Route path="dashboard" element={<Dashboard />} />
           </Route>

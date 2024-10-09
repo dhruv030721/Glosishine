@@ -83,15 +83,29 @@ const Cart = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await toast.promise(addReview({ productData: formdata }, id, rating), {
-        loading: "Processing....",
-        success: (response) => {
-          return `${response.data.message}`;
+      await toast.promise(
+        addReview({ productData: formdata }, id, rating),
+        {
+          loading: "Processing....",
+          success: (response) => {
+            return `${response.data.message}`;
+          },
+          error: (error) => {
+            return `${error.message}`;
+          },
         },
-        error: (error) => {
-          return `${error.message}`;
+        {
+          position: "bottom-right", // Set toast position here
         },
-      });
+        {
+          style: {
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "1.5",
+          },
+        }
+      );
     } catch (error) {
       console.error("Loggedin failed:", error);
     }
@@ -179,7 +193,18 @@ const Cart = () => {
   };
 
   const handleAddToCart = (item, quantity) => {
-    dispatch(addItem({ ...item, quantity }));
+    if (!selectedSize) {
+      toast.error("Please select a size before adding to cart");
+      return;
+    }
+
+    const itemWithSize = {
+      ...item,
+      quantity,
+      selectedSize,
+    };
+
+    dispatch(addItem(itemWithSize));
     toast.success("Item added to cart");
   };
 

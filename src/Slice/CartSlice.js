@@ -9,18 +9,20 @@ const cartSlice = createSlice({
   initialState,
   reducers: {
     addItem(state, action) {
+      const newItem = action.payload;
       const existingItem = state.items.find(
-        (item) => item.product_id === action.payload.product_id
+        (item) =>
+          item.product_id === newItem.product_id && item.size === newItem.size
       );
       if (existingItem) {
         existingItem.quantity = Math.min(
           10,
-          existingItem.quantity + (action.payload.quantity || 1)
+          existingItem.quantity + (newItem.quantity || 1)
         );
       } else {
         state.items.push({
-          ...action.payload,
-          quantity: action.payload.quantity || 1,
+          ...newItem,
+          quantity: newItem.quantity || 1,
         });
       }
       localStorage.setItem("cartItems", JSON.stringify(state.items));

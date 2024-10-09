@@ -86,7 +86,7 @@ const Home = () => {
         console.log(error);
       }
     })();
-  }, [imageSlider1, imageSlider2]);
+  }, []);
 
   const addToCart = (id) => {
     if (Appcontext.CartProducts.map((item) => item.product_id !== id)) {
@@ -140,7 +140,7 @@ const Home = () => {
 
   return (
     <div className="w-full h-full overflow-x-hidden">
-      <div className="flex items-center justify-center max-h-[90vh] mb-10">
+      <div className="flex items-center justify-center max-h-[90vh]">
         <Carousel
           className="h-auto"
           prevArrow={({ handlePrev }) => (
@@ -257,19 +257,15 @@ const Home = () => {
       <div
         data-aos="fade-up"
         data-aos-duration="800"
-        className="pt-4 relative xl:pt-0 2xl:py-5 4xl:py-24 w-f"
+        className="relative xl:pt-0 2xl:py-5 4xl:py-24 w-full"
       >
-        <div
-          // data-aos="fade-up"
-          // data-aos-duration="1000"
-          className="w-full h-full bg-bg-green xl:mb-2 xl:mt-12 2xl:my-4 4xl:my-6"
-        >
-          <h1 className="z-[999] w-full text-orange-50 font-PM text-center text-5xl sm:text-xl md:text-2xl lg:text-3xl xl:text-3xl flex pl-5 pr-5 justify-center xl:py-4 2xl:py-7 4xl:py-10">
+        <div className="my-5 w-full h-full bg-bg-green sm:my-5 xl:mb-2 xl:mt-12 2xl:my-4 4xl:my-6">
+          <h1 className="z-[999] w-full text-orange-50 font-PM text-center text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl flex pl-5 pr-5 justify-center py-4 xl:py-4 2xl:py-7 4xl:py-10">
             New Drops
           </h1>
         </div>
         <div className="w-full p-5 pt-0">
-          <div className="grid sm:grid-cols-1  md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 justify-center">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-5 gap-3 justify-center">
             {Appcontext.getdata.map((product, index) => (
               <ProductList
                 key={product.product_id}
@@ -296,11 +292,17 @@ const Home = () => {
         videoUrl={seasonalVideos.video1[0].url}
         videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
       />
-      <div className="w-full pl-16 pr-16 pt-5 pb-5 flex justify-center items-center 2xl:my-10">
-        <div className="flex justify-center items-center gap-x-10 gap-y-2">
+      <div className="w-full px-4 sm:px-8 md:px-16 pt-5 pb-5 flex flex-col sm:flex-row justify-center items-center 2xl:my-10">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-x-10">
           {[mansshirt, womensshirts].map((image, index) => (
             <a href={index === 0 ? "/menswear" : "/womenswear"} key={index}>
-              <img src={image} alt="" className="w-[450px] h-[550px]" />
+              <img
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                src={image}
+                alt=""
+                className="w-full max-w-[450px] h-auto"
+              />
             </a>
           ))}
         </div>
@@ -309,7 +311,7 @@ const Home = () => {
         videoUrl={seasonalVideos.video2[0].url}
         videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
       />
-      <div className="relative">
+      <div className="relative mb-5">
         <Carousel
           className="h-[75%]"
           prevArrow={({ handlePrev }) => (
@@ -379,9 +381,9 @@ const Home = () => {
         <div
           data-aos="fade-up"
           data-aos-duration="1000"
-          className="w-full h-full bg-bg-green xl:my-2 2xl:my-4 4xl:my-6"
+          className="mb-5 w-full h-full bg-bg-green xl:my-2 2xl:my-4 4xl:my-6"
         >
-          <h1 className="w-full xl:text-3xl text-orange-50 font-PM text-center text-5xl flex pl-5 pr-5 justify-center xl:py-4 2xl:py-7 4xl:py-10">
+          <h1 className="w-full text-orange-50 font-PM text-center text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl flex pl-5 pr-5 justify-center py-4 xl:py-4 2xl:py-7 4xl:py-10">
             Follow Our Feeds
           </h1>
         </div>

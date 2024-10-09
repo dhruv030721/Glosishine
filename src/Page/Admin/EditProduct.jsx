@@ -199,16 +199,31 @@ const EditProduct = ({ id }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      await toast.promise(updateProduct({ productData: formdata }, id), {
-        loading: "Updating Product...",
-        success: (response) => {
-          console.log(response);
-          return `${response.data.message}`;
+      await toast.promise(
+        updateProduct({ productData: formdata }, id),
+        {
+          loading: "Updating Product...",
+          success: (response) => {
+            console.log(response);
+            return `${response.data.message}`;
+          },
+          error: (error) => {
+            return `${error.message}`;
+          },
         },
-        error: (error) => {
-          return `${error.message}`;
+        {
+          position: "bottom-right", // Set toast position here
         },
-      });
+        {
+          style: {
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "1.5",
+            color: "#333333",
+          },
+        }
+      );
     } catch (error) {
       console.error("Error occurred:", error);
     }

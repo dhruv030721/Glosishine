@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { LoginUser } from "../../Services/Operations/Auth";
 import { useNavigate } from "react-router-dom";
-import { Token } from "@mui/icons-material";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
@@ -19,18 +18,32 @@ const Login = () => {
     e.preventDefault();
     // console.log("data is1 ->", userdata);
     try {
-      await toast.promise(LoginUser(userdata), {
-        loading: "Processing....",
-        success: (response) => {
-          navigate("/");
-          cookies.set("Access-Token", response.data.token);
+      await toast.promise(
+        LoginUser(userdata),
+        {
+          loading: "Processing....",
+          success: (response) => {
+            navigate("/");
+            cookies.set("Access-Token", response.data.token);
 
-          return `${response.data.message}`;
+            return `${response.data.message}`;
+          },
+          error: (error) => {
+            return `${error.message}`;
+          },
         },
-        error: (error) => {
-          return `${error.message}`;
+        {
+          position: "bottom-right", // Set toast position here
         },
-      });
+        {
+          style: {
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "1.5",
+          },
+        }
+      );
     } catch (error) {
       console.error("Loggedin failed:", error);
     }

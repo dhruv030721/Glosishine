@@ -42,7 +42,7 @@ const ProductList = ({ product, className, index, onRemove }) => {
     };
 
     checkIfInWatchlist();
-  }, [product, userContext.user]);
+  }, [product, userContext.user, isInWatchlist]);
 
   const handleWatchlistToggle = async (e) => {
     e.preventDefault();
@@ -104,15 +104,15 @@ const ProductList = ({ product, className, index, onRemove }) => {
 
   return (
     <div
-      // data-aos="fade-zoom-in"
-      // data-aos-easing="ease-in-back"
-      // data-aos-delay="200"
-      // data-aos-offset="0"
+      data-aos="fade-zoom-in"
+      data-aos-easing="ease-in-back"
+      data-aos-delay="200"
+      data-aos-offset="0"
       className={`relative w-full h-full rounded-lg bg-white bg-opacity-30 backdrop-blur-lg border-2 border-bg-green transition-all duration-200 flex flex-col overflow-hidden ${className}`}
     >
       <div className="relative flex flex-col overflow-hidden">
         <a
-          className="relative flex h-72 md:h-80 lg:h-96 xl:h-[28rem] 2xl:h-[36rem] 4xl:h-[50rem] overflow-hidden"
+          className="relative flex h-60 md:h-72 lg:h-80 xl:h-96 2xl:h-[28rem] 4xl:h-[40rem] overflow-hidden"
           href={`/${product.product_id}`}
         >
           <img
@@ -165,13 +165,13 @@ const ProductList = ({ product, className, index, onRemove }) => {
           )}
         </button>
 
-        <div className="mt-4 z-10">
+        <div className="mt-2 z-10">
           <a href={`/${product.product_id}`}>
             <h5 className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl font-mono font-semibold flex justify-center w-full text-black">
               {product.product_name}
             </h5>
           </a>
-          <div className="mt-2 mb-5 flex items-center justify-between">
+          <div className="mt-1 mb-3 flex items-center justify-between">
             <p className="w-full flex justify-evenly">
               <span className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl text-black font-bold line-through">
                 Rs. {product.regular_price}

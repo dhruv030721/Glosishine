@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   addProduct,
   updateProduct,
@@ -78,17 +78,58 @@ const AddProduct = ({ product }) => {
     productphoto: product?.productphoto || [],
   });
 
+  const [errors, setErrors] = useState({});
+  const [isStepValid, setIsStepValid] = useState(false);
+
+  useEffect(() => {
+    validateStep(activeStep);
+  }, [formdata, activeStep]);
+
+  const validateStep = (step) => {
+    let stepErrors = {};
+    let isValid = true;
+
+    switch (step) {
+      case 0: // Basic Information
+        if (!formdata.name.trim()) stepErrors.name = "Product name is required";
+        if (!formdata.weight) stepErrors.weight = "Weight is required";
+        // Add more validations for Basic Information fields
+        break;
+      case 1: // Pricing and Stock
+        if (!formdata.prize) stepErrors.prize = "Price is required";
+        if (!formdata.stock) stepErrors.stock = "Stock is required";
+        // Add more validations for Pricing and Stock fields
+        break;
+      case 2: // Product Details
+        if (!formdata.countryorigin.trim())
+          stepErrors.countryorigin = "Country of origin is required";
+        // Add more validations for Product Details fields
+        break;
+      case 3: // Image Upload
+        if (formdata.productphoto.length === 0)
+          stepErrors.images = "At least one image is required";
+        break;
+    }
+
+    setErrors(stepErrors);
+    isValid = Object.keys(stepErrors).length === 0;
+    setIsStepValid(isValid);
+    return isValid;
+  };
+
   const totalSteps = () => steps.length;
   const completedSteps = () => Object.keys(completed).length;
   const isLastStep = () => activeStep === totalSteps() - 1;
   const allStepsCompleted = () => completedSteps() === totalSteps();
 
   const handleNext = () => {
-    const newActiveStep =
-      isLastStep() && !allStepsCompleted()
-        ? steps.findIndex((step, i) => !(i in completed))
-        : activeStep + 1;
-    setActiveStep(newActiveStep);
+    if (validateStep(activeStep)) {
+      const newActiveStep =
+        isLastStep() && !allStepsCompleted()
+          ? steps.findIndex((step, i) => !(i in completed))
+          : activeStep + 1;
+      setActiveStep(newActiveStep);
+    }
   };
 
   const handleBack = () =>
@@ -120,15 +161,24 @@ const AddProduct = ({ product }) => {
             loading: "Updating....",
             success: "Product updated successfully!",
             error: (error) => `${error.message}`,
+          },
+          {
+            position: "bottom-right", // Set toast position here
           }
         );
       } else {
         // Adding new product
-        await toast.promise(addProduct({ productData: formdata }), {
-          loading: "Processing....",
-          success: "Product added successfully!",
-          error: (error) => `${error.message}`,
-        });
+        await toast.promise(
+          addProduct({ productData: formdata }),
+          {
+            loading: "Processing....",
+            success: "Product added successfully!",
+            error: (error) => `${error.message}`,
+          },
+          {
+            position: "bottom-right", // Set toast position here
+          }
+        );
       }
     } catch (error) {
       console.error("Submit failed:", error);
@@ -209,7 +259,7 @@ const AddProduct = ({ product }) => {
       <Box className="sticky bottom-0 z-[1000] bg-white p-4 flex justify-between">
         <button
           disabled={activeStep <= 0}
-          onClick={() => setActiveStep((prevStep) => prevStep - 1)}
+          onClick={handleBack}
           className="bg-red-700 text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-red-700 shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-red-700 active:bg-white active:text-red-600"
         >
           Back
@@ -217,14 +267,20 @@ const AddProduct = ({ product }) => {
         {activeStep === steps.length - 1 ? (
           <button
             onClick={submitHandler}
-            className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+            disabled={!isStepValid}
+            className={`bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white ${
+              !isStepValid ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             {product ? "Update" : "Submit"}
           </button>
         ) : (
           <button
-            onClick={() => setActiveStep((prevStep) => prevStep + 1)}
-            className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+            onClick={handleNext}
+            disabled={!isStepValid}
+            className={`bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white ${
+              !isStepValid ? "opacity-50 cursor-not-allowed" : ""
+            }`}
           >
             Next
           </button>
