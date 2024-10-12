@@ -1,9 +1,72 @@
 import { Grid } from "@mui/material";
 import CommonInput from "../CommonInput/CommonInput";
 import { useState } from "react";
+import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import {
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  ListItemText,
+} from "@mui/material";
+import { styled } from "@mui/material/styles";
 
-const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
+// Custom styled components
+const CustomSelect = styled(Select)(({ theme }) => ({
+  "&.MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "green", // Change this to match your theme
+    },
+    "&:hover fieldset": {
+      borderColor: "darkgreen", // Change this to match your theme
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "darkgreen", // Change this to match your theme
+    },
+  },
+}));
+
+const CustomMenuItem = styled(MenuItem)(({ theme }) => ({
+  "&.MuiMenuItem-root": {
+    "&.Mui-selected": {
+      backgroundColor: "lightgreen", // Change this to match your theme
+    },
+    "&:hover": {
+      backgroundColor: "rgba(0, 255, 0, 0.1)", // Change this to match your theme
+    },
+  },
+}));
+
+const CustomCheckbox = styled(Checkbox)(({ theme }) => ({
+  color: "green", // Change this to match your theme
+  "&.Mui-checked": {
+    color: "darkgreen", // Change this to match your theme
+  },
+}));
+
+// Add this new styled component for the color Select
+const CustomColorSelect = styled(Select)(({ theme }) => ({
+  "&.MuiOutlinedInput-root": {
+    "& fieldset": {
+      borderColor: "green",
+    },
+    "&:hover fieldset": {
+      borderColor: "darkgreen",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "darkgreen",
+    },
+  },
+}));
+
+const BasicInformation = ({
+  formdata,
+  setFormdata,
+  handleSizeChange,
+  handleColorChange,
+}) => {
   const [errors, setErrors] = useState({});
+  const [openSize, setOpenSize] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,17 +84,20 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
       case "name":
         if (!value.trim()) error = "Product name is required";
         break;
-      case "weight":
-        if (!value) error = "Weight is required";
+      case "productid":
+        if (!value) error = "Product ID is required";
         if (isNaN(value) || value <= 0)
-          error = "Weight must be a positive number";
+          error = "Product ID must be a positive number";
         break;
-      case "orderid":
-        if (!value) error = "Order ID is required";
-        if (isNaN(value) || value <= 0)
-          error = "Order ID must be a positive number";
+      case "color":
+        if (value.length === 0) error = "At least one color must be selected";
         break;
-      // Add more cases as needed
+      case "fabric":
+      case "fitshape":
+      case "designname":
+        if (!value.trim())
+          error = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
+        break;
     }
     return error;
   };
@@ -42,9 +108,32 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
     setErrors((prev) => ({ ...prev, [name]: error }));
   };
 
+  const handleSizeClose = () => {
+    setOpenSize(false);
+  };
+
+  const handleSizeOpen = () => {
+    setOpenSize(true);
+  };
+
+  const sizeOptions = ["S", "M", "L", "XL"];
+
   if (!formdata || !formdata.size) {
     return <div>Loading...</div>;
   }
+
+  const colorOptions = [
+    "Red",
+    "Blue",
+    "Green",
+    "Yellow",
+    "Black",
+    "White",
+    "Purple",
+    "Orange",
+    "Pink",
+    "Brown",
+  ];
 
   return (
     <>
@@ -67,37 +156,100 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
       </Grid>
       <Grid item xs={12} md={6}>
         <CommonInput
-          label="Size"
-          name="size"
-          type="select"
-          value={formdata.size}
-          onChange={handleSizeChange}
-          options={[
-            { value: "S", label: "S" },
-            { value: "M", label: "M" },
-            { value: "L", label: "L" },
-            { value: "XL", label: "XL" },
-            { value: "XXL", label: "XXL" },
-            { value: "XXXL", label: "XXXL" },
-          ]}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
           fullWidth
-          label="Weight (gram)"
-          name="weight"
-          value={formdata.weight}
+          label="Product ID"
+          name="productid"
+          value={formdata.productid}
           onChange={handleChange}
           onBlur={handleBlur}
           type="number"
           variant="outlined"
-          className="border-2 border-dashed border-bg-green"
+          className="border-2 border-dashed border-bg-green outline-none"
           InputProps={{
-            classes: { notchedOutline: "border-none" },
+            classes: { notchedOutline: "outline-none" },
           }}
         />
-        {errors.weight && <span className="text-red-500">{errors.weight}</span>}
+        {errors.productid && (
+          <span className="text-red-500">{errors.productid}</span>
+        )}
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel
+            id="size-label"
+            style={{
+              color: "green",
+              fontWeight: "bold",
+              backgroundColor: "white",
+              padding: "0px 5px",
+            }}
+          >
+            Size
+          </InputLabel>
+          <CustomSelect
+            labelId="size-label"
+            id="size-checkbox"
+            multiple
+            value={formdata.size}
+            onChange={handleSizeChange}
+            onClose={handleSizeClose}
+            onOpen={handleSizeOpen}
+            open={openSize}
+            renderValue={(selected) => selected.join(", ")}
+          >
+            {sizeOptions.map((size) => (
+              <CustomMenuItem key={size} value={size}>
+                <CustomCheckbox checked={formdata.size.indexOf(size) > -1} />
+                <ListItemText primary={size} style={{ color: "green" }} />
+              </CustomMenuItem>
+            ))}
+          </CustomSelect>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel
+            id="color-label"
+            style={{
+              color: "green",
+              fontWeight: "bold",
+              backgroundColor: "white",
+              padding: "0px 5px",
+            }}
+          >
+            Color
+          </InputLabel>
+          <CustomColorSelect
+            labelId="color-label"
+            id="color-checkbox"
+            multiple
+            value={Array.isArray(formdata.color) ? formdata.color : []}
+            onChange={(event) => {
+              const {
+                target: { value },
+              } = event;
+              setFormdata({
+                ...formdata,
+                color: typeof value === "string" ? value.split(",") : value,
+              });
+            }}
+            renderValue={(selected) =>
+              Array.isArray(selected) ? selected.join(", ") : ""
+            }
+          >
+            {colorOptions.map((color) => (
+              <MenuItem key={color} value={color}>
+                <Checkbox
+                  checked={
+                    Array.isArray(formdata.color) &&
+                    formdata.color.indexOf(color) > -1
+                  }
+                />
+                <ListItemText primary={color} />
+              </MenuItem>
+            ))}
+          </CustomColorSelect>
+        </FormControl>
       </Grid>
       <Grid item xs={12} md={6}>
         <CommonInput
@@ -148,41 +300,6 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
         />
       </Grid>
       <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Headline"
-          type="text"
-          name="headline"
-          value={formdata.headline}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          variant="outlined"
-          className="border-2 border-dashed border-bg-green"
-          InputProps={{
-            classes: { notchedOutline: "border-none" },
-          }}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Order ID"
-          name="orderid"
-          value={formdata.orderid}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          type="number"
-          variant="outlined"
-          className="border-2 border-dashed border-bg-green outline-none"
-          InputProps={{
-            classes: { notchedOutline: "outline-none" },
-          }}
-        />
-        {errors.orderid && (
-          <span className="text-red-500">{errors.orderid}</span>
-        )}
-      </Grid>
-      <Grid item xs={12}>
         <CommonInput
           label="Product Description"
           name="productdesc"

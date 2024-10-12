@@ -44,19 +44,16 @@ const AddProduct = ({ product }) => {
   const [completed, setCompleted] = useState({});
   const [formdata, setFormdata] = useState({
     name: product?.name || "",
-    prize: product?.prize || "",
     size: product?.size || [],
+    color: product?.color || [], // Ensure color is initialized as an array
     regularprize: product?.regularprize || "",
     saleprize: product?.saleprize || "",
     gst: product?.gst || "",
     weight: product?.weight || "",
-    stock: product?.stock || "",
     countryorigin: product?.countryorigin || "",
-    color: product?.color || "",
     fabric: product?.fabric || "",
     fitshape: product?.fitshape || "",
     nack: product?.nack || "",
-    quantity: product?.quantity || "",
     occupation: product?.occupation || "",
     patent: product?.patent || "",
     patenttype: product?.patenttype || "",
@@ -64,16 +61,13 @@ const AddProduct = ({ product }) => {
     chestsize: product?.chestsize || "",
     lengthsize: product?.lengthsize || "",
     designname: product?.designname || "",
-    sku1: product?.sku1 || "",
-    sku2: product?.sku2 || "",
+    sku: product?.sku || "",
     brandname: product?.brandname || "",
-    groupid: product?.groupid || "",
     productdesc: product?.productdesc || "",
-    headline: product?.headline || "",
     length: product?.length || "",
     noofpocket: product?.noofpocket || "",
     sleevestyle: product?.sleevestyle || "",
-    orderid: product?.orderid || "",
+    productid: product?.productid || "",
     stretchability: product?.stretchability || "",
     productphoto: product?.productphoto || [],
   });
@@ -92,12 +86,15 @@ const AddProduct = ({ product }) => {
     switch (step) {
       case 0: // Basic Information
         if (!formdata.name.trim()) stepErrors.name = "Product name is required";
-        if (!formdata.weight) stepErrors.weight = "Weight is required";
+        if (formdata.size.length === 0)
+          stepErrors.size = "At least one size is required";
+        if (formdata.color.length === 0)
+          stepErrors.color = "At least one color is required";
         // Add more validations for Basic Information fields
         break;
       case 1: // Pricing and Stock
-        if (!formdata.prize) stepErrors.prize = "Price is required";
-        if (!formdata.stock) stepErrors.stock = "Stock is required";
+        if (!formdata.discount) stepErrors.discount = "Discount is required";
+
         // Add more validations for Pricing and Stock fields
         break;
       case 2: // Product Details
@@ -164,6 +161,14 @@ const AddProduct = ({ product }) => {
           },
           {
             position: "bottom-right", // Set toast position here
+          },
+          {
+            style: {
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "14px",
+              fontWeight: "400",
+              lineHeight: "1.5",
+            },
           }
         );
       } else {
@@ -210,6 +215,16 @@ const AddProduct = ({ product }) => {
     });
   };
 
+  const handleColorChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setFormdata({
+      ...formdata,
+      color: typeof value === "string" ? value.split(",") : value,
+    });
+  };
+
   return (
     <Box className="w-full h-[93vh] flex flex-col">
       {/* Stepper at the top */}
@@ -237,6 +252,7 @@ const AddProduct = ({ product }) => {
               formdata={formdata}
               setFormdata={setFormdata}
               handleSizeChange={handleSizeChange}
+              handleColorChange={handleColorChange}
             />
           )}
           {activeStep === 1 && (

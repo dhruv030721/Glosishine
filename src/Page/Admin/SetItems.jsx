@@ -266,7 +266,7 @@ const SetItems = () => {
   return (
     <div className="container mx-auto px-4 py-8">
       {renderSection(
-        "Slider Items 1 (1610x810)",
+        "Slider-1 Items (1610x810)",
         imagesSlider1,
         "ImageSlider-1",
         <div className="grid grid-cols-1 gap-4">
@@ -324,7 +324,7 @@ const SetItems = () => {
       )}
 
       {renderSection(
-        "Slider Items 2 (1600x534)",
+        "Slider-2 Items (1600x534)",
         imagesSlider2,
         "ImageSlider-2",
         <div className="grid grid-cols-1 gap-4">

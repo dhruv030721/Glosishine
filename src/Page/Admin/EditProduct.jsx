@@ -46,91 +46,51 @@ const EditProduct = ({ id }) => {
   ];
 
   const [activeStep, setActiveStep] = useState(0);
-  const [formdata, setFormdata] = useState(() => {
-    return filteredProduct
-      ? {
-          name: filteredProduct.product_name || "",
-          prize: filteredProduct.price || "",
-          size: filteredProduct.size || [],
-          regularprize: filteredProduct.regular_price || "",
-          saleprize: filteredProduct.sale_price || "",
-          gst: filteredProduct.gst || "",
-          weight: filteredProduct.weight_gram || "",
-          stock: filteredProduct.stock || "",
-          countryorigin: filteredProduct.country_origin || "",
-          color: filteredProduct.color || "",
-          fabric: filteredProduct.fabric || "",
-          fitshape: filteredProduct.fit_shape || "",
-          nack: filteredProduct.neck || "",
-          quantity: filteredProduct.neck_quantity || "",
-          occupation: filteredProduct.occupation || "",
-          patent: filteredProduct.patent || "",
-          patenttype: filteredProduct.print_of_patent_type || "",
-          sleevelength: filteredProduct.sleeve_length || "",
-          chestsize: filteredProduct.chest_size || "",
-          lengthsize: filteredProduct.length_size || "",
-          designname: filteredProduct.design_name || "",
-          sku1: filteredProduct.sku1 || "",
-          sku2: filteredProduct.sku2 || "",
-          brandname: filteredProduct.brand_name || "",
-          productdesc: filteredProduct.product_description || "",
-          length: filteredProduct.length || "",
-          noofpocket: filteredProduct.number_of_pockets || "",
-          sleevestyle: filteredProduct.sleeve_style || "",
-          orderid: filteredProduct.order_id || "",
-          stretchability: filteredProduct.stretchability || "",
-          productphoto: filteredProduct.images || [],
-        }
-      : {
-          name: "",
-          prize: "",
-          size: [],
-          regularprize: "",
-          saleprize: "",
-          gst: "",
-          weight: "",
-          stock: "",
-          countryorigin: "",
-          color: "",
-          fabric: "",
-          fitshape: "",
-          nack: "",
-          quantity: "",
-          occupation: "",
-          patent: "",
-          patenttype: "",
-          sleevelength: "",
-          chestsize: "",
-          lengthsize: "",
-          designname: "",
-          sku1: "",
-          sku2: "",
-          brandname: "",
-          groupid: "",
-          productdesc: "",
-          headline: "",
-          length: "",
-          noofpocket: "",
-          sleevestyle: "",
-          orderid: "",
-          stretchability: "",
-          productphoto: [],
-        };
+  const [formdata, setFormdata] = useState({
+    name: "",
+    size: [],
+    color: [], // Added color field as an array
+    regularprize: "",
+    saleprize: "",
+    gst: "",
+    weight: "",
+    stock: "",
+    countryorigin: "",
+    fabric: "",
+    fitshape: "",
+    nack: "",
+    quantity: "",
+    occupation: "",
+    patent: "",
+    patenttype: "",
+    sleevelength: "",
+    chestsize: "",
+    lengthsize: "",
+    designname: "",
+    sku: "", // Changed from sku1 and sku2 to single sku
+    brandname: "",
+    productdesc: "",
+    length: "",
+    noofpocket: "",
+    sleevestyle: "",
+    productid: "", // Changed from orderid to productid
+    stretchability: "",
+    productphoto: [],
+    discount: "", // Added discount field
   });
 
   useEffect(() => {
     if (filteredProduct) {
       setFormdata({
         name: filteredProduct.product_name || "",
-        prize: filteredProduct.price || "",
-        size: filteredProduct.size.split(",") || [],
+        size: filteredProduct.size ? filteredProduct.size.split(",") : [],
+        color: filteredProduct.color ? filteredProduct.color.split(",") : [],
         regularprize: filteredProduct.regular_price || "",
         saleprize: filteredProduct.sale_price || "",
         gst: filteredProduct.gst || "",
         weight: filteredProduct.weight_gram || "",
         stock: filteredProduct.stock || "",
         countryorigin: filteredProduct.country_origin || "",
-        color: filteredProduct.color || "",
         fabric: filteredProduct.fabric || "",
         fitshape: filteredProduct.fit_shape || "",
         nack: filteredProduct.neck || "",
@@ -142,16 +102,16 @@ const EditProduct = ({ id }) => {
         chestsize: filteredProduct.chest_size || "",
         lengthsize: filteredProduct.length_size || "",
         designname: filteredProduct.design_name || "",
-        sku1: filteredProduct.sku1 || "",
-        sku2: filteredProduct.sku2 || "",
+        sku: filteredProduct.sku || "",
         brandname: filteredProduct.brand_name || "",
         productdesc: filteredProduct.product_description || "",
         length: filteredProduct.length || "",
         noofpocket: filteredProduct.number_of_pockets || "",
         sleevestyle: filteredProduct.sleeve_style || "",
-        orderid: filteredProduct.order_id || "",
+        productid: filteredProduct.product_id || "",
         stretchability: filteredProduct.stretchability || "",
         productphoto: filteredProduct.images || [],
+        discount: filteredProduct.discount || "",
       });
     }
   }, [filteredProduct]);
@@ -163,6 +123,16 @@ const EditProduct = ({ id }) => {
     setFormdata({
       ...formdata,
       size: typeof value === "string" ? value.split(",") : value,
+    });
+  };
+
+  const handleColorChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setFormdata({
+      ...formdata,
+      color: typeof value === "string" ? value.split(",") : value,
     });
   };
 
@@ -199,8 +169,19 @@ const EditProduct = ({ id }) => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      // Ensure all fields are properly formatted
+      const updatedFormData = {
+        ...formdata,
+        regularprize: formdata.regularprize.toString(),
+        saleprize: formdata.saleprize.toString(),
+        gst: formdata.gst.toString(),
+        weight: formdata.weight.toString(),
+        noofpocket: formdata.noofpocket.toString(),
+        discount: formdata.discount.toString(),
+      };
+
       await toast.promise(
-        updateProduct({ productData: formdata }, id),
+        updateProduct({ id, productData: updatedFormData }),
         {
           loading: "Updating Product...",
           success: (response) => {
@@ -288,6 +269,7 @@ const EditProduct = ({ id }) => {
                     formdata={formdata}
                     setFormdata={setFormdata}
                     handleSizeChange={handleSizeChange}
+                    handleColorChange={handleColorChange}
                   />
                 )}
                 {activeStep === 1 && (

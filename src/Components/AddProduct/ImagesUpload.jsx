@@ -1,20 +1,16 @@
 import "../../Components/AddProduct/inputStyles.css";
 import { useState } from "react";
 
-const ImagesUpload = ({
-  formdata,
-  handleImageUpload,
-  handleRemoveImage,
-  popup,
-}) => {
+const ImagesUpload = ({ formdata, handleImageUpload, handleRemoveImage }) => {
   const [error, setError] = useState("");
 
   const validateImages = (files) => {
-    if (files.length === 0) {
+    const totalImages = formdata.productphoto.length + files.length;
+    if (totalImages === 0) {
       setError("At least one image is required");
       return false;
     }
-    if (files.length > 5) {
+    if (totalImages > 5) {
       setError("Maximum 5 images allowed");
       return false;
     }
@@ -27,6 +23,13 @@ const ImagesUpload = ({
     if (validateImages(files)) {
       handleImageUpload(event);
     }
+  };
+
+  const getImageUrl = (image) => {
+    if (typeof image === "string") return image;
+    if (image && image.url) return image.url;
+    if (image && image instanceof File) return URL.createObjectURL(image);
+    return ""; // Return an empty string or a placeholder image URL
   };
 
   return (
@@ -58,25 +61,28 @@ const ImagesUpload = ({
       </form>
 
       <div className="grid grid-cols-3 gap-4">
-        {formdata.productphoto.length > 0 ? (
-          formdata.productphoto.map((file, index) => (
-            <div
-              key={index}
-              className="border border-gray-300 p-2 rounded-lg shadow"
-            >
-              <img
-                src={popup ? file : URL.createObjectURL(file)}
-                alt={`upload-${index}`}
-                className="w-full h-auto rounded-lg"
-              />
-              <button
-                onClick={() => handleRemoveImage(index)}
-                className="bg-red-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-red-600 transition"
+        {formdata.productphoto && formdata.productphoto.length > 0 ? (
+          formdata.productphoto.map((image, index) => {
+            const imageUrl = getImageUrl(image);
+            return imageUrl ? (
+              <div
+                key={index}
+                className="border border-gray-300 p-2 rounded-lg shadow"
               >
-                Remove
-              </button>
-            </div>
-          ))
+                <img
+                  src={imageUrl}
+                  alt={`upload-${index}`}
+                  className="w-full h-auto rounded-lg"
+                />
+                <button
+                  onClick={() => handleRemoveImage(index)}
+                  className="bg-red-500 text-white px-3 py-1 rounded-lg mt-2 hover:bg-red-600 transition"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : null;
+          })
         ) : (
           <p className="text-gray-500 font-poppins">No images uploaded yet</p>
         )}

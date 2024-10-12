@@ -1,7 +1,8 @@
 /* eslint-disable no-unused-vars */
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { AdminLogin } from "../../Services/Operations/Auth";
+import { getItem } from "../../Services/LocalStorageService";
 import toast from "react-hot-toast";
 
 const Admin = () => {
@@ -11,6 +12,13 @@ const Admin = () => {
     password: "",
   });
 
+  useEffect(() => {
+    const token = getItem("adminToken");
+    if (token) {
+      navigate("/admin/dashboard", { replace: true });
+    }
+  }, [navigate]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!adminuser.email || !adminuser.password) {
@@ -18,22 +26,24 @@ const Admin = () => {
       return;
     }
     try {
-      await toast.promise(
+      const response = await toast.promise(
         AdminLogin(adminuser),
         {
           loading: "Processing....",
           success: (response) => {
-            navigate("/admin/dashboard");
-            return `${response.data.message}`;
+            if (response.data.token) {
+              navigate("/admin/dashboard", { replace: true });
+              return "Login successful";
+            } else {
+              throw new Error("Login failed: No token received");
+            }
           },
           error: (error) => {
-            return `${error.response.data.message}`;
+            return error.response?.data?.message || "Login failed";
           },
         },
         {
-          position: "bottom-right", // Set toast position here
-        },
-        {
+          position: "bottom-right",
           style: {
             fontFamily: "'Poppins', sans-serif",
             fontSize: "14px",

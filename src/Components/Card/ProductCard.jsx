@@ -19,7 +19,7 @@ const ProductCard = ({ product }) => {
   return (
     <div
       key={product.product_id}
-      className="w-full  rounded overflow-hidden shadow-lg border"
+      className="w-full rounded overflow-hidden shadow-lg border relative"
     >
       <Link to={`/cart/${product.product_id}`}>
         <img
@@ -33,14 +33,6 @@ const ProductCard = ({ product }) => {
           <h1 className="font-bold w-full flex justify-start font-poppins text-md mb-2">
             {product.product_name}
           </h1>
-          <button
-            className=""
-            onClick={() => {
-              addToCart(product.product_id);
-            }}
-          >
-            <RiShoppingBag4Fill size={30} className="" />
-          </button>
         </div>
         <p className="text-gray-700 font-montserrat text-sm mb-2">
           {product.brand_name}
@@ -57,6 +49,12 @@ const ProductCard = ({ product }) => {
           </span>
         </div>
       </div>
+      <button
+        className="absolute bottom-2 right-2 bg-green-600 text-white rounded-full p-2 hover:bg-green-700 transition-colors duration-300"
+        onClick={() => addToCart(product.product_id)}
+      >
+        <RiShoppingBag4Fill size={24} />
+      </button>
     </div>
   );
 };

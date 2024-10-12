@@ -14,19 +14,16 @@ export async function addProduct({ productData }) {
 
   console.log("price", productData.ragularprize);
   formData.append("product_name", productData.name);
-  formData.append("price", parseInt(productData.prize));
   formData.append("size", sizestring);
   formData.append("regular_price", parseInt(productData.regularprize));
   formData.append("sale_price", parseInt(productData.saleprize));
   formData.append("gst", parseInt(productData.gst));
   formData.append("weight_gram", parseInt(productData.weight));
-  formData.append("stock", parseInt(productData.stock));
   formData.append("country_origin", productData.countryorigin);
   formData.append("color", productData.color);
   formData.append("fabric", productData.fabric);
   formData.append("fit_shape", productData.fitshape);
   formData.append("neck", productData.nack);
-  formData.append("net_quantity", productData.quantity);
   formData.append("occupation", productData.occupation);
   formData.append("patent", productData.patent);
   formData.append("print_of_patent_type", productData.patenttype);
@@ -34,17 +31,14 @@ export async function addProduct({ productData }) {
   formData.append("chest_size", productData.chestsize);
   formData.append("length_size", productData.lengthsize);
   formData.append("design_name", productData.designname);
-  formData.append("sku1", productData.sku1);
-  formData.append("sku2", productData.sku2);
+  formData.append("sku", productData.sku);
   formData.append("brand_name", productData.brandname);
-  formData.append("group_id", productData.groupid);
   formData.append("product_description", productData.productdesc);
-  // formData.append("headline", productData.headline);
   formData.append("length", productData.length);
   formData.append("number_of_pockets", parseInt(productData.noofpackets));
   formData.append("sleeve_style", productData.sleevestyle);
   formData.append("stretchability", productData.stretchability);
-  // formData.append("order_id", productData.orderid);
+  formData.append("product_id", productData.productid);
 
   productData.productphoto.forEach((element) => {
     formData.append(`product_photos[]`, element);
@@ -63,26 +57,22 @@ export async function getProduct() {
   return response;
 }
 
-export async function updateProduct(data, id) {
+export async function updateProduct(data) {
   let formData = new FormData();
-  const { productData } = data;
-  const sizestring = productData.size.join();
+  const { productData, id } = data;
 
   formData.append("product_id", id);
   formData.append("product_name", productData.name);
-  formData.append("price", parseInt(productData.prize));
-  formData.append("size", sizestring);
-  formData.append("regular_price", parseInt(productData.regularprize));
-  formData.append("sale_price", parseInt(productData.saleprize));
-  formData.append("gst", parseInt(productData.gst));
-  formData.append("weight_gram", parseInt(productData.weight));
-  formData.append("stock", parseInt(productData.stock));
+  formData.append("size", productData.size.join(","));
+  formData.append("color", productData.color.join(","));
+  formData.append("regular_price", productData.regularprize);
+  formData.append("sale_price", productData.saleprize);
+  formData.append("gst", productData.gst);
+  formData.append("weight_gram", productData.weight);
   formData.append("country_origin", productData.countryorigin);
-  formData.append("color", productData.color);
   formData.append("fabric", productData.fabric);
   formData.append("fit_shape", productData.fitshape);
   formData.append("neck", productData.nack);
-  formData.append("net_quantity", productData.quantity);
   formData.append("occupation", productData.occupation);
   formData.append("patent", productData.patent);
   formData.append("print_of_patent_type", productData.patenttype);
@@ -90,23 +80,25 @@ export async function updateProduct(data, id) {
   formData.append("chest_size", productData.chestsize);
   formData.append("length_size", productData.lengthsize);
   formData.append("design_name", productData.designname);
-  formData.append("sku1", productData.sku1);
-  formData.append("sku2", productData.sku2);
+  formData.append("sku", productData.sku);
   formData.append("brand_name", productData.brandname);
-  formData.append("group_id", productData.groupid);
   formData.append("product_description", productData.productdesc);
   formData.append("length", productData.length);
-  formData.append("number_of_pockets", parseInt(productData.noofpackets));
+  formData.append("number_of_pockets", productData.noofpocket);
   formData.append("sleeve_style", productData.sleevestyle);
   formData.append("stretchability", productData.stretchability);
+  formData.append("discount", productData.discount);
 
-  productData.productphoto.forEach((element) => {
-    if (typeof element === "string") {
-      formData.append(`existing_images[]`, element);
-    } else {
-      formData.append(`product_photos[]`, element);
-    }
-  });
+  // Handle product photos
+  if (productData.productphoto && productData.productphoto.length > 0) {
+    productData.productphoto.forEach((element, index) => {
+      if (typeof element === "string") {
+        formData.append(`existing_images[${index}]`, element);
+      } else {
+        formData.append(`product_photos[${index}]`, element);
+      }
+    });
+  }
 
   const response = await apiConnector(
     "POST",

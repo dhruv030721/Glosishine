@@ -2,7 +2,7 @@ import default_product_img from "../../assets/fation1.webp";
 import default_product_img_1 from "../../assets/howtostyle.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, removeFromWatchlist } from "../../Slice/watchlistSlice";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { FaHeart, FaRegHeart, FaShoppingBag } from "react-icons/fa";
 import { AppContext } from "../../App";
 import {
   addFavProduct,
@@ -58,7 +58,15 @@ const ProductList = ({ product, className, index, onRemove }) => {
             error: "Failed to remove product from watchlist.",
           },
           {
-            position: "bottom-right",
+            position: "bottom-right", // Set toast position here
+          },
+          {
+            style: {
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "14px",
+              fontWeight: "400",
+              lineHeight: "1.5",
+            },
           }
         );
         dispatch(removeFromWatchlist(product.product_id));
@@ -88,7 +96,15 @@ const ProductList = ({ product, className, index, onRemove }) => {
                 : "Failed to add product to watchlist.",
           },
           {
-            position: "bottom-right",
+            position: "bottom-right", // Set toast position here
+          },
+          {
+            style: {
+              fontFamily: "'Poppins', sans-serif",
+              fontSize: "14px",
+              fontWeight: "400",
+              lineHeight: "1.5",
+            },
           }
         );
         dispatch(addProduct(product));
@@ -100,6 +116,15 @@ const ProductList = ({ product, className, index, onRemove }) => {
         console.error("Error:", error);
       }
     }
+  };
+
+  const handleAddToBag = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    // Implement your add to bag logic here
+    toast.success("Product added to bag!", {
+      position: "bottom-right",
+    });
   };
 
   return (
@@ -150,13 +175,13 @@ const ProductList = ({ product, className, index, onRemove }) => {
             />
           </svg>
           <span className="absolute top-0 left-0 m-2 rounded-full bg-bg-green px-2 text-center text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-medium text-white">
-            {product.discountPercentage}% OFF
+            {product.discount}% OFF
           </span>
         </a>
         <button
           onClick={handleWatchlistToggle}
           className="absolute top-2 right-2 p-2 rounded-full bg-white bg-opacity-70 hover:bg-opacity-100 transition-all duration-200"
-          style={{ zIndex: 100 }} // Increase the z-index
+          style={{ zIndex: 100 }}
         >
           {isInWatchlist ? (
             <FaHeart className="text-red-500 text-xl" />
@@ -165,21 +190,32 @@ const ProductList = ({ product, className, index, onRemove }) => {
           )}
         </button>
 
-        <div className="mt-2 z-10">
-          <a href={`/${product.product_id}`}>
-            <h5 className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl font-mono font-semibold flex justify-center w-full text-black">
-              {product.product_name}
-            </h5>
-          </a>
-          <div className="mt-1 mb-3 flex items-center justify-between">
-            <p className="w-full flex justify-evenly">
+        <div className="mt-2 z-10 flex flex-col items-center px-2">
+          <div className="w-full text-center mb-2">
+            <a href={`/${product.product_id}`}>
+              <h5 className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl font-mono font-semibold text-black">
+                {product.product_name}
+              </h5>
+            </a>
+          </div>
+
+          <div className="w-full flex justify-around items-end mb-2">
+            <div className="flex flex-row gap-[1em]">
               <span className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl text-black font-bold line-through">
                 Rs. {product.regular_price}
               </span>
               <span className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl text-green-700 font-bold">
                 Rs. {product.sale_price}
               </span>
-            </p>
+            </div>
+
+            {/* Updated Add to Bag button */}
+            <button
+              onClick={handleAddToBag}
+              className="p-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-all duration-200 flex flex-col items-center justify-center"
+            >
+              <FaShoppingBag className="text-xl mb-1" />
+            </button>
           </div>
         </div>
       </div>

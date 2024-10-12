@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { LuHome, LuLogOut } from "react-icons/lu";
 import { IoBagHandle } from "react-icons/io5";
 import Modal from "@mui/joy/Modal";
@@ -10,10 +10,8 @@ import Orders from "./Orders";
 import SetItems from "./SetItems";
 import AddProduct from "./AddProduct";
 import { AppContext } from "../../App";
-import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
-
-const cookies = new Cookies();
+import { getItem, removeItem } from "../../Services/LocalStorageService";
 
 const Dashboard = () => {
   const appcontext = useContext(AppContext);
@@ -21,13 +19,20 @@ const Dashboard = () => {
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = getItem("adminToken");
+    if (!token) {
+      navigate("/admin", { replace: true });
+    }
+  }, [navigate]);
+
   const handleItemClick = (content) => {
     setSelectedContent(content);
   };
 
   const handleLogout = () => {
-    cookies.remove("Admin-Access-Token");
-    navigate("/admin");
+    removeItem("adminToken");
+    navigate("/admin", { replace: true });
   };
 
   return (

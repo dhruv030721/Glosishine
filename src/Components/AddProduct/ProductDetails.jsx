@@ -23,17 +23,26 @@ const ProductDetails = ({ formdata, setFormdata }) => {
       case "sleevelength":
       case "chestsize":
       case "lengthsize":
-      case "sku1":
-      case "sku2":
-      case "groupid":
+      case "sku":
       case "length":
       case "sleevestyle":
-        if (!value.trim()) error = `${name} is required`;
+        if (!value.trim())
+          error = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
         break;
       case "numberofpockets":
         if (!value) error = "Number of pockets is required";
         if (isNaN(value) || value < 0)
-          error = "Number of pockets must be a non-negative number";
+          error = "Number of pockets must be a non-negative integer";
+        if (!Number.isInteger(Number(value)))
+          error = "Number of pockets must be an integer";
+        break;
+      case "weight":
+        if (!value) error = "Weight is required";
+        if (isNaN(value) || value <= 0)
+          error = "Weight must be a positive number";
+        break;
+      case "stretchability":
+        if (!value) error = "Stretchability is required";
         break;
     }
     return error;
@@ -47,6 +56,23 @@ const ProductDetails = ({ formdata, setFormdata }) => {
 
   return (
     <>
+      <Grid item xs={12} md={6}>
+        <CommonInput
+          fullWidth
+          label="Weight (gram)"
+          name="weight"
+          value={formdata.weight}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          type="number"
+          variant="outlined"
+          className="border-2 border-dashed border-bg-green"
+          InputProps={{
+            classes: { notchedOutline: "border-none" },
+          }}
+        />
+        {errors.weight && <span className="text-red-500">{errors.weight}</span>}
+      </Grid>
       <Grid item xs={12} md={6}>
         <CommonInput
           fullWidth
@@ -163,43 +189,16 @@ const ProductDetails = ({ formdata, setFormdata }) => {
       <Grid item xs={12} md={6}>
         <CommonInput
           fullWidth
-          label="SKU1"
+          label="SKU"
           type="text"
-          name="sku1"
-          value={formdata.sku1}
+          name="sku"
+          value={formdata.sku}
           onChange={handleChange}
           variant="outlined"
           className="font-poppins"
           onBlur={handleBlur}
         />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="SKU2"
-          type="text"
-          name="sku2"
-          value={formdata.sku2}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Group ID"
-          type="text"
-          name="groupid"
-          value={formdata.groupid}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
-
       <Grid item xs={12} md={6}>
         <CommonInput
           fullWidth
@@ -218,8 +217,8 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           fullWidth
           label="Number of Pockets"
           type="number"
-          name="numberofpockets"
-          value={formdata.numberofpockets}
+          name="noofpocket"
+          value={formdata.noofpocket}
           onChange={handleChange}
           variant="outlined"
           className="font-poppins"
@@ -254,6 +253,14 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           onBlur={handleBlur}
         />
       </Grid>
+      {Object.entries(errors).map(
+        ([field, error]) =>
+          error && (
+            <span key={field} className="text-red-500">
+              {error}
+            </span>
+          )
+      )}
     </>
   );
 };

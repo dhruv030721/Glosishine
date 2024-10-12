@@ -6,6 +6,7 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
   const frameRef = useRef(null);
   const videoRef = useRef(null);
   const [dimensions, setDimensions] = useState({ frame: {}, video: {} });
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const calculateDimensions = (frameRect, screenWidth) => {
     let videoWidth, videoHeight, videoLeft, videoTop;
@@ -14,7 +15,7 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
       // Mobile screens
       videoWidth = frameRect.width * 0.75 - 5;
       videoHeight = frameRect.height * 0.65 + 10;
-      videoLeft = frameRect.width * 0.125 - 25;
+      videoLeft = frameRect.width * 0.125 - 30;
       videoTop = frameRect.height * 0.17 - 20;
     } else if (screenWidth < 400) {
       // Mobile screens
@@ -37,7 +38,7 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
     } else {
       // Desktop screens (1024px and above)
       videoWidth = frameRect.width * 0.82 - 100;
-      videoHeight = frameRect.height * 0.72 - 10;
+      videoHeight = frameRect.height * 0.72 - 5;
       videoLeft = (frameRect.width - videoWidth) / 2 - 110;
       videoTop = frameRect.height * 0.11 - 25;
     }
@@ -80,6 +81,26 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
     }
   }, [dimensions]);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (video) {
+      const handleLoadedMetadata = () => {
+        setIsVideoLoaded(true);
+      };
+
+      video.addEventListener("loadedmetadata", handleLoadedMetadata);
+
+      // If the video is already loaded when the component mounts
+      if (video.readyState >= 2) {
+        setIsVideoLoaded(true);
+      }
+
+      return () => {
+        video.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      };
+    }
+  }, []);
+
   return (
     <div
       ref={containerRef}
@@ -96,14 +117,21 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
           alt="TV Frame"
           className="w-full h-auto"
         />
-        <video
-          ref={videoRef}
-          src={videoUrl}
-          autoPlay
-          muted
-          loop
-          className={`absolute object-cover ${videoClassName}`}
-        />
+        <div
+          className={`absolute inset-0 ${
+            isVideoLoaded ? "opacity-100" : "opacity-0"
+          } transition-opacity duration-300`}
+        >
+          <video
+            ref={videoRef}
+            src={videoUrl}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className={`absolute object-cover ${videoClassName}`}
+          />
+        </div>
       </div>
     </div>
   );

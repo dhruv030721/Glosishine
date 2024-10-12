@@ -14,19 +14,20 @@ const PricingStock = ({ formdata, setFormdata }) => {
   const validateField = (name, value) => {
     let error = "";
     switch (name) {
-      case "prize":
       case "regularprize":
       case "saleprize":
       case "gst":
-      case "quantity":
       case "stock":
-        if (!value) error = `${name} is required`;
+      case "discount":
+        if (!value)
+          error = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
         if (isNaN(value) || value < 0)
-          error = `${name} must be a non-negative number`;
+          error = `${
+            name.charAt(0).toUpperCase() + name.slice(1)
+          } must be a non-negative number`;
         break;
       case "brandname":
-      case "color":
-        if (!value.trim()) error = `${name} is required`;
+        if (!value.trim()) error = "Brand name is required";
         break;
     }
     return error;
@@ -40,32 +41,6 @@ const PricingStock = ({ formdata, setFormdata }) => {
 
   return (
     <>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Prize"
-          type="number"
-          name="prize"
-          value={formdata.prize}
-          onChange={(e) => setFormdata({ ...formdata, prize: e.target.value })}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Brand Name"
-          type="text"
-          name="brandname"
-          value={formdata.brandname}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
       <Grid item xs={12} md={6}>
         <CommonInput
           fullWidth
@@ -95,6 +70,19 @@ const PricingStock = ({ formdata, setFormdata }) => {
       <Grid item xs={12} md={6}>
         <CommonInput
           fullWidth
+          label="Brand Name"
+          type="text"
+          name="brandname"
+          value={formdata.brandname}
+          onChange={handleChange}
+          variant="outlined"
+          className="font-poppins"
+          onBlur={handleBlur}
+        />
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <CommonInput
+          fullWidth
           label="GST %"
           type="number"
           name="gst"
@@ -108,42 +96,24 @@ const PricingStock = ({ formdata, setFormdata }) => {
       <Grid item xs={12} md={6}>
         <CommonInput
           fullWidth
-          label="Net Quantity"
+          label="Discount %"
           type="number"
-          name="quantity"
-          value={formdata.quantity}
+          name="discount"
+          value={formdata.discount}
           onChange={handleChange}
           variant="outlined"
           className="font-poppins"
           onBlur={handleBlur}
         />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Stock (No of pieces)"
-          type="number"
-          name="stock"
-          value={formdata.stock}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Color"
-          type="text"
-          name="color"
-          value={formdata.color}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
+      {Object.entries(errors).map(
+        ([field, error]) =>
+          error && (
+            <span key={field} className="text-red-500">
+              {error}
+            </span>
+          )
+      )}
     </>
   );
 };
