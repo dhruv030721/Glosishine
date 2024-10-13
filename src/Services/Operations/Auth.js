@@ -1,11 +1,12 @@
 import { apiConnector } from "../Apiconnector";
 import { jwtDecode } from "jwt-decode";
-import { adminendpoints, authendpoints } from "../Apis";
+import { adminendpoints, authendpoints, userendpoints } from "../Apis";
 import { setItem } from "../LocalStorageService";
 
 const { CONTINUEWITHGOOGLE, REGISTER_API, LOGIN_API, SEND_OTP, VERIFY_OTP } =
   authendpoints;
 const { ADMIN_LOGIN } = adminendpoints;
+const { GETUSER_API } = userendpoints;
 
 export default class Global {
   static token;
@@ -18,6 +19,25 @@ export async function LoginUser(data) {
   // Global.user = jwtDecode(Global.token);
   // console.log("Global.user", Global.user);
   return response;
+}
+
+export async function getUser(email) {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+
+  try {
+    const response = await apiConnector(
+      "GET",
+      `${GETUSER_API}?email=${email}`,
+      null,
+      headers
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching user data:", error);
+    throw error;
+  }
 }
 
 export async function AdminLogin(data) {

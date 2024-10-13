@@ -186,6 +186,7 @@ const EditProduct = ({ id }) => {
           loading: "Updating Product...",
           success: (response) => {
             console.log(response);
+            handleClose(); // Close the dialog on success
             return `${response.data.message}`;
           },
           error: (error) => {

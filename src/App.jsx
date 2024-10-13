@@ -135,6 +135,7 @@ function App() {
           CartProducts,
           token,
           user,
+          setUser,
           adminToken,
           isDrawerOpen,
           setIsDrawerOpen,

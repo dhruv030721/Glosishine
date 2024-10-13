@@ -184,6 +184,9 @@ const AddProduct = ({ product }) => {
             position: "bottom-right", // Set toast position here
           }
         );
+
+        // Reload the page after successful product addition
+        window.location.reload();
       }
     } catch (error) {
       console.error("Submit failed:", error);

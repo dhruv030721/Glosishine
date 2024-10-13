@@ -30,7 +30,6 @@ import {
 } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
 import { FaRegStar, FaStar, FaStarHalfAlt } from "react-icons/fa";
-import { addItem } from "../../Slice/CartSlice";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
@@ -42,12 +41,15 @@ import IconReturn from "../../assets/Icon-return.svg";
 import IconSecure from "../../assets/Icon-secure.svg";
 import "./Cart.css";
 import { FaHeart } from "react-icons/fa6";
+import { addItemAsync } from "../../Slice/CartSlice";
+import { updateQuantityAsync } from "../../Slice/CartSlice";
 
 const Cart = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const Appcontext = useContext(AppContext);
   const userContext = useContext(AppContext);
+  const email = userContext?.user?.[0]?.email;
   const filterdata = Appcontext.getdata.filter(
     (item) => item.product_id === id
   );
@@ -182,30 +184,42 @@ const Cart = () => {
     }
   };
 
-  const handleIncrement = () => {
-    setValue(value + 1);
+  const handleIncrement = (productId) => {
+    dispatch(updateQuantityAsync({ email, id: productId, delta: 1 }));
   };
 
-  const handleDecrement = () => {
-    if (value > 0) {
-      setValue(value - 1);
-    }
+  const handleDecrement = (productId) => {
+    dispatch(updateQuantityAsync({ email, id: productId, delta: -1 }));
   };
 
   const handleAddToCart = (item, quantity) => {
     if (!selectedSize) {
-      toast.error("Please select a size before adding to cart");
+      toast.error("Please select a size before adding to cart", {
+        position: "bottom-right",
+      });
       return;
     }
 
-    const itemWithSize = {
-      ...item,
-      quantity,
-      selectedSize,
+    const itemToAdd = {
+      email: userContext.user[0].email,
+      product_id: item.product_id,
+      quantity: quantity.toString(),
+      size: selectedSize,
     };
 
-    dispatch(addItem(itemWithSize));
-    toast.success("Item added to cart");
+    dispatch(addItemAsync(itemToAdd))
+      .unwrap()
+      .then(() => {
+        toast.success("Item added to cart", {
+          position: "bottom-right",
+        });
+      })
+      .catch((error) => {
+        console.error("Failed to add item to cart:", error);
+        toast.error("Failed to add item to cart", {
+          position: "bottom-right",
+        });
+      });
   };
 
   const handleAddToWatchlist = async () => {};
@@ -227,7 +241,8 @@ const Cart = () => {
   useEffect(() => {
     const checkIfInWatchlist = async () => {
       try {
-        const favProducts = await getFavProduct();
+        const favProducts = await getFavProduct(email);
+        console.log(favProducts);
 
         // Check if favProducts.data is an array and then use find method
         if (Array.isArray(favProducts.data.data)) {

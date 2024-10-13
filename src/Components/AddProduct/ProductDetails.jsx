@@ -218,7 +218,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           label="Number of Pockets"
           type="number"
           name="noofpocket"
-          value={formdata.noofpocket}
+          value={parseInt(formdata.noofpocket)}
           onChange={handleChange}
           variant="outlined"
           className="font-poppins"

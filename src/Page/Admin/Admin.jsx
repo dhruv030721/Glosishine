@@ -22,7 +22,9 @@ const Admin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!adminuser.email || !adminuser.password) {
-      toast.error("Please fill all the fields");
+      toast.error("Please fill all the fields", {
+        position: "bottom-right",
+      });
       return;
     }
     try {
@@ -49,7 +51,6 @@ const Admin = () => {
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
-            color: "#333333",
           },
         }
       );

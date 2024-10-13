@@ -28,6 +28,14 @@ export const favproductendpoints = {
     BASE_URL + "favorite-products/remove-favoriteproduct.php",
 };
 
+export const cartendpoints = {
+  ADDCARTPRODUCTS_API: BASE_URL + "cart/add-cart-product.php",
+  GETCARTPRODUCTS_API: BASE_URL + "cart/get-cart-products.php",
+  DELETECARTPRODUCT_API: BASE_URL + "cart/remove-cart-product.php",
+  INCREASEQUANTITY_API: BASE_URL + "cart/increment-cart-product-quantity.php",
+  DECREASEQUANTITY_API: BASE_URL + "cart/decrement-cart-product-quantity.php",
+};
+
 export const adminendpoints = {
   ADMIN_LOGIN: BASE_URL + "auth/admin-login.php",
   ADD_CONTENT_ITEM: BASE_URL + "content-items/add-content-item.php",

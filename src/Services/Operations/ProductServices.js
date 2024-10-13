@@ -3,7 +3,9 @@ import {
   favproductendpoints,
   productendpoints,
   reviewendpoints,
+  cartendpoints,
 } from "../Apis";
+import Cookies from "js-cookie"; // Make sure to install and import js-cookie
 
 export async function addProduct({ productData }) {
   let formData = new FormData();
@@ -147,10 +149,16 @@ export async function getReview(id) {
 }
 
 // fav product
-export async function getFavProduct() {
+export async function getFavProduct(email) {
+  const headers = {
+    "Content-Type": "application/json",
+  };
+  const body = { email };
   const response = await apiConnector(
-    "GET",
-    favproductendpoints.GETFAVPRODUCT_API
+    "POST",
+    favproductendpoints.GETFAVPRODUCT_API,
+    body,
+    headers
   );
   return response;
 }
@@ -183,3 +191,109 @@ export async function deleteFavProduct(product_id) {
   );
   return response;
 }
+
+export const getCartProduct = async (email) => {
+  try {
+    const accessToken = Cookies.get("Access-Token");
+    const adminAccessToken = Cookies.get("Admin-Access-Token");
+
+    const response = await apiConnector(
+      "POST",
+      cartendpoints.GETCARTPRODUCTS_API,
+      { email },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          Cookie: `Access-Token=${accessToken}; Admin-Access-Token=${adminAccessToken}`,
+        },
+      }
+    );
+
+    console.log("Full response:", response);
+
+    if (response.headers["content-type"].includes("application/json")) {
+      return response.data;
+    } else {
+      console.error("Received non-JSON response. Content:", response.data);
+      throw new Error("Received non-JSON response");
+    }
+  } catch (error) {
+    console.error("Error getting product from cart:", error);
+    throw error;
+  }
+};
+
+export const addToCart = async (productData) => {
+  try {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const response = await apiConnector(
+      "POST",
+      cartendpoints.ADDCARTPRODUCTS_API,
+      productData,
+      headers
+    );
+    return response.data; // Return the data directly
+  } catch (error) {
+    console.error("Error adding product to cart:", error);
+    throw error;
+  }
+};
+
+export const removeFromCart = async (email, productId) => {
+  try {
+    const response = await apiConnector(
+      "DELETE",
+      cartendpoints.DELETECARTPRODUCT_API,
+      { email, product_id: productId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response;
+  } catch (error) {
+    console.error("Error removing product from cart:", error);
+    throw error;
+  }
+};
+
+export const increaseQuantity = async (email, productId) => {
+  try {
+    const response = await apiConnector(
+      "PATCH",
+      cartendpoints.INCREASEQUANTITY_API,
+      { email, product_id: productId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error increasing product quantity:", error);
+    throw error;
+  }
+};
+
+export const decreaseQuantity = async (email, productId) => {
+  try {
+    const response = await apiConnector(
+      "PATCH",
+      cartendpoints.DECREASEQUANTITY_API,
+      { email, product_id: productId },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error decreasing product quantity:", error);
+    throw error;
+  }
+};

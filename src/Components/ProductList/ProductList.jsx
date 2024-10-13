@@ -11,6 +11,7 @@ import {
 } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
 import { useContext, useEffect, useState } from "react";
+import { addItemAsync } from "../../Slice/CartSlice";
 
 const ProductList = ({ product, className, index, onRemove }) => {
   const dispatch = useDispatch();
@@ -18,11 +19,14 @@ const ProductList = ({ product, className, index, onRemove }) => {
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [favProductId, setFavProductId] = useState(null);
   const userContext = useContext(AppContext);
+  const cartItems = useSelector((state) => state.cart.items);
+  const [isInCart, setIsInCart] = useState(false);
 
   useEffect(() => {
+    const email = userContext?.user?.[0]?.email;
     const checkIfInWatchlist = async () => {
       try {
-        const favProducts = await getFavProduct();
+        const favProducts = await getFavProduct(email);
         if (Array.isArray(favProducts.data.data)) {
           const favProduct = favProducts.data.data.find(
             (favItem) => favItem.product_id === product.product_id
@@ -43,6 +47,12 @@ const ProductList = ({ product, className, index, onRemove }) => {
 
     checkIfInWatchlist();
   }, [product, userContext.user, isInWatchlist]);
+
+  useEffect(() => {
+    setIsInCart(
+      cartItems.some((item) => item?.product_id === product.product_id)
+    );
+  }, [cartItems, product.product_id]);
 
   const handleWatchlistToggle = async (e) => {
     e.preventDefault();
@@ -118,13 +128,58 @@ const ProductList = ({ product, className, index, onRemove }) => {
     }
   };
 
-  const handleAddToBag = (e) => {
+  const handleAddToBag = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // Implement your add to bag logic here
-    toast.success("Product added to bag!", {
-      position: "bottom-right",
-    });
+
+    const email = userContext?.user?.[0]?.email;
+    if (!email) {
+      toast.error("Please log in to add items to your bag", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    if (isInCart) {
+      toast.error("This product is already in your bag", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    try {
+      await toast.promise(
+        dispatch(
+          addItemAsync({
+            email,
+            product_id: product.product_id,
+            quantity: 1,
+            // Add other necessary product details here
+          })
+        ).unwrap(),
+        {
+          loading: "Adding product to bag...",
+          success: "Product added to bag!",
+          error: (err) => {
+            console.log(err);
+            return err.message;
+          },
+        },
+        {
+          position: "bottom-right",
+          style: {
+            fontFamily: "'Poppins', sans-serif",
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "1.5",
+          },
+        }
+      );
+
+      setIsInCart(true);
+    } catch (error) {
+      console.error("Error adding product to bag:", error);
+    }
   };
 
   return (
@@ -212,7 +267,7 @@ const ProductList = ({ product, className, index, onRemove }) => {
             {/* Updated Add to Bag button */}
             <button
               onClick={handleAddToBag}
-              className="p-2 rounded-lg bg-green-600 text-white hover:bg-green-700 transition-all duration-200 flex flex-col items-center justify-center"
+              className={`p-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition-all duration-200 flex flex-col items-center justify-center`}
             >
               <FaShoppingBag className="text-xl mb-1" />
             </button>

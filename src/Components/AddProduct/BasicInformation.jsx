@@ -159,10 +159,10 @@ const BasicInformation = ({
           fullWidth
           label="Product ID"
           name="productid"
-          value={formdata.productid}
+          value={formdata.productid || formdata.product_id}
           onChange={handleChange}
           onBlur={handleBlur}
-          type="number"
+          type="text"
           variant="outlined"
           className="border-2 border-dashed border-bg-green outline-none"
           InputProps={{

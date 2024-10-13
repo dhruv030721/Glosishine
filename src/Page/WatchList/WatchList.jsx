@@ -1,19 +1,24 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setWatchlist, removeFromWatchlist } from "../../Slice/watchlistSlice"; // Add removeFromWatchlist
 import { getFavProduct } from "../../Services/Operations/ProductServices";
 import ProductList from "../../Components/ProductList/ProductList";
+import { AppContext } from "../../App";
+import { tailChase } from "ldrs";
 
 export const WatchList = () => {
   const dispatch = useDispatch();
   const watchlist = useSelector((state) => state.watchlist);
   const [localWatchlist, setLocalWatchlist] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const userContext = useContext(AppContext);
+  const email = userContext?.user?.[0]?.email;
 
   // Fetch watchlist data and set it to Redux state
   useEffect(() => {
     const fetchWatchlist = async () => {
       try {
-        const response = await getFavProduct();
+        const response = await getFavProduct(email);
         if (response && response.data.success) {
           dispatch(setWatchlist(response.data.data));
           setLocalWatchlist(response.data.data);
@@ -22,11 +27,13 @@ export const WatchList = () => {
         }
       } catch (error) {
         console.error("An error occurred while fetching watchlist:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchWatchlist();
-  }, [dispatch]);
+  }, []);
 
   const handleRemove = (productId) => {
     dispatch(removeFromWatchlist(productId));
@@ -34,6 +41,20 @@ export const WatchList = () => {
       prev.filter((item) => item.product_id !== productId)
     );
   };
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen">
+        <l-tail-chase
+          size="60"
+          bg-opacity="0.2"
+          speed="2"
+          color="rgb(6,68,59)"
+          className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+        ></l-tail-chase>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-100">

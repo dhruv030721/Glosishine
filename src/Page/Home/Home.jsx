@@ -33,7 +33,7 @@ import { getContentItem } from "../../Services/Operations/ContentItem";
 import tvFrameSvg from "../../assets/TVFrame.png";
 import ScribbleLineImg from "../../assets/ScribbleLineImg.png";
 import ProductList from "../../Components/ProductList/ProductList";
-import { hourglass, tailChase } from "ldrs";
+import { tailChase } from "ldrs";
 import TVVideoSection from "../../Components/TVSection/TvSection";
 
 const Home = () => {

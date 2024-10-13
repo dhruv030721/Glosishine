@@ -1,13 +1,17 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
 import { LoginUser } from "../../Services/Operations/Auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
+import { AppContext } from "../../App";
+import { tailChase } from "ldrs";
 
 const cookies = new Cookies();
 const Login = () => {
   const navigate = useNavigate();
+  const { setUser } = useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [userdata, setUserdata] = useState({
     email: "",
@@ -16,7 +20,7 @@ const Login = () => {
 
   const SubmitHandler = async (e) => {
     e.preventDefault();
-    // console.log("data is1 ->", userdata);
+    setIsLoading(true);
     try {
       await toast.promise(
         LoginUser(userdata),
@@ -26,6 +30,14 @@ const Login = () => {
             navigate("/");
             cookies.set("Access-Token", response.data.token);
 
+            setUser([
+              {
+                email: userdata.email,
+              },
+            ]);
+
+            window.dispatchEvent(new Event("userLoggedIn"));
+
             return `${response.data.message}`;
           },
           error: (error) => {
@@ -33,9 +45,7 @@ const Login = () => {
           },
         },
         {
-          position: "bottom-right", // Set toast position here
-        },
-        {
+          position: "bottom-right",
           style: {
             fontFamily: "'Poppins', sans-serif",
             fontSize: "14px",
@@ -45,12 +55,25 @@ const Login = () => {
         }
       );
     } catch (error) {
-      console.error("Loggedin failed:", error);
+      console.error("Login failed:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div className="p-4 sm:p-8 md:p-10 w-full">
+      {isLoading && (
+        <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
+          <l-tail-chase
+            size="60"
+            bg-opacity="0.2"
+            speed="2"
+            color="rgb(6,68,59)"
+            className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+          ></l-tail-chase>
+        </div>
+      )}
       <div className="flex flex-col w-full items-center justify-center">
         <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3">
           <div className="mb-4 sm:mb-8 space-y-3 w-full">
