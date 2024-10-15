@@ -252,7 +252,7 @@ const Cart = () => {
 
           if (favProduct) {
             setIsInWatchlist(true);
-            setFavProductId(favProduct.id); // Set the 'id' of the favorite product
+            setFavProductId(favProduct.product_id); // Set the 'id' of the favorite product
           } else {
             setIsInWatchlist(false);
           }

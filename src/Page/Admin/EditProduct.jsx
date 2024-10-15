@@ -23,6 +23,7 @@ import BasicInformation from "../../Components/AddProduct/BasicInformation";
 import PricingStock from "../../Components/AddProduct/PricingStock";
 import ProductDetails from "../../Components/AddProduct/ProductDetails";
 import ImagesUpload from "../../Components/AddProduct/ImagesUpload";
+import { FaEdit } from "react-icons/fa";
 
 const EditProduct = ({ id }) => {
   const context = useContext(AppContext);
@@ -218,10 +219,10 @@ const EditProduct = ({ id }) => {
   return (
     <div>
       <button
+        className="border-2 border-green-700 border-dashed rounded-lg p-2"
         onClick={handleClickOpen}
-        className="text-indigo-600 hover:text-indigo-900"
       >
-        Edit
+        <FaEdit size={20} color="green" />
       </button>
       <Dialog open={open} onClose={handleClose} maxWidth="lg" fullWidth>
         <DialogTitle>

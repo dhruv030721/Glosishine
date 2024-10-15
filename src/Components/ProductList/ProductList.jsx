@@ -33,7 +33,7 @@ const ProductList = ({ product, className, index, onRemove }) => {
           );
           if (favProduct) {
             setIsInWatchlist(true);
-            setFavProductId(favProduct.id);
+            setFavProductId(favProduct.product_id);
           } else {
             setIsInWatchlist(false);
           }

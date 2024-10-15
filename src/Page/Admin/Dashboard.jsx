@@ -2,6 +2,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { LuHome, LuLogOut } from "react-icons/lu";
 import { IoBagHandle } from "react-icons/io5";
+import { MdAnalytics } from "react-icons/md";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { FaTruck } from "react-icons/fa6";
@@ -12,10 +13,11 @@ import AddProduct from "./AddProduct";
 import { AppContext } from "../../App";
 import { useNavigate } from "react-router-dom";
 import { getItem, removeItem } from "../../Services/LocalStorageService";
+import DashboardContent from "./DashboardContent";
 
 const Dashboard = () => {
   const appcontext = useContext(AppContext);
-  const [selectedContent, setSelectedContent] = useState("addproduct");
+  const [selectedContent, setSelectedContent] = useState("dashboard");
   const [open, setOpen] = React.useState(false);
   const navigate = useNavigate();
 
@@ -46,6 +48,13 @@ const Dashboard = () => {
           </div>
           <div className="flex flex-col font-poppins flex-1 overflow-y-auto mt-2 gap-y-3">
             <button
+              className={`flex items-center px-6 py-2 ml-2 mr-2 rounded-md text-lg text-white`}
+              onClick={() => handleItemClick("dashboard")}
+            >
+              <MdAnalytics className="w-6 h-6 mr-2" />
+              Dashboard
+            </button>
+            <button
               className={`flex items-center px-6 ml-2 mr-2 rounded-md py-2 text-lg text-white`}
               onClick={() => handleItemClick("addproduct")}
             >
@@ -72,7 +81,7 @@ const Dashboard = () => {
             >
               <IoBagHandle className="w-6 h-6 mr-2" />
               Home page UI
-            </button>
+            </button>{" "}
           </div>
           <React.Fragment>
             <button
@@ -117,8 +126,9 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-col w-[76%]  flex-1 overflow-y-scroll">
+      <div className="flex flex-col w-[76%] flex-1 overflow-y-scroll">
         <div className="p-6 w-full">
+          {selectedContent === "dashboard" && <DashboardContent />}
           {selectedContent === "addproduct" && <AddProduct />}
           {selectedContent === "products" && <Product />}
           {selectedContent === "orders" && <Orders />}

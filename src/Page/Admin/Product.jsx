@@ -1,5 +1,5 @@
 import { useCallback, useContext } from "react";
-import { FaTrash } from "react-icons/fa";
+import { FaTrash, FaEdit } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App.jsx";
 import { deleteProduct } from "../../Services/Operations/ProductServices.js";
@@ -94,7 +94,7 @@ const Product = () => {
                   <div className="w-1/5 text-center mt-4 md:mt-0">
                     <p className="text-lg font-semibold">{product.size}</p>
                   </div>
-                  <div className="text-center mt-4 md:mt-0">
+                  <div className="flex gap-2 text-center mt-4 md:mt-0">
                     <EditProduct id={product.product_id} />
                     <button
                       onClick={() => deleteProductHandler(product.product_id)}
