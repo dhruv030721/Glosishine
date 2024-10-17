@@ -4,6 +4,7 @@ import {
   productendpoints,
   reviewendpoints,
   cartendpoints,
+  inventoryendpoints,
 } from "../Apis";
 import Cookies from "js-cookie"; // Make sure to install and import js-cookie
 
@@ -192,6 +193,7 @@ export async function deleteFavProduct(product_id) {
   return response;
 }
 
+//Cart Products
 export const getCartProduct = async (email) => {
   try {
     const accessToken = Cookies.get("Access-Token");
@@ -296,4 +298,32 @@ export const decreaseQuantity = async (email, productId) => {
     console.error("Error decreasing product quantity:", error);
     throw error;
   }
+};
+
+//Inventory
+export const getInventory = async () => {
+  const response = await apiConnector(
+    "GET",
+    inventoryendpoints.GETINVENTORY_API,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const addInventory = async (inventoryData) => {
+  const response = await apiConnector(
+    "POST",
+    inventoryendpoints.ADDINVENTORY_API,
+    inventoryData,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
 };

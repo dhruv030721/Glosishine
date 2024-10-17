@@ -36,6 +36,11 @@ export const cartendpoints = {
   DECREASEQUANTITY_API: BASE_URL + "cart/decrement-cart-product-quantity.php",
 };
 
+export const inventoryendpoints = {
+  GETINVENTORY_API: BASE_URL + "inventory/get-inventory.php",
+  ADDINVENTORY_API: BASE_URL + "inventory/add-inventory.php",
+};
+
 export const adminendpoints = {
   ADMIN_LOGIN: BASE_URL + "auth/admin-login.php",
   ADD_CONTENT_ITEM: BASE_URL + "content-items/add-content-item.php",
