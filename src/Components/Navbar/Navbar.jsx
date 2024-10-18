@@ -164,10 +164,12 @@ const Navbar = () => {
             <button onClick={() => setIsSearchOpen(!isSearchOpen)}>
               <HiMagnifyingGlass size={25} />
             </button>
-            <Link to={context.token && context.user ? "/account" : "/login"}>
+            <Link to={context?.token && context?.user ? "/account" : "/login"}>
               <IoPersonOutline size={25} />
             </Link>
-            <Link to={context.token && context.user ? "/watchlist" : "/login"}>
+            <Link
+              to={context?.token && context?.user ? "/watchlist" : "/login"}
+            >
               <IoMdHeartEmpty size={25} />
             </Link>
             <Link to="/cart">

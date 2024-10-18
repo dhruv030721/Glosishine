@@ -242,7 +242,6 @@ const Cart = () => {
     const checkIfInWatchlist = async () => {
       try {
         const favProducts = await getFavProduct(email);
-        console.log(favProducts);
 
         // Check if favProducts.data is an array and then use find method
         if (Array.isArray(favProducts.data.data)) {
@@ -265,7 +264,7 @@ const Cart = () => {
     };
 
     checkIfInWatchlist();
-  }, [filterdata, userContext.user]);
+  }, []);
 
   const handleClick = async () => {
     if (isInWatchlist) {

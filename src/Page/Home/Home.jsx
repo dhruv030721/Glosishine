@@ -35,6 +35,8 @@ import ScribbleLineImg from "../../assets/ScribbleLineImg.png";
 import ProductList from "../../Components/ProductList/ProductList";
 import { tailChase } from "ldrs";
 import TVVideoSection from "../../Components/TVSection/TvSection";
+import { getFavProduct } from "../../Services/Operations/ProductServices";
+import { removeFromWatchlist } from "../../Slice/watchlistSlice";
 
 const Home = () => {
   const Appcontext = useContext(AppContext);
@@ -45,6 +47,7 @@ const Home = () => {
   const [advertisement, setAdvertisement] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [watchlistItems, setWatchlistItems] = useState([]);
 
   const itemsPerPage = {
     mobile: 1,
@@ -70,6 +73,11 @@ const Home = () => {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
+
+  const handleRemove = (id) => {
+    removeFromWatchlist(id);
+    setWatchlistItems((prev) => prev.filter((item) => item.id !== id));
+  };
 
   tailChase.register();
 
@@ -124,9 +132,22 @@ const Home = () => {
         setFeed(getfeed);
         setAdvertisement(advertisement);
         setSeasonalVideos({ video1, video2 });
+
+        // Fetch watchlist items
+        const email = Appcontext?.user?.[0]?.email;
+        if (email) {
+          const favProducts = await getFavProduct(email);
+          if (Array.isArray(favProducts.data.data)) {
+            setWatchlistItems(favProducts.data.data);
+          } else {
+            console.error("Expected an array for favorite products data.");
+          }
+        }
+
         setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     })();
   }, []);
@@ -282,7 +303,13 @@ const Home = () => {
                   key={product.product_id}
                   className="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/5 px-2"
                 >
-                  <ProductList product={product} index={index} />
+                  <ProductList
+                    product={product}
+                    index={index}
+                    onRemove={handleRemove}
+                    watchlistItems={watchlistItems}
+                    setWatchlistItems={setWatchlistItems}
+                  />
                 </div>
               ))}
             </div>

@@ -1,45 +1,48 @@
-import { useContext, useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { setWatchlist, removeFromWatchlist } from "../../Slice/watchlistSlice"; // Add removeFromWatchlist
+import { useCallback, useContext, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { removeFromWatchlist } from "../../Slice/watchlistSlice";
 import { getFavProduct } from "../../Services/Operations/ProductServices";
 import ProductList from "../../Components/ProductList/ProductList";
 import { AppContext } from "../../App";
-import { tailChase } from "ldrs";
+// import { tailChase } from "ldrs";
 
 export const WatchList = () => {
   const dispatch = useDispatch();
-  const watchlist = useSelector((state) => state.watchlist);
-  const [localWatchlist, setLocalWatchlist] = useState([]);
+  const [watchlistItems, setWatchlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const userContext = useContext(AppContext);
-  const email = userContext?.user?.[0]?.email;
+  const allProducts = userContext.getdata || [];
 
-  // Fetch watchlist data and set it to Redux state
-  useEffect(() => {
-    const fetchWatchlist = async () => {
-      try {
-        const response = await getFavProduct(email);
-        if (response && response.data.success) {
-          dispatch(setWatchlist(response.data.data));
-          setLocalWatchlist(response.data.data);
-        } else {
-          console.error("Failed to fetch watchlist");
-        }
-      } catch (error) {
-        console.error("An error occurred while fetching watchlist:", error);
-      } finally {
+  const getData = useCallback(() => {
+    const email = userContext?.user?.[0]?.email;
+    if (!email) return;
+
+    setLoading(true);
+    getFavProduct(email)
+      .then((res) => {
         setLoading(false);
-      }
-    };
+        // Filter and merge watchlist items with full product details
+        const updatedWatchlistItems = res.data.data.map((item) => {
+          const fullProductDetails = allProducts.find(
+            (product) => product.product_id === item.product_id
+          );
+          return { ...item, ...fullProductDetails };
+        });
+        setWatchlistItems(updatedWatchlistItems);
+      })
+      .catch((err) => {
+        setLoading(false);
+        console.error("Error fetching watchlist:", err);
+      });
+  }, [userContext, allProducts]);
 
-    fetchWatchlist();
-  }, []);
+  useEffect(() => {
+    getData();
+  }, [getData]);
 
-  const handleRemove = (productId) => {
-    dispatch(removeFromWatchlist(productId));
-    setLocalWatchlist((prev) =>
-      prev.filter((item) => item.product_id !== productId)
-    );
+  const handleRemove = (id) => {
+    dispatch(removeFromWatchlist(id));
+    setWatchlistItems((prev) => prev.filter((item) => item.id !== id));
   };
 
   if (loading) {
@@ -61,19 +64,21 @@ export const WatchList = () => {
       <div>
         <h1 className="text-2xl font-bold mb-4">Shopping Bag</h1>
         <h2 className="text-lg mb-6">
-          {localWatchlist.length}{" "}
-          {localWatchlist.length === 1 ? "item" : "items"} in your bag.
+          {watchlistItems.length}{" "}
+          {watchlistItems.length === 1 ? "item" : "items"} in your bag.
         </h2>
       </div>
 
       <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-3 justify-center p-5 my-10">
-        {localWatchlist.length > 0 ? (
-          localWatchlist.map((product, index) => (
+        {watchlistItems.length > 0 ? (
+          watchlistItems.map((product, index) => (
             <ProductList
-              key={product.product_id}
+              key={product.id}
               product={product}
               index={index}
               onRemove={handleRemove}
+              watchlistItems={watchlistItems}
+              setWatchlistItems={setWatchlistItems}
             />
           ))
         ) : (

@@ -7,15 +7,20 @@ import { AppContext } from "../../App";
 import {
   addFavProduct,
   deleteFavProduct,
-  getFavProduct,
 } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
 import { useContext, useEffect, useState } from "react";
 import { addItemAsync } from "../../Slice/CartSlice";
 
-const ProductList = ({ product, className, index, onRemove }) => {
+const ProductList = ({
+  product,
+  className,
+  index,
+  onRemove,
+  watchlistItems,
+  setWatchlistItems,
+}) => {
   const dispatch = useDispatch();
-  const watchlist = useSelector((state) => state.watchlist);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [favProductId, setFavProductId] = useState(null);
   const userContext = useContext(AppContext);
@@ -23,30 +28,16 @@ const ProductList = ({ product, className, index, onRemove }) => {
   const [isInCart, setIsInCart] = useState(false);
 
   useEffect(() => {
-    const email = userContext?.user?.[0]?.email;
-    const checkIfInWatchlist = async () => {
-      try {
-        const favProducts = await getFavProduct(email);
-        if (Array.isArray(favProducts.data.data)) {
-          const favProduct = favProducts.data.data.find(
-            (favItem) => favItem.product_id === product.product_id
-          );
-          if (favProduct) {
-            setIsInWatchlist(true);
-            setFavProductId(favProduct.product_id);
-          } else {
-            setIsInWatchlist(false);
-          }
-        } else {
-          console.error("Expected an array for favorite products data.");
-        }
-      } catch (error) {
-        console.error("Error fetching favorite products:", error);
-      }
-    };
-
-    checkIfInWatchlist();
-  }, [product, userContext.user, isInWatchlist]);
+    const favProduct = watchlistItems.find(
+      (favItem) => favItem.product_id === product.product_id
+    );
+    if (favProduct) {
+      setIsInWatchlist(true);
+      setFavProductId(favProduct.id);
+    } else {
+      setIsInWatchlist(false);
+    }
+  }, [watchlistItems, product.product_id]);
 
   useEffect(() => {
     setIsInCart(
@@ -68,19 +59,16 @@ const ProductList = ({ product, className, index, onRemove }) => {
             error: "Failed to remove product from watchlist.",
           },
           {
-            position: "bottom-right", // Set toast position here
-          },
-          {
-            style: {
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: "400",
-              lineHeight: "1.5",
-            },
+            position: "bottom-right",
           }
         );
         dispatch(removeFromWatchlist(product.product_id));
         setIsInWatchlist(false);
+        setWatchlistItems(
+          watchlistItems.filter(
+            (item) => item.product_id !== product.product_id
+          )
+        );
         if (onRemove) {
           onRemove(product.product_id);
         }
@@ -106,19 +94,15 @@ const ProductList = ({ product, className, index, onRemove }) => {
                 : "Failed to add product to watchlist.",
           },
           {
-            position: "bottom-right", // Set toast position here
-          },
-          {
-            style: {
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: "400",
-              lineHeight: "1.5",
-            },
+            position: "bottom-right",
           }
         );
         dispatch(addProduct(product));
         setIsInWatchlist(true);
+        setWatchlistItems([
+          ...watchlistItems,
+          { product_id: product.product_id },
+        ]);
       } catch (error) {
         toast.error("Are you sure you're logged in?", {
           position: "bottom-right",

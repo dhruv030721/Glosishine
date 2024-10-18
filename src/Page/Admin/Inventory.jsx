@@ -24,6 +24,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
+import InventoryIcon from "@mui/icons-material/Inventory";
 
 // Styled components for custom button and dialog
 const GreenButton = styled(Button)(({ theme }) => ({
@@ -131,7 +132,7 @@ const Inventory = () => {
     <thead>
       <tr className="bg-gray-100">
         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-          No
+          #
         </th>
         <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
           Product Info
@@ -165,14 +166,14 @@ const Inventory = () => {
                 />
               </div>
               <div className="ml-4">
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-sm font-medium text-palette font-bold">
                   {productInfo?.product_name || "Unknown Product"}
                 </div>
                 <div className="text-sm text-gray-500">{item.product_id}</div>
               </div>
             </div>
           </td>
-          <td className="px-4 py-4 grid grid-cols-2 md:grid-cols-3 gap-0.5 whitespace-nowrap text-sm text-gray-500">
+          <td className="px-4 py-4 grid grid-cols-2 md:grid-cols-3 gap-0.5 whitespace-nowrap text-sm text-palette font-bold">
             <div>S - {item.S}</div>
             <div>M - {item.M}</div>
             <div>L - {item.L}</div>
@@ -264,11 +265,28 @@ const Inventory = () => {
         <Grid item xs={12} sm={6} md={3}>
           <Card className="bg-white shadow-lg">
             <CardContent className="flex items-center">
+              <InventoryIcon className="text-green-600 bg-green-100 rounded-full text-4xl mr-4" />
               <div>
-                <Typography variant="h6" className="font-bold text-gray-600">
-                  Total Products
+                <Typography
+                  variant="h6"
+                  className="font-bold text-gray-600"
+                  sx={{
+                    fontFamily: "montserrat",
+                    fontWeight: "bold",
+                    fontSize: "16px",
+                  }}
+                >
+                  Products
                 </Typography>
-                <Typography variant="h4" className="text-bg-green px-2 rounded">
+                <Typography
+                  variant="h4"
+                  className="text-green-600 px-2 rounded"
+                  sx={{
+                    fontFamily: "montserrat",
+                    fontWeight: "bold",
+                    fontSize: "22px",
+                  }}
+                >
                   {inventoryData.length}
                 </Typography>
               </div>
@@ -315,6 +333,14 @@ const Inventory = () => {
                   value={newInventory.product_id || ""}
                   label="Product"
                   onChange={handleProductChange}
+                  MenuProps={{
+                    PaperProps: {
+                      style: {
+                        maxHeight: 48 * 4.5 + 8,
+                        width: 250,
+                      },
+                    },
+                  }}
                 >
                   <MenuItem value="">
                     <em>None</em>

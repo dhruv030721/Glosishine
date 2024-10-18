@@ -94,13 +94,12 @@ const AddProduct = ({ product }) => {
         break;
       case 1: // Pricing and Stock
         if (!formdata.discount) stepErrors.discount = "Discount is required";
-
-        // Add more validations for Pricing and Stock fields
         break;
       case 2: // Product Details
         if (!formdata.countryorigin.trim())
           stepErrors.countryorigin = "Country of origin is required";
-        // Add more validations for Product Details fields
+        else if (!formdata.stretchability.trim())
+          stepErrors.stretchability = "Stretchability is required";
         break;
       case 3: // Image Upload
         if (formdata.productphoto.length === 0)
