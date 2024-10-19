@@ -130,17 +130,17 @@ const Inventory = () => {
 
   const renderHeader = () => (
     <thead>
-      <tr className="bg-gray-100">
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      <tr className="bg-bg-green text-white">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           #
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Product Info
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Stock
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           View
         </th>
       </tr>
@@ -247,15 +247,18 @@ const Inventory = () => {
   };
 
   return (
-    <Box className="p-4 text-white">
-      <div className="flex justify-between items-center mb-4">
-        <Typography variant="h4" className="font-bold text-bg-green">
+    <Box className="p-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4 sm:gap-0">
+        <Typography
+          variant="h4"
+          className="font-bold text-bg-green text-2xl sm:text-3xl mb-2 sm:mb-0"
+        >
           Inventory Management
         </Typography>
         <GreenButton
           variant="contained"
           onClick={() => setOpenAddDialog(true)}
-          className="font-semibold"
+          className="font-semibold w-full sm:w-auto"
         >
           Add Inventory
         </GreenButton>
@@ -264,27 +267,28 @@ const Inventory = () => {
       <Grid container spacing={3} className="mb-4">
         <Grid item xs={12} sm={6} md={3}>
           <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center">
-              <InventoryIcon className="text-green-600 bg-green-100 rounded-full text-4xl mr-4" />
+            <CardContent className="flex items-center p-4">
+              <InventoryIcon
+                fontSize="48"
+                className="text-green-600 bg-green-100 rounded-full text-4xl mr-4 p-2"
+              />
               <div>
                 <Typography
                   variant="h6"
-                  className="font-bold text-gray-600"
+                  className="font-bold text-gray-600 text-sm sm:text-base"
                   sx={{
                     fontFamily: "montserrat",
                     fontWeight: "bold",
-                    fontSize: "16px",
                   }}
                 >
                   Products
                 </Typography>
                 <Typography
                   variant="h4"
-                  className="text-green-600 px-2 rounded"
+                  className="text-green-600 px-2 rounded text-lg sm:text-xl"
                   sx={{
                     fontFamily: "montserrat",
                     fontWeight: "bold",
-                    fontSize: "22px",
                   }}
                 >
                   {inventoryData.length}
@@ -295,11 +299,121 @@ const Inventory = () => {
         </Grid>
       </Grid>
 
-      <CommonTable
-        renderHeader={renderHeader}
-        data={inventoryData}
-        renderRow={renderRow}
-      />
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white">
+          <thead>
+            <tr className="bg-bg-green text-white">
+              <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider hidden sm:table-cell">
+                #
+              </th>
+              <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                Product Info
+              </th>
+              <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                Stock
+              </th>
+              <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                View
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {inventoryData.map((item, index) => (
+              <React.Fragment key={item.product_id}>
+                <tr className="border-b">
+                  <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500 hidden sm:table-cell">
+                    {index + 1}
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap">
+                    <div className="flex items-center">
+                      <div className="flex-shrink-0 h-10 w-10">
+                        <img
+                          className="h-10 w-10 rounded-full object-cover"
+                          src={
+                            products.find(
+                              (p) => p.product_id === item.product_id
+                            )?.images?.[0] || defaultImage
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div className="ml-4">
+                        <div className="text-sm text-bg-green font-bold">
+                          {products.find(
+                            (p) => p.product_id === item.product_id
+                          )?.product_name || "Unknown Product"}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {item.product_id}
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-1 text-sm text-bg-green font-bold">
+                      <div>S - {item.S}</div>
+                      <div>M - {item.M}</div>
+                      <div>L - {item.L}</div>
+                      <div>XL - {item.XL}</div>
+                      <div>XXL - {item.XXL}</div>
+                    </div>
+                  </td>
+                  <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+                    <IconButton
+                      onClick={() => toggleInventoryDetails(item.product_id)}
+                    >
+                      <VisibilityIcon className="text-green-600" />
+                    </IconButton>
+                  </td>
+                </tr>
+                <tr>
+                  <td colSpan={4} className="px-4 py-4">
+                    <Collapse in={expandedInventory === item.product_id}>
+                      <div className="bg-gray-50 p-4 rounded-md overflow-x-auto">
+                        <h4 className="font-bold mb-2">Inventory Details</h4>
+                        <table className="min-w-full bg-white border border-gray-200">
+                          <thead>
+                            <tr className="bg-gray-100">
+                              <th className="px-4 py-2 text-left">No</th>
+                              <th className="px-4 py-2 text-left">Date</th>
+                              <th className="px-4 py-2 text-left">S</th>
+                              <th className="px-4 py-2 text-left">M</th>
+                              <th className="px-4 py-2 text-left">L</th>
+                              <th className="px-4 py-2 text-left">XL</th>
+                              <th className="px-4 py-2 text-left">XXL</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {originalInventoryData
+                              .filter(
+                                (history) =>
+                                  history.product_id === item.product_id
+                              )
+                              .map((history, idx) => (
+                                <tr
+                                  key={history.id}
+                                  className="border-t border-gray-200"
+                                >
+                                  <td className="px-4 py-2">{idx + 1}</td>
+                                  <td className="px-4 py-2">{history.date}</td>
+                                  <td className="px-4 py-2">{history.S}</td>
+                                  <td className="px-4 py-2">{history.M}</td>
+                                  <td className="px-4 py-2">{history.L}</td>
+                                  <td className="px-4 py-2">{history.XL}</td>
+                                  <td className="px-4 py-2">{history.XXL}</td>
+                                </tr>
+                              ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </Collapse>
+                  </td>
+                </tr>
+              </React.Fragment>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Add Inventory Dialog */}
       <CustomDialog
@@ -377,6 +491,7 @@ const Inventory = () => {
           <Button
             onClick={() => setOpenAddDialog(false)}
             className="text-secondary"
+            color="error"
           >
             Cancel
           </Button>

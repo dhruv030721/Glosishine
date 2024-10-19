@@ -2,7 +2,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { LuHome, LuLogOut } from "react-icons/lu";
 import { IoBagHandle } from "react-icons/io5";
-import { MdAnalytics, MdInventory } from "react-icons/md";
+import { MdAnalytics, MdDiscount, MdInventory } from "react-icons/md";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { FaTruck } from "react-icons/fa6";
@@ -16,10 +16,14 @@ import { getItem, removeItem } from "../../Services/LocalStorageService";
 import DashboardContent from "./DashboardContent";
 import Inventory from "./Inventory";
 import logo from "../../assets/logos.jpg";
+import Discounts from "./Discounts";
+import { IoMdClose } from "react-icons/io";
+
 const Dashboard = () => {
   const appcontext = useContext(AppContext);
   const [selectedContent, setSelectedContent] = useState("dashboard");
   const [open, setOpen] = React.useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,6 +35,7 @@ const Dashboard = () => {
 
   const handleItemClick = (content) => {
     setSelectedContent(content);
+    setIsSidebarOpen(false);
   };
 
   const handleLogout = () => {
@@ -38,15 +43,28 @@ const Dashboard = () => {
     navigate("/admin", { replace: true });
   };
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="flex h-screen w-full bg-white">
-      <div className="flex flex-col w-[23%] bg-green-800 border-r dark:bg-bg-green dark:border-bg-green">
+    <div className="flex flex-col md:flex-row h-screen w-full bg-white">
+      <div
+        className={`${
+          isSidebarOpen ? "block" : "hidden"
+        } md:block md:w-[23%] bg-green-800 border-r dark:bg-bg-green dark:border-bg-green fixed md:static inset-0 z-50`}
+      >
         <div className="flex flex-col h-screen">
-          <div className="flex items-center justify-center h-14 border-b dark:border-gray-600 gap-3">
-            <img src={logo} alt="logo" className="aspect-video w-16" />
-            <span className="text-xl font-dm-sans font-bold text-white dark:text-white">
-              Glosishine Admin
-            </span>
+          <div className="flex items-center justify-between h-14 border-b dark:border-gray-600 px-4">
+            <div className="flex items-center gap-3">
+              <img src={logo} alt="logo" className="aspect-video w-16" />
+              <span className="text-xl font-dm-sans font-bold text-white dark:text-white">
+                Glosishine Admin
+              </span>
+            </div>
+            <button onClick={toggleSidebar} className="md:hidden text-white">
+              <IoMdClose size={24} />
+            </button>
           </div>
           <div className="flex flex-col font-dm-sans flex-1 overflow-y-auto mt-2 gap-y-3">
             <button
@@ -55,13 +73,20 @@ const Dashboard = () => {
             >
               <MdAnalytics className="w-6 h-6 mr-2" />
               Dashboard
-            </button>{" "}
+            </button>
             <button
               className={`flex items-center px-6 py-2 ml-2 mr-2 rounded-md text-lg text-white`}
               onClick={() => handleItemClick("inventory")}
             >
               <MdInventory className="w-6 h-6 mr-2" />
               Inventory
+            </button>
+            <button
+              className={`flex items-center px-6 py-2 ml-2 mr-2 rounded-md text-lg text-white`}
+              onClick={() => handleItemClick("discounts")}
+            >
+              <MdDiscount className="w-6 h-6 mr-2" />
+              Discounts
             </button>
             <button
               className={`flex items-center px-6 ml-2 mr-2 rounded-md py-2 text-lg text-white`}
@@ -90,7 +115,7 @@ const Dashboard = () => {
             >
               <IoBagHandle className="w-6 h-6 mr-2" />
               Home page UI
-            </button>{" "}
+            </button>
           </div>
           <React.Fragment>
             <button
@@ -135,10 +160,21 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <div className="flex flex-col w-[76%] flex-1 overflow-y-scroll">
+      {/* Mobile header */}
+      <div className="md:hidden flex items-center justify-start gap-[25%] p-4 bg-bg-green text-white">
+        <button onClick={toggleSidebar} className="text-2xl">
+          ☰
+        </button>
+        <span className="text-xl font-bold">Glosishine Admin</span>
+      </div>
+
+      {/* Main content */}
+      <div className="flex flex-col w-full md:w-[76%] flex-1 overflow-y-auto">
+        {/* Content area */}
         <div className="p-6 w-full">
           {selectedContent === "dashboard" && <DashboardContent />}
           {selectedContent === "inventory" && <Inventory />}
+          {selectedContent === "discounts" && <Discounts />}
           {selectedContent === "addproduct" && <AddProduct />}
           {selectedContent === "products" && <Product />}
           {selectedContent === "orders" && <Orders />}

@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React, { useEffect, useState, useContext } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { FaTrash, FaSpinner } from "react-icons/fa";
@@ -9,6 +10,7 @@ import {
 } from "../../Slice/CartSlice";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App"; // Adjust the import path as needed
+import { getDiscount } from "../../Services/Operations/ProductServices";
 
 const MAX_QUANTITY = 10; // Set the maximum quantity limit
 
@@ -21,6 +23,8 @@ export const CartPage = () => {
   const userContext = useContext(AppContext);
   const email = userContext?.user?.[0]?.email || "";
   const [loadingItems, setLoadingItems] = useState({});
+  const [couponCode, setCouponCode] = useState("");
+  const [appliedDiscount, setAppliedDiscount] = useState(null);
 
   const fetchCartItems = () => {
     if (email) {
@@ -124,6 +128,52 @@ export const CartPage = () => {
       });
   };
 
+  const handleApplyCoupon = async () => {
+    if (!couponCode) {
+      toast.error("Please enter a coupon code", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
+    try {
+      const response = await getDiscount(couponCode);
+      if (response.success && response.data.length > 0) {
+        const discount = response.data[0];
+        const currentDate = new Date();
+        const startDate = new Date(discount.start_date);
+        const endDate = new Date(discount.end_date);
+
+        if (
+          currentDate >= startDate &&
+          currentDate <= endDate &&
+          discount.active
+        ) {
+          setAppliedDiscount(discount);
+          toast.success(
+            `Coupon applied successfully! ${discount.discount}% off`,
+            {
+              position: "bottom-right",
+            }
+          );
+        } else {
+          toast.error("This coupon is not valid or has expired", {
+            position: "bottom-right",
+          });
+        }
+      } else {
+        toast.error("Invalid coupon code", {
+          position: "bottom-right",
+        });
+      }
+    } catch (error) {
+      console.error("Error applying coupon:", error);
+      toast.error("Failed to apply coupon", {
+        position: "bottom-right",
+      });
+    }
+  };
+
   // Calculate cart total and total discount
   const cartTotal = cartItems.reduce(
     (total, item) => total + item?.regular_price * item?.quantity,
@@ -134,8 +184,20 @@ export const CartPage = () => {
     return total + discountAmount * item?.quantity;
   }, 0);
 
+  // Calculate coupon discount
+  const couponDiscountAmount = appliedDiscount
+    ? (cartTotal - totalDiscount) * (appliedDiscount.discount / 100)
+    : 0;
+
+  // Calculate final total
+  const finalTotal = cartTotal - totalDiscount - couponDiscountAmount;
+
   if (!email) {
-    return <div>Please log in to view your cart.</div>;
+    return (
+      <div className="text-center text-bg-green h-80 flex flex-col justify-center items-center">
+        <h1 className="text-4xl font-bold">Please log in to view your cart.</h1>
+      </div>
+    );
   }
 
   if (cartStatus === "loading") {
@@ -305,10 +367,13 @@ export const CartPage = () => {
             placeholder="Coupon Code"
             className="w-full p-2 border rounded mb-4"
             disabled={cartItems.length === 0}
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value)}
           />
           <button
             className="w-full p-2 bg-black text-white rounded"
             disabled={cartItems.length === 0}
+            onClick={handleApplyCoupon}
           >
             Apply
           </button>
@@ -319,12 +384,18 @@ export const CartPage = () => {
               <p>₹{cartTotal.toFixed(2)}</p>
             </div>
             <div className="flex justify-between mb-2">
-              <p>Discount</p>
+              <p>Product Discount</p>
               <p>−₹{totalDiscount.toFixed(2)}</p>
             </div>
+            {appliedDiscount && (
+              <div className="flex justify-between mb-2">
+                <p>Coupon Discount ({appliedDiscount.discount}%)</p>
+                <p>−₹{couponDiscountAmount.toFixed(2)}</p>
+              </div>
+            )}
             <div className="flex justify-between text-lg font-semibold">
               <p>Cart Total</p>
-              <p>₹{(cartTotal - totalDiscount).toFixed(2)}</p>
+              <p>₹{finalTotal.toFixed(2)}</p>
             </div>
             <button
               className="w-full mt-4 p-2 bg-orange-400 text-white rounded"

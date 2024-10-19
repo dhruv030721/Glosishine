@@ -225,23 +225,23 @@ const DashboardContent = () => {
 
   const renderHeader = () => (
     <thead>
-      <tr className="bg-gray-100">
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+      <tr className="bg-bg-green text-white">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           #
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Order ID
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Product
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Amount
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Status
         </th>
-        <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Action
         </th>
       </tr>
@@ -251,12 +251,15 @@ const DashboardContent = () => {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <Box className="p-4 font-dm-sans">
-      <div className="flex justify-between items-center mb-4">
-        <Typography variant="h4" className="font-bold text-green-600">
+    <Box className="p-2 sm:p-4 md:p-6 font-dm-sans">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4 sm:gap-0">
+        <Typography
+          variant="h4"
+          className="font-bold text-green-600 text-2xl sm:text-3xl mb-2 sm:mb-0"
+        >
           Dashboard Overview
         </Typography>
-        <FormControl variant="outlined" className="w-full md:w-1/4">
+        <FormControl variant="outlined" className="w-full sm:w-1/2 md:w-1/4">
           <InputLabel style={{ color: "green" }}>View</InputLabel>
           <Select
             value={view}
@@ -270,33 +273,26 @@ const DashboardContent = () => {
           </Select>
         </FormControl>
       </div>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} className="mb-6">
         <Grid item xs={12} sm={6} md={3}>
           <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center">
-              <InventoryIcon className="text-green-600 bg-green-100 rounded-full text-4xl mr-4" />
+            <CardContent className="flex items-center p-4">
+              <InventoryIcon
+                fontSize="48"
+                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
+              />
               <div>
                 <Typography
                   variant="h6"
-                  className="font-bold text-black"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "16px",
-                  }}
+                  className="font-bold text-gray-600 text-sm sm:text-base"
                 >
                   Products
                 </Typography>
                 <Typography
                   variant="h4"
-                  className="text-green-600 px-2 rounded"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "22px",
-                  }}
+                  className="text-green-600 text-xl sm:text-2xl font-bold"
                 >
-                  {data.products}
+                  {data?.products || 0}
                 </Typography>
               </div>
             </CardContent>
@@ -304,30 +300,23 @@ const DashboardContent = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center">
-              <ShoppingCartIcon className="text-green-600 bg-green-100 rounded-full text-4xl mr-4" />
+            <CardContent className="flex items-center p-4">
+              <ShoppingCartIcon
+                fontSize="48"
+                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
+              />
               <div>
                 <Typography
                   variant="h6"
-                  className="font-bold text-black"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "16px",
-                  }}
+                  className="font-bold text-gray-600 text-sm sm:text-base"
                 >
                   Today Orders
                 </Typography>
                 <Typography
                   variant="h4"
-                  className="text-green-600 px-2 rounded"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "22px",
-                  }}
+                  className="text-green-600 text-xl sm:text-2xl font-bold"
                 >
-                  {data.todayOrders}
+                  {data?.todayOrders || 0}
                 </Typography>
               </div>
             </CardContent>
@@ -335,30 +324,23 @@ const DashboardContent = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center">
-              <ReceiptIcon className="text-green-600 bg-green-100 rounded-full text-4xl mr-4" />
+            <CardContent className="flex items-center p-4">
+              <ReceiptIcon
+                fontSize="48"
+                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
+              />
               <div>
                 <Typography
                   variant="h6"
-                  className="text-black"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "16px",
-                  }}
+                  className="font-bold text-gray-600 text-sm sm:text-base"
                 >
                   Total Orders
                 </Typography>
                 <Typography
                   variant="h4"
-                  className="text-green-600 px-2 rounded"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "22px",
-                  }}
+                  className="text-green-600 text-xl sm:text-2xl font-bold"
                 >
-                  {data.totalOrders}
+                  {data?.totalOrders || 0}
                 </Typography>
               </div>
             </CardContent>
@@ -366,86 +348,46 @@ const DashboardContent = () => {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center">
-              <MonetizationOnIcon className="bg-green-100 rounded-full text-green-600 text-4xl mr-4" />
+            <CardContent className="flex items-center p-4">
+              <MonetizationOnIcon
+                fontSize="48"
+                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
+              />
               <div>
                 <Typography
                   variant="h6"
-                  className="font-bold text-black"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "16px",
-                  }}
+                  className="font-bold text-gray-600 text-sm sm:text-base"
                 >
                   Total Earning
                 </Typography>
                 <Typography
                   variant="h4"
-                  className="text-green-600 px-2 rounded"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                    fontSize: "22px",
-                  }}
+                  className="text-green-600 text-xl sm:text-2xl font-bold"
                 >
-                  ₹ {data.totalEarnings}
+                  ₹ {data?.totalEarnings || 0}
                 </Typography>
               </div>
             </CardContent>
           </Card>
         </Grid>
-        <Grid item xs={12}>
-          <Card className="bg-white shadow-lg">
-            <CardContent>
-              <Typography
-                variant="h6"
-                className="font-bold mb-4 text-green-600"
-              >
-                {summaryData.title}
-              </Typography>
-              {view === "latestOrders" && (
+      </Grid>
+      <Grid item xs={12}>
+        <Card className="bg-white shadow-lg">
+          <CardContent>
+            <Typography variant="h6" className="font-bold mb-4 text-green-600">
+              {summaryData.title}
+            </Typography>
+            {view === "latestOrders" && (
+              <div className="overflow-x-auto">
                 <CommonTable
-                  data={data.latestOrders}
+                  data={data?.latestOrders || []}
                   renderHeader={renderHeader}
                   renderRow={renderRow}
                 />
-              )}
-              <div className="hidden grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                {data.latestOrders.map((order) => (
-                  <div key={order.id} className="bg-gray-100 rounded-md p-4">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold">{`SC${order.date.replace(
-                        /-/g,
-                        "/"
-                      )}/000${order.id}`}</span>
-                      <span>
-                        {order.date} - {new Date().toLocaleTimeString()}
-                      </span>
-                    </div>
-                    <span className="inline-block bg-yellow-200 text-yellow-800 px-2 py-1 rounded mb-2">
-                      Processing
-                    </span>
-                    <div className="flex items-center">
-                      <img
-                        src={defaultImage}
-                        alt={order.product}
-                        className="w-16 h-16 object-cover rounded mr-4"
-                      />
-                      <div>
-                        <h3 className="font-semibold">{order.product}</h3>
-                        <p>₹ {order.amount}</p>
-                      </div>
-                    </div>
-                    <button className="mt-2 bg-green-500 text-white px-4 py-2 rounded">
-                      See details
-                    </button>
-                  </div>
-                ))}
               </div>
-            </CardContent>
-          </Card>
-        </Grid>
+            )}
+          </CardContent>
+        </Card>
       </Grid>
     </Box>
   );

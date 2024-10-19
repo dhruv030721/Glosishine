@@ -5,6 +5,7 @@ import {
   reviewendpoints,
   cartendpoints,
   inventoryendpoints,
+  discountendpoints,
 } from "../Apis";
 import Cookies from "js-cookie"; // Make sure to install and import js-cookie
 
@@ -319,6 +320,65 @@ export const addInventory = async (inventoryData) => {
     "POST",
     inventoryendpoints.ADDINVENTORY_API,
     inventoryData,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+//discount
+export const getDiscount = async (couponCode) => {
+  const response = await apiConnector(
+    "GET",
+    discountendpoints.GETDISCOUNT_API + `?coupon_code=${couponCode}`
+  );
+  return response.data;
+};
+
+export const getAllDiscounts = async () => {
+  const response = await apiConnector(
+    "GET",
+    discountendpoints.GETALLDISCOUNTS_API
+  );
+  return response.data;
+};
+
+export const updateDiscountStatus = async (couponCode_id, status) => {
+  const response = await apiConnector(
+    "POST",
+    discountendpoints.STATUSUPDATE_API,
+    { id: couponCode_id, active: status },
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const addDiscount = async (discountData) => {
+  const response = await apiConnector(
+    "POST",
+    discountendpoints.ADDDISCOUNT_API,
+    discountData,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const deleteDiscount = async (couponCode_id) => {
+  const response = await apiConnector(
+    "DELETE",
+    discountendpoints.DELETEDISCOUNT_API,
+    { id: couponCode_id },
     {
       headers: {
         "Content-Type": "application/json",

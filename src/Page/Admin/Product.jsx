@@ -1,5 +1,5 @@
 import { useCallback, useContext } from "react";
-import { FaTrash, FaEdit } from "react-icons/fa";
+import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App.jsx";
 import { deleteProduct } from "../../Services/Operations/ProductServices.js";
@@ -41,23 +41,23 @@ const Product = () => {
   );
 
   return (
-    <div className="w-full h-full p-6 bg-gray-100 font-dm-sans">
-      <h1 className="text-2xl font-bold mb-4">Products</h1>
+    <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4">Products</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-3">
-          <div className="p-6 bg-white shadow-lg rounded-md">
-            <div className="flex justify-between items-center mb-4 p-4 bg-gray-100 rounded-md">
-              <div className="flex-1 text-left">
+      <div className="grid grid-cols-1 gap-4 sm:gap-6">
+        <div className="col-span-1">
+          <div className="p-3 sm:p-4 md:p-6 bg-white shadow-lg rounded-md">
+            <div className="hidden sm:grid grid-cols-12 gap-2 mb-4 p-2 sm:p-4 bg-gray-100 rounded-md">
+              <div className="col-span-5 text-left">
                 <h3 className="font-semibold">Product</h3>
               </div>
-              <div className="w-1/5 text-center">
+              <div className="col-span-2 text-center">
                 <h3 className="font-semibold">Price</h3>
               </div>
-              <div className="w-1/5 text-center">
+              <div className="col-span-2 text-center">
                 <h3 className="font-semibold">Size</h3>
               </div>
-              <div className="w-1/7 text-center">
+              <div className="col-span-3 text-center">
                 <h3 className="font-semibold">Actions</h3>
               </div>
             </div>
@@ -66,42 +66,49 @@ const Product = () => {
               Appcontext.getdata.map((product) => (
                 <div
                   key={product.product_id}
-                  className="flex justify-between items-center mb-6 p-4 bg-white rounded-md h-auto flex-wrap md:flex-nowrap"
+                  className="flex flex-col sm:grid sm:grid-cols-12 gap-4 items-center mb-6 p-3 sm:p-4 bg-white rounded-md shadow-sm"
                 >
-                  <div className="flex-1 flex items-center text-left">
+                  <div className="w-full sm:col-span-5 flex items-center">
                     <img
-                      src={product.images[0] || "default-image-url"} // Replace with a default image URL
+                      src={product.images[0] || "default-image-url"}
                       alt={product.product_name}
-                      className="w-24 object-cover rounded-md h-full"
+                      className="w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-md"
                     />
-                    <div className="ml-4">
-                      <h3 className="font-semibold text-base md:text-lg">
+                    <div className="ml-3 sm:ml-4">
+                      <h3 className="font-semibold text-base sm:text-lg">
                         {product.product_name}
                       </h3>
-                      <p className="text-gray-500 text-sm md:text-base">
+                      <p className="text-gray-500 text-sm">
                         Brand: {product.brand_name}
                       </p>
-                      <p className="text-gray-500 text-sm md:text-base">
+                      <p className="text-gray-500 text-sm">
                         Product ID: {product.product_id}
                       </p>
                     </div>
                   </div>
-                  <div className="w-1/5 text-center mt-4 md:mt-0">
-                    <p className="text-lg font-semibold">
-                      ₹{product.sale_price}
-                    </p>
-                  </div>
-                  <div className="w-1/5 text-center mt-4 md:mt-0">
-                    <p className="text-lg font-semibold">{product.size}</p>
-                  </div>
-                  <div className="flex gap-2 text-center mt-4 md:mt-0">
-                    <EditProduct id={product.product_id} />
-                    <button
-                      onClick={() => deleteProductHandler(product.product_id)}
-                      className="border-2 border-red-500 border-dashed rounded-lg p-2 ml-2"
-                    >
-                      <FaTrash size={20} color="red" />
-                    </button>
+                  <div className="w-full sm:col-span-7 flex justify-between sm:justify-around items-center mt-3 sm:mt-0">
+                    <div className="text-center">
+                      <p className="text-base sm:text-lg font-semibold">
+                        ₹{product.sale_price}
+                      </p>
+                    </div>
+                    <div className="text-center">
+                      <p className="text-base sm:text-lg font-semibold">
+                        {product.size}
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <EditProduct id={product.product_id} />
+                      <button
+                        onClick={() => deleteProductHandler(product.product_id)}
+                        className="border-2 border-red-500 border-dashed rounded-lg p-2"
+                      >
+                        <FaTrash
+                          className="w-4 h-4 sm:w-5 sm:h-5"
+                          color="red"
+                        />
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))

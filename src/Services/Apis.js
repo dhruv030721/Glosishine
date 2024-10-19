@@ -41,6 +41,15 @@ export const inventoryendpoints = {
   ADDINVENTORY_API: BASE_URL + "inventory/add-inventory.php",
 };
 
+export const discountendpoints = {
+  ADDDISCOUNT_API: BASE_URL + "discount/create-discount.php",
+  GETDISCOUNT_API: BASE_URL + "discount/get-discount.php",
+  GETALLDISCOUNTS_API: BASE_URL + "discount/get-discounts.php",
+  UPDATEDISCOUNT_API: BASE_URL + "discount/update-discount.php",
+  DELETEDISCOUNT_API: BASE_URL + "discount/remove-discount.php",
+  STATUSUPDATE_API: BASE_URL + "/discount/change-discount-status.php",
+};
+
 export const adminendpoints = {
   ADMIN_LOGIN: BASE_URL + "auth/admin-login.php",
   ADD_CONTENT_ITEM: BASE_URL + "content-items/add-content-item.php",

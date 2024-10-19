@@ -6,7 +6,6 @@ import { AppContext } from "../../App";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../../Services/Operations/Auth";
-import { tailChase } from "ldrs";
 
 const cookies = new Cookies();
 const Account = () => {
@@ -143,6 +142,7 @@ const Account = () => {
                         <button
                           className="text-black bg-slate-200 text-lg font-poppins items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
                           onClick={() => setOpen(false)}
+                          color="error"
                         >
                           Cancel
                         </button>

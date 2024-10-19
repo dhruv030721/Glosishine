@@ -1,7 +1,7 @@
 import Navbar from "../../Components/Navbar/Navbar";
 import { Outlet, useLocation } from "react-router-dom";
 import Footer from "../../Components/Footer/Footer";
-import NotFound from "../../Components/NotFound/NotFound"; // Assuming you have a 404 page component
+import NotFound from "../NotFound/NotFound"; // Assuming you have a 404 page component
 
 const MainLayout = () => {
   const validPaths = [

@@ -229,8 +229,7 @@ const AddProduct = ({ product }) => {
 
   return (
     <Box className="w-full h-[93vh] flex flex-col font-dm-sans">
-      {/* Stepper at the top */}
-      <Box className="sticky top-0 z-[1000] bg-white mb-10">
+      <Box className="sticky top-0 z-30 bg-white mb-4 sm:mb-10 p-2 sm:p-4">
         <Stepper
           alternativeLabel
           activeStep={activeStep}
@@ -239,7 +238,7 @@ const AddProduct = ({ product }) => {
           {steps.map((label) => (
             <Step key={label}>
               <StepLabel StepIconComponent={ColorlibStepIcon}>
-                {label}
+                <span className="hidden sm:inline">{label}</span>
               </StepLabel>
             </Step>
           ))}
@@ -247,7 +246,7 @@ const AddProduct = ({ product }) => {
       </Box>
 
       {/* Scrollable content in the middle */}
-      <Box className="grow-[1] overflow-y-auto p-4 font-dm-sans">
+      <Box className="grow overflow-y-auto p-2 sm:p-4 font-dm-sans">
         <Grid container spacing={2}>
           {activeStep === 0 && (
             <BasicInformation
@@ -274,11 +273,11 @@ const AddProduct = ({ product }) => {
       </Box>
 
       {/* Button section at the bottom */}
-      <Box className="sticky bottom-0 z-[1000] bg-white p-4 flex justify-between">
+      <Box className="sticky bottom-0 z-30 bg-white p-2 sm:p-4 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
         <button
           disabled={activeStep <= 0}
           onClick={handleBack}
-          className="bg-red-700 text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-red-700 shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-red-700 active:bg-white active:text-red-600"
+          className="w-full sm:w-auto bg-red-700 text-white uppercase tracking-wider py-2 px-4 sm:py-3 sm:px-10 cursor-pointer rounded-lg border-2 border-dashed border-red-700 shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-red-700 active:bg-white active:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           Back
         </button>
@@ -286,7 +285,7 @@ const AddProduct = ({ product }) => {
           <button
             onClick={submitHandler}
             disabled={!isStepValid}
-            className={`bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white ${
+            className={`w-full sm:w-auto bg-bg-green text-white uppercase tracking-wider py-2 px-4 sm:py-3 sm:px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white ${
               !isStepValid ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -296,7 +295,7 @@ const AddProduct = ({ product }) => {
           <button
             onClick={handleNext}
             disabled={!isStepValid}
-            className={`bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white ${
+            className={`w-full sm:w-auto bg-bg-green text-white uppercase tracking-wider py-2 px-4 sm:py-3 sm:px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white ${
               !isStepValid ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >

@@ -40,7 +40,7 @@ import { getProduct } from "./Services/Operations/ProductServices";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode";
 import { CartPage } from "./Page/CartPage/CartPage";
-import NotFound from "./Components/NotFound/NotFound";
+import NotFound from "./Page/NotFound/NotFound";
 import { WatchList } from "./Page/WatchList/WatchList";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import "./App.css";

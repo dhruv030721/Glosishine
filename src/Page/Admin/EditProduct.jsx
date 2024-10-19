@@ -295,25 +295,25 @@ const EditProduct = ({ id }) => {
             </Box>
 
             {/* Button section at the bottom */}
-            <Box className="sticky bottom-0 z-[1000] bg-white p-4 flex justify-between">
+            <Box className="sticky bottom-0 z-[1000] bg-white p-2 sm:p-4 flex flex-col sm:flex-row justify-between gap-2 sm:gap-4">
               <button
                 disabled={activeStep <= 0}
                 onClick={() => setActiveStep((prevStep) => prevStep - 1)}
-                className="bg-red-700 text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-red-700 shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-red-700 active:bg-white active:text-red-600"
+                className="w-full sm:w-auto bg-red-700 text-white uppercase tracking-wider py-2 px-4 sm:py-3 sm:px-10 text-sm sm:text-base cursor-pointer rounded-lg border-2 border-dashed border-red-700 shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-red-700 active:bg-white active:text-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Back
               </button>
               {activeStep === steps.length - 1 ? (
                 <button
                   onClick={submitHandler}
-                  className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+                  className="w-full sm:w-auto bg-bg-green text-white uppercase tracking-wider py-2 px-4 sm:py-3 sm:px-10 text-sm sm:text-base cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
                 >
                   Update
                 </button>
               ) : (
                 <button
                   onClick={() => setActiveStep((prevStep) => prevStep + 1)}
-                  className="bg-bg-green text-white uppercase tracking-wider py-3 px-10 cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
+                  className="w-full sm:w-auto bg-bg-green text-white uppercase tracking-wider py-2 px-4 sm:py-3 sm:px-10 text-sm sm:text-base cursor-pointer rounded-lg border-2 border-dashed border-bg-green shadow-md transition-colors duration-400 hover:bg-[#fff] hover:text-bg-green active:bg-white"
                 >
                   Next
                 </button>
