@@ -28,7 +28,7 @@ import InventoryIcon from "@mui/icons-material/Inventory";
 
 // Styled components for custom button and dialog
 const GreenButton = styled(Button)(({ theme }) => ({
-  backgroundColor: "#33B786",
+  backgroundColor: "#064C3A",
   color: "white",
   "&:hover": {
     backgroundColor: "#064C3A",
@@ -166,14 +166,14 @@ const Inventory = () => {
                 />
               </div>
               <div className="ml-4">
-                <div className="text-sm font-medium text-palette font-bold">
+                <div className="text-sm text-bg-green font-bold">
                   {productInfo?.product_name || "Unknown Product"}
                 </div>
                 <div className="text-sm text-gray-500">{item.product_id}</div>
               </div>
             </div>
           </td>
-          <td className="px-4 py-4 grid grid-cols-2 md:grid-cols-3 gap-0.5 whitespace-nowrap text-sm text-palette font-bold">
+          <td className="px-4 py-4 grid grid-cols-2 md:grid-cols-3 gap-0.5 whitespace-nowrap text-sm text-bg-green font-bold">
             <div>S - {item.S}</div>
             <div>M - {item.M}</div>
             <div>L - {item.L}</div>
@@ -249,7 +249,7 @@ const Inventory = () => {
   return (
     <Box className="p-4 text-white">
       <div className="flex justify-between items-center mb-4">
-        <Typography variant="h4" className="font-bold text-palette">
+        <Typography variant="h4" className="font-bold text-bg-green">
           Inventory Management
         </Typography>
         <GreenButton
@@ -306,7 +306,7 @@ const Inventory = () => {
         open={openAddDialog}
         onClose={() => setOpenAddDialog(false)}
       >
-        <DialogTitle className="bg-palette text-white">
+        <DialogTitle className="bg-bg-green text-white">
           Add Inventory
         </DialogTitle>
         <DialogContent className="mt-4">
@@ -384,7 +384,7 @@ const Inventory = () => {
             onClick={handleAddInventory}
             disabled={!isFormValid()}
             style={{
-              backgroundColor: isFormValid() ? "#33B786" : "lightgray",
+              backgroundColor: isFormValid() ? "#064C3A" : "lightgray",
               color: isFormValid() ? "white" : "darkgray",
               cursor: isFormValid() ? "pointer" : "not-allowed",
             }}

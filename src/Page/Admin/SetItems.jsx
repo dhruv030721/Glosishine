@@ -264,7 +264,7 @@ const SetItems = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 font-dm-sans">
       {renderSection(
         "Slider-1 Items (1610x810)",
         imagesSlider1,

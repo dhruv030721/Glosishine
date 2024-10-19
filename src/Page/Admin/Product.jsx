@@ -29,7 +29,7 @@ const Product = () => {
         },
         {
           style: {
-            fontFamily: "'Poppins', sans-serif",
+            fontFamily: "'dm-sans', sans-serif",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
@@ -41,7 +41,7 @@ const Product = () => {
   );
 
   return (
-    <div className="w-full h-full p-6 bg-gray-100">
+    <div className="w-full h-full p-6 bg-gray-100 font-dm-sans">
       <h1 className="text-2xl font-bold mb-4">Products</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

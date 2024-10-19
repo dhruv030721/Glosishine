@@ -228,7 +228,7 @@ const AddProduct = ({ product }) => {
   };
 
   return (
-    <Box className="w-full h-[93vh] flex flex-col">
+    <Box className="w-full h-[93vh] flex flex-col font-dm-sans">
       {/* Stepper at the top */}
       <Box className="sticky top-0 z-[1000] bg-white mb-10">
         <Stepper
@@ -247,7 +247,7 @@ const AddProduct = ({ product }) => {
       </Box>
 
       {/* Scrollable content in the middle */}
-      <Box className="grow-[1] overflow-y-auto p-4">
+      <Box className="grow-[1] overflow-y-auto p-4 font-dm-sans">
         <Grid container spacing={2}>
           {activeStep === 0 && (
             <BasicInformation

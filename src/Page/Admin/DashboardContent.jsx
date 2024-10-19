@@ -101,7 +101,7 @@ const DashboardContent = () => {
           {index + 1}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
-          <div className="text-sm font-medium text-palette">{`SC${order.date.replace(
+          <div className="text-sm font-medium text-bg-green">{`SC${order.date.replace(
             /-/g,
             "/"
           )}/000${order.id}`}</div>
@@ -119,7 +119,7 @@ const DashboardContent = () => {
               />
             </div>
             <div className="ml-4">
-              <div className="text-sm font-medium text-palette">
+              <div className="text-sm font-medium text-bg-green">
                 {order?.items?.map((item, index) => (
                   <p key={index}>{item.name}</p>
                 ))}
@@ -128,7 +128,7 @@ const DashboardContent = () => {
             </div>
           </div>
         </td>
-        <td className="px-4 py-4 whitespace-nowrap text-sm text-palette">
+        <td className="px-4 py-4 whitespace-nowrap text-sm text-bg-green">
           ₹ {order.amount}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
@@ -197,7 +197,7 @@ const DashboardContent = () => {
                           </div>
                         </td>
                         <td className="px-4 py-2">{item.sku}</td>
-                        <td className="px-4 py-2 text-palette">
+                        <td className="px-4 py-2 text-bg-green">
                           ₹{item.price}
                         </td>
                         <td className="px-4 py-2">{item.quantity}</td>
@@ -251,7 +251,7 @@ const DashboardContent = () => {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <Box className="p-4">
+    <Box className="p-4 font-dm-sans">
       <div className="flex justify-between items-center mb-4">
         <Typography variant="h4" className="font-bold text-green-600">
           Dashboard Overview
@@ -278,7 +278,7 @@ const DashboardContent = () => {
               <div>
                 <Typography
                   variant="h6"
-                  className="font-bold text-gray-600"
+                  className="font-bold text-black"
                   sx={{
                     fontFamily: "montserrat",
                     fontWeight: "bold",
@@ -309,7 +309,7 @@ const DashboardContent = () => {
               <div>
                 <Typography
                   variant="h6"
-                  className="font-bold text-gray-600"
+                  className="font-bold text-black"
                   sx={{
                     fontFamily: "montserrat",
                     fontWeight: "bold",
@@ -340,7 +340,7 @@ const DashboardContent = () => {
               <div>
                 <Typography
                   variant="h6"
-                  className="text-gray-600"
+                  className="text-black"
                   sx={{
                     fontFamily: "montserrat",
                     fontWeight: "bold",
@@ -371,7 +371,7 @@ const DashboardContent = () => {
               <div>
                 <Typography
                   variant="h6"
-                  className="font-bold text-gray-600"
+                  className="font-bold text-black"
                   sx={{
                     fontFamily: "montserrat",
                     fontWeight: "bold",

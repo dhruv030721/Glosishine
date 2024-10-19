@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import { getItem, removeItem } from "../../Services/LocalStorageService";
 import DashboardContent from "./DashboardContent";
 import Inventory from "./Inventory";
-
+import logo from "../../assets/logos.jpg";
 const Dashboard = () => {
   const appcontext = useContext(AppContext);
   const [selectedContent, setSelectedContent] = useState("dashboard");
@@ -42,12 +42,13 @@ const Dashboard = () => {
     <div className="flex h-screen w-full bg-white">
       <div className="flex flex-col w-[23%] bg-green-800 border-r dark:bg-bg-green dark:border-bg-green">
         <div className="flex flex-col h-screen">
-          <div className="flex items-center justify-center h-14 border-b dark:border-gray-600">
+          <div className="flex items-center justify-center h-14 border-b dark:border-gray-600 gap-3">
+            <img src={logo} alt="logo" className="aspect-video w-16" />
             <span className="text-xl font-dm-sans font-bold text-white dark:text-white">
               Glosishine Admin
             </span>
           </div>
-          <div className="flex flex-col font-poppins flex-1 overflow-y-auto mt-2 gap-y-3">
+          <div className="flex flex-col font-dm-sans flex-1 overflow-y-auto mt-2 gap-y-3">
             <button
               className={`flex items-center px-6 py-2 ml-2 mr-2 rounded-md text-lg text-white`}
               onClick={() => handleItemClick("dashboard")}
@@ -110,19 +111,19 @@ const Dashboard = () => {
                 }}
               >
                 <div>
-                  <div className="text-xl font-Jost text-black">
+                  <div className="text-xl font-dm-sans text-black">
                     Are you sure you want to log out?
                   </div>
                   <div className="flex flex-row justify-end gap-4 mt-3">
                     <button
-                      className="text-black bg-slate-200 text-lg font-Outfit items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
+                      className="text-black bg-slate-200 text-lg font-dm-sans items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
                       onClick={() => setOpen(false)}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleLogout}
-                      className=" text-white bg-red-600 text-lg font-Outfit items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
+                      className=" text-white bg-red-600 text-lg font-dm-sans items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
                     >
                       Confirm
                     </button>
