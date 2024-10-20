@@ -13,6 +13,7 @@ import {
   Grid,
   useMediaQuery,
   useTheme,
+  Card,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import EditIcon from "@mui/icons-material/Edit";
@@ -43,6 +44,12 @@ const CustomDialog = styled(Dialog)(({ theme }) => ({
     maxWidth: "600px",
   },
 }));
+
+const BorderedCard = styled(Card)({
+  boxShadow: "none",
+  border: "1px solid #e0e0e0", // Light gray border
+  borderRadius: "8px",
+});
 
 const Discounts = () => {
   const [discounts, setDiscounts] = useState([]);
@@ -276,8 +283,8 @@ const Discounts = () => {
   };
 
   return (
-    <Box className="p-2 sm:p-4 font-dm-sans">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4">
+    <Box className="p-2 sm:p-4 bg-gray-100 font-dm-sans">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4 sm:gap-0">
         <Typography
           variant={isMobile ? "h5" : "h4"}
           className="font-bold text-bg-green mb-2 sm:mb-0"
@@ -293,13 +300,15 @@ const Discounts = () => {
         </GreenButton>
       </div>
 
-      <div className="overflow-x-auto">
-        <CommonTable
-          renderHeader={renderHeader}
-          data={discounts}
-          renderRow={renderRow}
-        />
-      </div>
+      <BorderedCard>
+        <div className="overflow-x-auto">
+          <CommonTable
+            renderHeader={renderHeader}
+            data={discounts}
+            renderRow={renderRow}
+          />
+        </div>
+      </BorderedCard>
 
       <CustomDialog
         open={openDialog}

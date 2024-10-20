@@ -17,6 +17,13 @@ import ReceiptIcon from "@mui/icons-material/Receipt";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import Collapse from "@mui/material/Collapse";
 import CommonTable from "../../Components/CommonTable/CommonTable";
+import { styled } from "@mui/material/styles";
+
+const BorderedCard = styled(Card)({
+  boxShadow: "none",
+  border: "1px solid #e0e0e0", // Light gray border
+  borderRadius: "8px",
+});
 
 const DashboardContent = () => {
   const [data, setData] = useState(null);
@@ -251,7 +258,7 @@ const DashboardContent = () => {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <Box className="p-2 sm:p-4 md:p-6 font-dm-sans">
+    <Box className="p-2 sm:p-4 md:p-6 font-dm-sans bg-gray-100">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4 sm:gap-0">
         <Typography
           variant="h4"
@@ -274,105 +281,56 @@ const DashboardContent = () => {
         </FormControl>
       </div>
       <Grid container spacing={3} className="mb-6">
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center p-4">
-              <InventoryIcon
-                fontSize="48"
-                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  className="font-bold text-gray-600 text-sm sm:text-base"
-                >
-                  Products
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className="text-green-600 text-xl sm:text-2xl font-bold"
-                >
-                  {data?.products || 0}
-                </Typography>
-              </div>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center p-4">
-              <ShoppingCartIcon
-                fontSize="48"
-                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  className="font-bold text-gray-600 text-sm sm:text-base"
-                >
-                  Today Orders
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className="text-green-600 text-xl sm:text-2xl font-bold"
-                >
-                  {data?.todayOrders || 0}
-                </Typography>
-              </div>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center p-4">
-              <ReceiptIcon
-                fontSize="48"
-                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  className="font-bold text-gray-600 text-sm sm:text-base"
-                >
-                  Total Orders
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className="text-green-600 text-xl sm:text-2xl font-bold"
-                >
-                  {data?.totalOrders || 0}
-                </Typography>
-              </div>
-            </CardContent>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <Card className="bg-white shadow-lg">
-            <CardContent className="flex items-center p-4">
-              <MonetizationOnIcon
-                fontSize="48"
-                className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  className="font-bold text-gray-600 text-sm sm:text-base"
-                >
-                  Total Earning
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className="text-green-600 text-xl sm:text-2xl font-bold"
-                >
-                  ₹ {data?.totalEarnings || 0}
-                </Typography>
-              </div>
-            </CardContent>
-          </Card>
-        </Grid>
+        {[
+          {
+            icon: InventoryIcon,
+            title: "Products",
+            value: data?.products || 0,
+          },
+          {
+            icon: ShoppingCartIcon,
+            title: "Today Orders",
+            value: data?.todayOrders || 0,
+          },
+          {
+            icon: ReceiptIcon,
+            title: "Total Orders",
+            value: data?.totalOrders || 0,
+          },
+          {
+            icon: MonetizationOnIcon,
+            title: "Total Earning",
+            value: `₹ ${data?.totalEarnings || 0}`,
+          },
+        ].map((item, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index}>
+            <BorderedCard>
+              <CardContent className="flex items-center p-4">
+                <item.icon
+                  fontSize="48"
+                  className="text-green-600 bg-green-100 rounded-full text-4xl sm:text-5xl mr-4 p-2 sm:p-3"
+                />
+                <div>
+                  <Typography
+                    variant="h6"
+                    className="font-bold text-gray-600 text-sm sm:text-base"
+                  >
+                    {item.title}
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    className="text-green-600 text-xl sm:text-2xl font-bold"
+                  >
+                    {item.value}
+                  </Typography>
+                </div>
+              </CardContent>
+            </BorderedCard>
+          </Grid>
+        ))}
       </Grid>
       <Grid item xs={12}>
-        <Card className="bg-white shadow-lg">
+        <BorderedCard>
           <CardContent>
             <Typography variant="h6" className="font-bold mb-4 text-green-600">
               {summaryData.title}
@@ -387,7 +345,7 @@ const DashboardContent = () => {
               </div>
             )}
           </CardContent>
-        </Card>
+        </BorderedCard>
       </Grid>
     </Box>
   );
