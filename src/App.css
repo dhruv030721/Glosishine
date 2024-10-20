@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500&display=swap");
-
 /* Target all elements with a class that starts with "go" and contains "toast" */
 div[class^="go"] * {
   font-family: "Poppins", sans-serif !important;

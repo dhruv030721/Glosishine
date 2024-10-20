@@ -2,7 +2,8 @@ import default_product_img from "../../assets/fation1.webp";
 import default_product_img_1 from "../../assets/howtostyle.webp";
 import { useDispatch, useSelector } from "react-redux";
 import { addProduct, removeFromWatchlist } from "../../Slice/watchlistSlice";
-import { FaHeart, FaRegHeart, FaShoppingBag } from "react-icons/fa";
+import { FaHeart, FaRegHeart } from "react-icons/fa6";
+import { FaShoppingCart } from "react-icons/fa";
 import { AppContext } from "../../App";
 import {
   addFavProduct,
@@ -213,47 +214,44 @@ const ProductList = ({
               d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
             />
           </svg>
-          <span className="absolute top-0 left-0 m-2 rounded-full bg-bg-green px-2 text-center text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-medium text-white">
-            {product.discount}% OFF
-          </span>
         </a>
         <button
           onClick={handleWatchlistToggle}
-          className="absolute top-2 right-2 p-2 rounded-full bg-white bg-opacity-70 hover:bg-opacity-100 transition-all duration-200"
+          className="absolute top-2 right-2 p-2 rounded-lg bg-bg-green hover:bg-green-700 transition-all duration-200"
           style={{ zIndex: 100 }}
         >
           {isInWatchlist ? (
-            <FaHeart className="text-red-500 text-xl" />
+            <FaHeart className="text-white text-xl" />
           ) : (
-            <FaRegHeart className="text-gray-600 text-xl" />
+            <FaRegHeart className="text-white text-xl" />
           )}
         </button>
 
-        <div className="mt-2 z-10 flex flex-col items-center px-2">
-          <div className="w-full text-center mb-2">
-            <a href={`/${product.product_id}`}>
-              <h5 className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl font-mono font-semibold text-black">
-                {product.product_name}
-              </h5>
-            </a>
-          </div>
+        <div className="mt-4 z-10 flex flex-col items-start justify-center text-center px-4">
+          <a href={`/${product.product_id}`}>
+            <h5 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-semibold text-black mb-2">
+              {product.product_name}
+            </h5>
+          </a>
 
-          <div className="w-full flex justify-around items-end mb-2">
-            <div className="flex flex-row gap-[1em]">
-              <span className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl text-black font-bold line-through">
-                Rs. {product.regular_price}
+          <div className="w-full flex items-center justify-between mb-2">
+            <div className="flex items-center space-x-1">
+              <span className="text-md md:text-[20px] lg:text-md xl:text-xxs 2xl:text-xs 4xl:text-sm text-black font-bold">
+                ₹{product.sale_price}
               </span>
-              <span className="text-xs md:text-sm lg:text-base xl:text-lg 2xl:text-xl 4xl:text-2xl text-green-700 font-bold">
-                Rs. {product.sale_price}
+              <span className="text-xs md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-gray-500 line-through">
+                ₹{product.regular_price}
+              </span>
+              <span className="text-xxs md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-bg-green">
+                ({product.discount}% OFF)
               </span>
             </div>
 
-            {/* Updated Add to Bag button */}
             <button
               onClick={handleAddToBag}
-              className={`p-2 rounded-lg bg-green-600 hover:bg-green-700 text-white transition-all duration-200 flex flex-col items-center justify-center`}
+              className="p-2 rounded-lg bg-bg-green hover:bg-green-700 text-white transition-all duration-200"
             >
-              <FaShoppingBag className="text-xl mb-1" />
+              <FaShoppingCart className="text-xl" />
             </button>
           </div>
         </div>

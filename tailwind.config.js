@@ -14,6 +14,7 @@ export default {
         outfit: ["Outfit"],
         caveat: ["Caveat, cursive"],
         PM: ["Permanent Marker, cursive"],
+        signika: ["Signika, sans-serif"],
       },
       colors: {
         primary: "#9C9C9C",

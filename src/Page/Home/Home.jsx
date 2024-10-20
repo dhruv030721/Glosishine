@@ -37,6 +37,7 @@ import { tailChase } from "ldrs";
 import TVVideoSection from "../../Components/TVSection/TvSection";
 import { getFavProduct } from "../../Services/Operations/ProductServices";
 import { removeFromWatchlist } from "../../Slice/watchlistSlice";
+import yellowLine from "../../assets/Yellow-Line.svg";
 
 const Home = () => {
   const Appcontext = useContext(AppContext);
@@ -210,7 +211,7 @@ const Home = () => {
 
   return (
     <div className="w-full h-full overflow-x-hidden">
-      <section data-aos="fade-up">
+      <section data-aos="fade-up" className="mb-8 sm:mb-12 md:mb-16">
         <div className="flex items-center justify-center max-h-[90vh]">
           <Carousel
             className="h-auto"
@@ -282,14 +283,22 @@ const Home = () => {
         </div>
       </section>
 
-      <section data-aos="fade-up" className="mt-4 sm:mt-6 md:mt-8 lg:mt-14">
+      <section
+        data-aos="fade-up"
+        className="mt-8 sm:mt-12 md:mt-16 mb-8 sm:mb-12 md:mb-16"
+      >
         <div className="relative w-full">
-          <div className="w-full bg-bg-green py-4 sm:py-6 md:py-8">
-            <h1 className="text-orange-50 font-PM text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl px-4">
+          <div className="w-full px-4 sm:px-6 md:px-8 py-4 sm:py-6 md:py-8">
+            <h1 className="text-bg-green font-bold font-signika text-left text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-2">
               New Drops
             </h1>
+            <img
+              src={yellowLine}
+              alt="scribble"
+              className="ml-1 sm:ml-2 md:ml-3 w-24 sm:w-20 md:w-24 lg:w-28 xl:w-32"
+            />
           </div>
-          <div className="w-full px-4 sm:px-6 md:px-8 pt-4 pb-10 overflow-hidden relative">
+          <div className="w-full px-4 sm:px-6 md:px-8 pt-4 pb-0 overflow-hidden relative">
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
@@ -362,84 +371,51 @@ const Home = () => {
         </div>
       </section>
 
-      <section data-aos="fade-up">
+      <section
+        data-aos="fade-up"
+        className="mt-10 sm:mt-10 md:mt-10 mb-8 sm:mb-12 md:mb-16"
+      >
         <TVVideoSection
           videoUrl={seasonalVideos.video1[0].url}
           videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
         />
       </section>
 
-      <section data-aos="fade-up">
-        <div className="w-full px-4 sm:px-8 md:px-16 pt-5 pb-5 flex flex-col sm:flex-row justify-center items-center 2xl:my-10">
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-x-10">
-            {[mansshirt, womensshirts].map((image, index) => (
-              <a href={index === 0 ? "/menswear" : "/womenswear"} key={index}>
-                <img
-                  data-aos="fade-up"
-                  data-aos-duration="1000"
-                  src={image}
-                  alt=""
-                  className="w-full max-w-[450px] h-auto"
-                />
-              </a>
-            ))}
-          </div>
+      <section data-aos="fade-up" className="my-8 sm:my-12 md:my-16">
+        <div className="w-full px-4 sm:px-8 md:px-16 py-5 flex flex-col sm:flex-row justify-center items-center gap-8 sm:gap-x-10">
+          {[mansshirt, womensshirts].map((image, index) => (
+            <a
+              href={index === 0 ? "/menswear" : "/womenswear"}
+              key={index}
+              className="w-full sm:w-auto"
+            >
+              <img
+                data-aos="fade-up"
+                data-aos-duration="1000"
+                src={image}
+                alt=""
+                className="w-full max-w-[450px] h-auto"
+              />
+            </a>
+          ))}
         </div>
       </section>
 
-      <section data-aos="fade-up">
+      <section
+        data-aos="fade-up"
+        className="mt-12 sm:mt-16 md:mt-20 mb-8 sm:mb-12 md:mb-16"
+      >
         <TVVideoSection
           videoUrl={seasonalVideos.video2[0].url}
           videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
         />
       </section>
 
-      <div className="relative">
-        <Carousel
-          className="h-[75%]"
-          prevArrow={({ handlePrev }) => (
-            <button
-              onClick={handlePrev}
-              className="z-[999] absolute top-1/2 left-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15.75 19.5L8.25 12l7.5-7.5"
-                />
-              </svg>
-            </button>
-          )}
-          nextArrow={({ handleNext }) => (
-            <button
-              onClick={handleNext}
-              className="z-[999] absolute top-1/2 right-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth="1.5"
-                stroke="currentColor"
-                className="w-6 h-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
-                />
-              </svg>
-            </button>
-          )}
-        >
+      <section
+        data-aos="fade-up"
+        className="mt-12 sm:mt-16 md:mt-20 mb-8 sm:mb-12 md:mb-16"
+      >
+        <Carousel className="h-[75%]">
           {imageSlider2.map((image, index) => (
             <div
               key={index}
@@ -457,29 +433,30 @@ const Home = () => {
             </div>
           ))}
         </Carousel>
-      </div>
+      </section>
 
-      <div className="relative">
-        <div
-          data-aos="fade-up"
-          data-aos-duration="1000"
-          className="my-2 w-full h-full bg-bg-green sm:my-5 lg:my-2 xl:my-2 2xl:my-4 4xl:my-6"
-        >
-          <h1 className="w-full text-orange-50 font-PM text-center text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-5xl flex pl-5 pr-5 justify-center py-4 xl:py-4 2xl:py-7 4xl:py-10">
+      <section data-aos="fade-up" className="mt-8 sm:mt-12 md:mt-16 xl:mt-0">
+        <div className="w-full px-4 sm:px-6 md:px-8 py-2 sm:py-3 md:py-4">
+          <h1 className="text-bg-green font-bold font-signika text-left text-3xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl mb-2">
             Follow Our Feeds
           </h1>
+          <img
+            src={yellowLine}
+            alt="scribble"
+            className="ml-1 sm:ml-2 md:ml-3 w-24 sm:w-20 md:w-24 lg:w-28 xl:w-32"
+          />
         </div>
-        <div className="w-full">
+        <div className="w-full mt-4 sm:mt-6 md:mt-8">
           {photos.map((photo, index) => (
             <img
               key={feed[index].id}
               src={photo}
-              className="w-full"
+              className="w-full mb-4 sm:mb-6 md:mb-8"
               alt={`feed ${feed[index].id + 1}`}
             />
           ))}
         </div>
-      </div>
+      </section>
     </div>
   );
 };
