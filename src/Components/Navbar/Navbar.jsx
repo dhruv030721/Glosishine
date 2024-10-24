@@ -167,9 +167,7 @@ const Navbar = () => {
             <Link to={context?.token && context?.user ? "/account" : "/login"}>
               <IoPersonOutline size={25} />
             </Link>
-            <Link
-              to={context?.token && context?.user ? "/watchlist" : "/login"}
-            >
+            <Link to="/watchlist">
               <IoMdHeartEmpty size={25} />
             </Link>
             <Link to="/cart">

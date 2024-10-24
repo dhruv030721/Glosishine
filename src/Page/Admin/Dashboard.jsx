@@ -119,7 +119,7 @@ const Dashboard = () => {
           </div>
           <React.Fragment>
             <button
-              className="flex items-center font-poppins text-white mb-5 px-6 ml-2 mr-2 rounded-md py-2 text-lg"
+              className="flex items-center font-dm-sans text-white mb-5 px-6 ml-2 mr-2 rounded-md py-2 text-lg"
               onClick={() => setOpen(true)}
             >
               <LuLogOut className="w-6 h-6 mr-2" />

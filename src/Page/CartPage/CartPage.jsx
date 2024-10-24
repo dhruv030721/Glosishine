@@ -299,11 +299,11 @@ export const CartPage = () => {
 
   if (!email && cartStatus !== "loading") {
     return (
-      <div className="text-center text-bg-green h-80 flex flex-col justify-center items-center">
+      <div className="text-center font-monserrat text-bg-green h-80 flex flex-col justify-center items-center">
         <h1 className="text-4xl font-bold">Please log in to view your cart.</h1>
         <Link
           to="/login"
-          className="mt-4 px-6 py-2 bg-bg-green text-white rounded-md hover:bg-green-800 transition-colors"
+          className="mt-4 px-6 py-2 bg-bg-green font-semibold text-white rounded-md hover:bg-green-800 transition-colors"
         >
           Log In
         </Link>

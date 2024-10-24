@@ -1,56 +1,53 @@
-import React, { useState } from 'react';
-
 const data = [
   {
-    product: 'Wireless Headphones',
-    total: '$99.99',
-    status: 'Delivered',
-    placedOn: '2023-05-15',
-    user: { name: 'John Doe', email: 'john.doe@example.com' },
+    product: "Wireless Headphones",
+    total: "$99.99",
+    status: "Delivered",
+    placedOn: "2023-05-15",
+    user: { name: "John Doe", email: "john.doe@example.com" },
   },
   {
-    product: 'Gaming Mouse',
-    total: '$49.99',
-    status: 'Pending',
-    placedOn: '2023-06-01',
-    user: { name: 'Jane Smith', email: 'jane.smith@example.com' },
+    product: "Gaming Mouse",
+    total: "$49.99",
+    status: "Pending",
+    placedOn: "2023-06-01",
+    user: { name: "Jane Smith", email: "jane.smith@example.com" },
   },
   {
-    product: 'Laptop Sleeve',
-    total: '$29.99',
-    status: 'Delivered',
-    placedOn: '2023-04-20',
-    user: { name: 'Bob Johnson', email: 'bob.johnson@example.com' },
+    product: "Laptop Sleeve",
+    total: "$29.99",
+    status: "Delivered",
+    placedOn: "2023-04-20",
+    user: { name: "Bob Johnson", email: "bob.johnson@example.com" },
   },
   {
-    product: 'Wireless Keyboard',
-    total: '$79.99',
-    status: 'Cancelled',
-    placedOn: '2023-03-10',
-    user: { name: 'Sarah Lee', email: 'sarah.lee@example.com' },
+    product: "Wireless Keyboard",
+    total: "$79.99",
+    status: "Cancelled",
+    placedOn: "2023-03-10",
+    user: { name: "Sarah Lee", email: "sarah.lee@example.com" },
   },
   {
-    product: 'DSLR Camera',
-    total: '$599.99',
-    status: 'Delivered',
-    placedOn: '2023-02-28',
-    user: { name: 'Michael Chen', email: 'michael.chen@example.com' },
+    product: "DSLR Camera",
+    total: "$599.99",
+    status: "Delivered",
+    placedOn: "2023-02-28",
+    user: { name: "Michael Chen", email: "michael.chen@example.com" },
   },
 ];
 
 const Orders = () => {
-
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-4">
         <input
-          className="flex h-10 w-full rounded-md font-poppins border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1"
+          className="flex h-10 w-full rounded-md font-dm-sans border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 flex-1"
           placeholder="Search by name or email"
           type="search"
         />
       </div>
       <div className="relative w-full overflow-auto">
-        <table className="w-full caption-bottom text-sm font-poppins">
+        <table className="w-full caption-bottom text-sm font-dm-sans">
           <thead className="[&amp;_tr]:border-b">
             <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
               <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
@@ -128,7 +125,14 @@ const Orders = () => {
                         strokeLinejoin="round"
                         className="w-4 h-4"
                       >
-                        <rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect>
+                        <rect
+                          width="14"
+                          height="14"
+                          x="8"
+                          y="8"
+                          rx="2"
+                          ry="2"
+                        ></rect>
                         <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"></path>
                       </svg>
                       <span className="sr-only">Copy User ID</span>

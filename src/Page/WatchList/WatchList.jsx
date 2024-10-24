@@ -1,17 +1,28 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { removeFromWatchlist } from "../../Slice/watchlistSlice";
 import { getFavProduct } from "../../Services/Operations/ProductServices";
 import ProductList from "../../Components/ProductList/ProductList";
+import Cookies from "universal-cookie";
 import { AppContext } from "../../App";
 // import { tailChase } from "ldrs";
 
 export const WatchList = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [watchlistItems, setWatchlistItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const userContext = useContext(AppContext);
+  const cookies = new Cookies();
+  const token = cookies.get("Access-Token");
   const allProducts = userContext.getdata || [];
+
+  useEffect(() => {
+    if (!token || !userContext.user) {
+      navigate("/login");
+    }
+  }, [token, userContext.user, navigate]);
 
   const getData = useCallback(() => {
     const email = userContext?.user?.[0]?.email;
@@ -60,7 +71,7 @@ export const WatchList = () => {
   }
 
   return (
-    <div className="p-6 bg-gray-100">
+    <div className="p-6 bg-gray-100 font-montserrat">
       <div>
         <h1 className="text-2xl font-bold mb-4">Shopping Bag</h1>
         <h2 className="text-lg mb-6">

@@ -128,7 +128,7 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
 
   return (
     <>
-      <Grid item xs={12} md={6} className="font-dm-sans">
+      <Grid item xs={12} md={6} className="font-poppins">
         <CommonInput
           fullWidth
           label="Product Name"
@@ -138,7 +138,7 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
           onChange={handleChange}
           onBlur={handleBlur}
           variant="outlined"
-          className="border-2 border-dashed border-bg-green font-dm-sans"
+          className="border-2 border-dashed border-bg-green font-poppins"
           InputProps={{
             classes: { notchedOutline: "border-none" }, // Removes the default MUI border
           }}
