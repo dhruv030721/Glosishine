@@ -25,6 +25,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import InventoryIcon from "@mui/icons-material/Inventory";
+import { tailChase } from "ldrs";
 
 // Styled components for custom button and dialog
 const GreenButton = styled(Button)(({ theme }) => ({
@@ -72,6 +73,9 @@ const Inventory = () => {
   });
   const Appcontext = useContext(AppContext);
   const products = Appcontext.getdata || [];
+  const [loading, setLoading] = useState(true);
+
+  tailChase.register();
 
   useEffect(() => {
     console.log("Products loaded:", products);
@@ -79,6 +83,7 @@ const Inventory = () => {
 
   const fetchInventoryData = async () => {
     try {
+      setLoading(true);
       const response = await axios.get(inventoryendpoints.GETINVENTORY_API);
       if (response.data.success) {
         setOriginalInventoryData(response.data.data); // Store original data
@@ -100,6 +105,7 @@ const Inventory = () => {
       } else {
         console.error("Failed to fetch inventory data:", response.data.message);
       }
+      setLoading(false);
     } catch (error) {
       console.error("Error fetching inventory data:", error);
     }
@@ -258,6 +264,19 @@ const Inventory = () => {
       ["S", "M", "L", "XL", "XXL"].every((size) => newInventory[size])
     );
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <l-tail-chase
+          size="60"
+          speed="2"
+          color="rgb(6,68,59)"
+          className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+        ></l-tail-chase>
+      </div>
+    );
+  }
 
   return (
     <Box className="p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">

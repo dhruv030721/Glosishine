@@ -1,18 +1,31 @@
 import { Link } from "react-router-dom";
 import "./Footer.css";
+import logo from "../../assets/logos.jpg"; // Make sure this path is correct
+import yellowLine from "../../assets/Yellow-Line.svg"; // Make sure this path is correct
 
 const Footer = () => {
   return (
     <div className="w-full bg-graycolor">
       <div className="mt-10 px-4 md:px-10 pb-10 w-full">
-        <div className="w-full flex flex-wrap justify-around">
-          <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
+        <div className="w-full flex flex-wrap justify-around items-start">
+          {/* Logo Section */}
+          <div className="w-full sm:w-auto mb-8 sm:mb-0 flex justify-center sm:justify-start">
+            <img
+              src={logo}
+              alt="Finch Logo"
+              className="h-16 md:h-24 object-contain"
+            />
+          </div>
+
+          {/* Existing Footer Sections */}
+          <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto hidden">
             <h1 className="text-lg mb-4 relative">
               Finch
-              <span
-                className="absolute top-7 left-0 border-b-4 border-bg-green rounded"
-                style={{ width: "65%" }}
-              ></span>
+              <img
+                src={yellowLine}
+                alt="scribble"
+                className="absolute -bottom-2 left-0 w-24 sm:w-20 md:w-24 lg:w-28 xl:w-32"
+              />
             </h1>
             <Link to="/aboutus" className="link-hover-effect">
               About Us
@@ -33,13 +46,14 @@ const Footer = () => {
               Blogs
             </Link>
           </div>
-          <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
+          <div className="hidden flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
             <h1 className="text-lg mb-4 relative">
               Policies
-              <span
-                className="absolute top-7 left-0 border-b-4 border-bg-green rounded"
-                style={{ width: "40%" }}
-              ></span>
+              <img
+                src={yellowLine}
+                alt="scribble"
+                className="absolute -bottom-2 left-0 w-24 sm:w-20 md:w-24 lg:w-28 xl:w-32"
+              />
             </h1>
             <Link to="/termsanduse" className="link-hover-effect">
               Terms and Use
@@ -57,24 +71,26 @@ const Footer = () => {
           <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
             <h1 className="text-lg mb-4 relative">
               How Can We Help You?
-              <span
-                className="absolute top-7 left-0 border-b-4 border-bg-green rounded"
-                style={{ width: "100%" }}
-              ></span>
+              <img
+                src={yellowLine}
+                alt="scribble"
+                className="absolute -bottom-2 left-0 w-[20%] sm:w-[20%] md:w-[40%] lg:w-[40%] xl:w-[40%]"
+              />
             </h1>
             <Link to="/account" className="link-hover-effect">
               My Account
             </Link>
-            <h1 className="link-hover-effect">Track Order</h1>
-            <h1 className="link-hover-effect">Return/Exchange</h1>
+            <h1 className="link-hover-effect hidden">Track Order</h1>
+            <h1 className="link-hover-effect hidden">Return/Exchange</h1>
           </div>
           <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
             <h1 className="text-lg mb-4 relative">
               Reach Us
-              <span
-                className="absolute top-7 left-0 border-b-4 border-bg-green rounded"
-                style={{ width: "40%" }}
-              ></span>
+              <img
+                src={yellowLine}
+                alt="scribble"
+                className="absolute -bottom-2 left-0 w-[20%] sm:w-[20%] md:w-[30%] lg:w-[30%] xl:w-[30%]"
+              />
             </h1>
             <h1 className="link-hover-effect">
               2nd Floor, No. 37/1B, Wings, 4th <br />

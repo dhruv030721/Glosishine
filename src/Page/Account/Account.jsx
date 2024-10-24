@@ -1,15 +1,20 @@
+/* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState, useCallback } from "react";
-import Addresses from "./Addresses";
+import AddressModal from "./AddressModal";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { AppContext } from "../../App";
 import Cookies from "universal-cookie";
 import { useNavigate } from "react-router-dom";
 import { getUser } from "../../Services/Operations/Auth";
+import { FaEdit } from "react-icons/fa";
+import CommonTable from "../../Components/CommonTable/CommonTable";
 
 const cookies = new Cookies();
+
 const Account = () => {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [addressModalOpen, setAddressModalOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
   const { user, setUser } = useContext(AppContext);
@@ -76,165 +81,181 @@ const Account = () => {
     return <div>No user data available. Please try refreshing the page.</div>;
   }
 
+  const renderHeader = () => (
+    <thead>
+      <tr className="bg-bg-green text-white">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Order ID
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Date
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Items
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Total
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Status
+        </th>
+      </tr>
+    </thead>
+  );
+
+  const renderRow = (order, index) => (
+    <tr key={order.id} className="bg-white">
+      <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-bg-green">
+        #{order.id}
+      </td>
+      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+        {order.date}
+      </td>
+      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+        {order.items.map((item, index) => (
+          <div key={index}>{item}</div>
+        ))}
+      </td>
+      <td className="px-4 py-4 whitespace-nowrap text-sm text-bg-green">
+        ₹{order.total}
+      </td>
+      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+        {order.status}
+      </td>
+    </tr>
+  );
+
   return (
     <div className="flex items-center justify-center min-h-screen p-5 bg-gray-100">
       <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-4xl">
         <div className="flex flex-col items-center gap-8">
-          <div className="flex items-center gap-4">
-            <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
-              <img
-                src={userData.profile_img || "https://via.placeholder.com/150"}
-                alt="User"
-                className="rounded-full w-full h-full object-cover"
-              />
-            </div>
-            <div className="text-center">
-              <h2 className="text-2xl font-poppins font-bold">
-                {userData.name}
-              </h2>
-              <p className="text-gray-500 font-monserrat">{userData.email}</p>
-            </div>
-          </div>
+          <UserProfile userData={userData} />
           <div className="grid gap-8 w-full">
-            <div className="bg-gray-100 rounded-lg shadow-lg p-6">
-              <h3 className="text-lg font-semibold font-monserrat">
-                Personal Details
-              </h3>
-              <div className="grid grid-cols-2 font-poppins gap-2 text-sm mt-4">
-                <div className="text-gray-500">Phone:</div>
-                <div>{userData.mobile_number}</div>
-                <div className="text-gray-500">Address:</div>
-                <div className="flex items-center gap-2">
-                  <span>{userData.address || "Not provided"}</span>
-                  <Addresses />
-                </div>
-                {/* Add more user details here if available in the API response */}
-              </div>
-            </div>
-            <div className="w-full flex justify-center items-center">
-              <React.Fragment>
-                <button
-                  className="p-2 w-36 border-blue-300 border-[1px] font-poppins rounded-md "
-                  onClick={() => setOpen(true)}
-                >
-                  Logout
-                </button>
-                <Modal keepMounted open={open}>
-                  <ModalDialog
-                    sx={{
-                      width: "30%",
-                      height: "20%",
-                      "@media (max-width:440px)": {
-                        height: "17%",
-                        width: "65%",
-                      },
-                      "@media (max-width:380px)": {
-                        height: "22%",
-                        width: "70%",
-                      },
-                    }}
-                  >
-                    <div>
-                      <div className="text-xl font-dm-sans text-black">
-                        Are you sure you want to log out?
-                      </div>
-                      <div className="flex flex-row justify-end gap-4 mt-3">
-                        <button
-                          className="text-black bg-slate-200 text-lg font-poppins items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
-                          onClick={() => setOpen(false)}
-                          color="error"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          className=" text-white bg-red-600 text-lg font-poppins items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
-                          onClick={logoutHandler}
-                        >
-                          Confirm
-                        </button>
-                      </div>
-                    </div>
-                  </ModalDialog>
-                </Modal>
-              </React.Fragment>
-            </div>
-
-            <div className="bg-gray-100 rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-4 font-outfit">
-                Order History
-              </h2>
-              <table className="min-w-full divide-y  divide-gray-200">
-                <thead className="font-monserrat">
-                  <tr>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Image
-                    </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Order #
-                    </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Date
-                    </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Items
-                    </th>
-                    <th className="px-6 py-3 bg-gray-50 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      Total
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y text-sm font-dm-sans font-semibold divide-gray-200">
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <img
-                        src="/placeholder.svg"
-                        alt="Order Item"
-                        className="w-16 h-16 rounded-md object-cover"
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <a href="#" className="text-blue-600 hover:underline">
-                        #12345
-                      </a>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      June 1, 2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>Acme Shirt x 2</div>
-                      <div>Acme Pants x 1</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">$99.99</td>
-                  </tr>
-                  <tr>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <img
-                        src="/placeholder.svg"
-                        alt="Order Item"
-                        className="w-16 h-16 rounded-md object-cover"
-                      />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <a href="#" className="text-blue-600 hover:underline">
-                        #12347
-                      </a>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      April 30, 2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <div>Acme Jacket x 1</div>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">$79.99</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+            <PersonalDetails
+              userData={userData}
+              onAddressClick={() => setAddressModalOpen(true)}
+            />
+            <LogoutButton onLogout={() => setOpen(true)} />
+            <OrderHistory
+              orders={userData.orders || []}
+              renderHeader={renderHeader}
+              renderRow={renderRow}
+            />
           </div>
         </div>
       </div>
+      <LogoutModal
+        open={open}
+        onClose={() => setOpen(false)}
+        onLogout={logoutHandler}
+      />
+      <AddressModal
+        open={addressModalOpen}
+        onClose={() => setAddressModalOpen(false)}
+      />
     </div>
   );
 };
+
+const UserProfile = ({ userData }) => (
+  <div className="flex items-center gap-4">
+    <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
+      <img
+        src={userData.profile_img || "https://via.placeholder.com/150"}
+        alt="User"
+        className="rounded-full w-full h-full object-cover"
+      />
+    </div>
+    <div className="text-center">
+      <h2 className="text-2xl font-poppins font-bold">{userData.name}</h2>
+      <p className="text-gray-500 font-monserrat">{userData.email}</p>
+    </div>
+  </div>
+);
+
+const PersonalDetails = ({ userData, onAddressClick }) => (
+  <div className="bg-gray-100 rounded-lg shadow-lg p-6">
+    <h3 className="text-lg font-semibold font-monserrat">Personal Details</h3>
+    <div className="grid grid-cols-2 font-poppins gap-2 text-sm mt-4">
+      <div className="text-gray-500">Phone:</div>
+      <div>{userData.mobile_number}</div>
+      <div className="text-gray-500">Address:</div>
+      <div className="flex items-center gap-2">
+        <span>{userData.address || "Not provided"}</span>
+        <button
+          onClick={onAddressClick}
+          className="text-bg-green hover:underline"
+        >
+          <FaEdit />
+        </button>
+      </div>
+    </div>
+  </div>
+);
+
+const LogoutButton = ({ onLogout }) => (
+  <div className="w-full flex justify-center items-center">
+    <button
+      className="p-2 w-36 border-red-600 border-2 font-poppins rounded-md text-red-600 hover:bg-red-600 hover:text-white transition-colors"
+      onClick={onLogout}
+    >
+      Logout
+    </button>
+  </div>
+);
+
+const LogoutModal = ({ open, onClose, onLogout }) => (
+  <Modal keepMounted open={open} onClose={onClose}>
+    <ModalDialog
+      sx={{
+        width: "30%",
+        height: "20%",
+        "@media (max-width:440px)": {
+          height: "17%",
+          width: "65%",
+        },
+        "@media (max-width:380px)": {
+          height: "22%",
+          width: "70%",
+        },
+      }}
+    >
+      <div>
+        <div className="text-xl font-dm-sans text-black">
+          Are you sure you want to log out?
+        </div>
+        <div className="flex flex-row justify-end gap-4 mt-3">
+          <button
+            className="text-black bg-slate-200 hover:bg-bg-green hover:text-white text-lg font-poppins items-center flex justify-center p-2 rounded-lg w-24 font-semibold"
+            onClick={onClose}
+          >
+            Cancel
+          </button>
+          <button
+            className="text-white bg-red-600 hover:bg-red-700 text-lg font-poppins items-center flex justify-center p-2 rounded-lg w-24 font-semibold"
+            onClick={onLogout}
+          >
+            Confirm
+          </button>
+        </div>
+      </div>
+    </ModalDialog>
+  </Modal>
+);
+
+const OrderHistory = ({ orders, renderHeader, renderRow }) => (
+  <div className="bg-gray-100 rounded-lg shadow-lg p-6">
+    <h2 className="text-2xl font-bold mb-4 font-outfit text-bg-green">
+      Order History
+    </h2>
+    <div className="overflow-x-auto">
+      <CommonTable
+        data={orders}
+        renderHeader={renderHeader}
+        renderRow={renderRow}
+      />
+    </div>
+  </div>
+);
 
 export default Account;

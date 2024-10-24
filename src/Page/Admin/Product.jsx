@@ -1,12 +1,40 @@
-import { useCallback, useContext } from "react";
+import { useCallback, useContext, useState, useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App.jsx";
-import { deleteProduct } from "../../Services/Operations/ProductServices.js";
+import {
+  deleteProduct,
+  getProduct,
+} from "../../Services/Operations/ProductServices.js";
 import EditProduct from "./EditProduct.jsx";
+import { tailChase } from "ldrs";
+import { Typography } from "@mui/material";
 
 const Product = () => {
   const Appcontext = useContext(AppContext);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true); // Add loading state
+
+  tailChase.register();
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  const fetchProducts = async () => {
+    try {
+      const productData = await getProduct();
+      setProducts(productData.data.data);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+    } finally {
+      setLoading(false); // Set loading to false after fetching
+    }
+  };
+
+  const handleProductUpdate = (updatedProducts) => {
+    setProducts(updatedProducts);
+  };
 
   const deleteProductHandler = useCallback(
     async (id) => {
@@ -40,13 +68,33 @@ const Product = () => {
     [Appcontext.setGetdata]
   );
 
+  console.log(products);
+
+  if (loading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
+        <l-tail-chase
+          size="60"
+          speed="2"
+          color="rgb(6,68,59)"
+          className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+        ></l-tail-chase>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">
-      <h1 className="text-xl sm:text-2xl font-bold mb-4">Products</h1>
+      <Typography
+        variant="h4"
+        className="font-bold text-bg-green text-2xl sm:text-3xl mb-2 sm:mb-0"
+      >
+        Products
+      </Typography>
 
       <div className="grid grid-cols-1 gap-4 sm:gap-6">
         <div className="col-span-1">
-          <div className="p-3 sm:p-4 md:p-6 bg-white shadow-lg rounded-md">
+          <div className="p-3 sm:p-4 md:p-6 bg-white border-2 border-gray-200 rounded-md">
             <div className="hidden sm:grid grid-cols-12 gap-2 mb-4 p-2 sm:p-4 bg-gray-100 rounded-md">
               <div className="col-span-5 text-left">
                 <h3 className="font-semibold">Product</h3>
@@ -62,8 +110,8 @@ const Product = () => {
               </div>
             </div>
 
-            {Appcontext.getdata.length > 0 ? (
-              Appcontext.getdata.map((product) => (
+            {products.length > 0 ? (
+              products.map((product) => (
                 <div
                   key={product.product_id}
                   className="flex flex-col sm:grid sm:grid-cols-12 gap-4 items-center mb-6 p-3 sm:p-4 bg-white rounded-md shadow-sm"
@@ -98,7 +146,10 @@ const Product = () => {
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      <EditProduct id={product.product_id} />
+                      <EditProduct
+                        id={product.product_id}
+                        onProductUpdate={handleProductUpdate}
+                      />
                       <button
                         onClick={() => deleteProductHandler(product.product_id)}
                         className="border-2 border-red-500 border-dashed rounded-lg p-2"

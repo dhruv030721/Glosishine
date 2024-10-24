@@ -44,6 +44,8 @@ import NotFound from "./Page/NotFound/NotFound";
 import { WatchList } from "./Page/WatchList/WatchList";
 import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import "./App.css";
+import OrderSuccess from "./Page/OrdersSuccess/OrderSuccess";
+import OrderFailed from "./Page/OrderFailed/OrderFailed";
 
 export const AppContext = createContext();
 
@@ -173,6 +175,8 @@ function App() {
             <Route path="watchlist" element={<WatchList />} />
             <Route path="menswear" element={<NotFound />} />
             <Route path="womenswear" element={<NotFound />} />
+            <Route path="ordersuccess" element={<OrderSuccess />} />
+            <Route path="orderfailed" element={<OrderFailed />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 

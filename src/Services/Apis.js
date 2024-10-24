@@ -34,6 +34,7 @@ export const cartendpoints = {
   DELETECARTPRODUCT_API: BASE_URL + "cart/remove-cart-product.php",
   INCREASEQUANTITY_API: BASE_URL + "cart/increment-cart-product-quantity.php",
   DECREASEQUANTITY_API: BASE_URL + "cart/decrement-cart-product-quantity.php",
+  CLEARCART_API: BASE_URL + "cart/clear-cart.php",
 };
 
 export const inventoryendpoints = {
@@ -60,4 +61,9 @@ export const adminendpoints = {
 export const reviewendpoints = {
   ADDREVIEW_API: BASE_URL + "customer-review/add-review.php",
   GETREVIEW_API: BASE_URL + "customer-review/get-review.php?product_id=",
+};
+
+export const RAZORPAY_API = {
+  CREATE_ORDER: BASE_URL + "payment/index.php",
+  VERIFY_PAYMENT: BASE_URL + "payment/verify-payment.php",
 };

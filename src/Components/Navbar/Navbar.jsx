@@ -368,17 +368,15 @@ const Navbar = () => {
             </label>
             <FemaleIcon sx={{ color: "#ff69b4" }} />
           </div>
-          <div className="w-full flex flex-row p-5 gap-x-4 justify-center items-center text-center">
+          <div className="w-full flex flex-wrap justify-center items-center p-5 gap-4">
             {dropdownItems[activeTab].map((item, index) => (
-              <>
-                <Link
-                  key={index}
-                  to={item.link}
-                  className="hover:underline hover:text-bg-green font-poppins"
-                >
-                  {item.name}
-                </Link>
-              </>
+              <Link
+                key={index}
+                to={item.link}
+                className="text-black font-poppins px-4 py-2 rounded-full transition-all duration-300 hover:bg-bg-green hover:text-white"
+              >
+                {item.name}
+              </Link>
             ))}
           </div>
         </div>

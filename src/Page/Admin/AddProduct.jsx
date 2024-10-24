@@ -45,15 +45,15 @@ const AddProduct = ({ product }) => {
   const [formdata, setFormdata] = useState({
     name: product?.name || "",
     size: product?.size || [],
-    color: product?.color || [], // Ensure color is initialized as an array
     regularprize: product?.regularprize || "",
     saleprize: product?.saleprize || "",
-    gst: product?.gst || "",
     weight: product?.weight || "",
+    stock: product?.stock || "",
     countryorigin: product?.countryorigin || "",
     fabric: product?.fabric || "",
     fitshape: product?.fitshape || "",
     nack: product?.nack || "",
+    quantity: product?.quantity || "",
     occupation: product?.occupation || "",
     patent: product?.patent || "",
     patenttype: product?.patenttype || "",
@@ -64,7 +64,6 @@ const AddProduct = ({ product }) => {
     sku: product?.sku || "",
     brandname: product?.brandname || "",
     productdesc: product?.productdesc || "",
-    length: product?.length || "",
     noofpocket: product?.noofpocket || "",
     sleevestyle: product?.sleevestyle || "",
     productid: product?.productid || "",
@@ -88,12 +87,11 @@ const AddProduct = ({ product }) => {
         if (!formdata.name.trim()) stepErrors.name = "Product name is required";
         if (formdata.size.length === 0)
           stepErrors.size = "At least one size is required";
-        if (formdata.color.length === 0)
-          stepErrors.color = "At least one color is required";
         // Add more validations for Basic Information fields
         break;
       case 1: // Pricing and Stock
-        if (!formdata.discount) stepErrors.discount = "Discount is required";
+        if (!formdata.regularprize)
+          stepErrors.regularprize = "Regular prize is required";
         break;
       case 2: // Product Details
         if (!formdata.countryorigin.trim())
@@ -217,16 +215,6 @@ const AddProduct = ({ product }) => {
     });
   };
 
-  const handleColorChange = (event) => {
-    const {
-      target: { value },
-    } = event;
-    setFormdata({
-      ...formdata,
-      color: typeof value === "string" ? value.split(",") : value,
-    });
-  };
-
   return (
     <Box className="w-full h-[93vh] flex flex-col font-dm-sans">
       <Box className="sticky top-0 z-30 bg-white mb-4 sm:mb-10 p-2 sm:p-4">
@@ -253,7 +241,6 @@ const AddProduct = ({ product }) => {
               formdata={formdata}
               setFormdata={setFormdata}
               handleSizeChange={handleSizeChange}
-              handleColorChange={handleColorChange}
             />
           )}
           {activeStep === 1 && (

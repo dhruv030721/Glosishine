@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { apiConnector } from "../Apiconnector";
 import {
   favproductendpoints,
@@ -6,25 +7,20 @@ import {
   cartendpoints,
   inventoryendpoints,
   discountendpoints,
+  RAZORPAY_API,
 } from "../Apis";
 import Cookies from "js-cookie"; // Make sure to install and import js-cookie
 
 export async function addProduct({ productData }) {
   let formData = new FormData();
-  // console.log(productData.size)
   const sizestring = productData.size.join();
 
-  // console.log("sizestring", sizestring);
-
-  console.log("price", productData.ragularprize);
   formData.append("product_name", productData.name);
   formData.append("size", sizestring);
   formData.append("regular_price", parseInt(productData.regularprize));
   formData.append("sale_price", parseInt(productData.saleprize));
-  formData.append("gst", parseInt(productData.gst));
   formData.append("weight_gram", parseInt(productData.weight));
   formData.append("country_origin", productData.countryorigin);
-  formData.append("color", productData.color);
   formData.append("fabric", productData.fabric);
   formData.append("fit_shape", productData.fitshape);
   formData.append("neck", productData.nack);
@@ -38,11 +34,9 @@ export async function addProduct({ productData }) {
   formData.append("sku", productData.sku);
   formData.append("brand_name", productData.brandname);
   formData.append("product_description", productData.productdesc);
-  formData.append("length", productData.length);
   formData.append("number_of_pockets", parseInt(productData.noofpackets));
   formData.append("sleeve_style", productData.sleevestyle);
   formData.append("stretchability", productData.stretchability);
-  formData.append("product_id", productData.productid);
 
   productData.productphoto.forEach((element) => {
     formData.append(`product_photos[]`, element);
@@ -65,13 +59,12 @@ export async function updateProduct(data) {
   let formData = new FormData();
   const { productData, id } = data;
 
+  // Keep product_id in updateProduct
   formData.append("product_id", id);
   formData.append("product_name", productData.name);
   formData.append("size", productData.size.join(","));
-  formData.append("color", productData.color.join(","));
   formData.append("regular_price", productData.regularprize);
   formData.append("sale_price", productData.saleprize);
-  formData.append("gst", productData.gst);
   formData.append("weight_gram", productData.weight);
   formData.append("country_origin", productData.countryorigin);
   formData.append("fabric", productData.fabric);
@@ -87,11 +80,9 @@ export async function updateProduct(data) {
   formData.append("sku", productData.sku);
   formData.append("brand_name", productData.brandname);
   formData.append("product_description", productData.productdesc);
-  formData.append("length", productData.length);
   formData.append("number_of_pockets", productData.noofpocket);
   formData.append("sleeve_style", productData.sleevestyle);
   formData.append("stretchability", productData.stretchability);
-  formData.append("discount", productData.discount);
 
   // Handle product photos
   if (productData.productphoto && productData.productphoto.length > 0) {
@@ -263,6 +254,18 @@ export const removeFromCart = async (email, productId) => {
   }
 };
 
+export const clearAllCart = async (email) => {
+  try {
+    const response = await apiConnector("DELETE", cartendpoints.CLEARCART_API, {
+      email: email,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error clearing cart:", error);
+    throw error;
+  }
+};
+
 export const increaseQuantity = async (email, productId) => {
   try {
     const response = await apiConnector(
@@ -346,11 +349,25 @@ export const getAllDiscounts = async () => {
   return response.data;
 };
 
-export const updateDiscountStatus = async (couponCode_id, status) => {
+export const updateDiscount = async (formData) => {
+  const response = await apiConnector(
+    "PATCH",
+    discountendpoints.UPDATEDISCOUNT_API,
+    formData,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+  return response.data;
+};
+
+export const updateDiscountStatus = async (formData) => {
   const response = await apiConnector(
     "POST",
     discountendpoints.STATUSUPDATE_API,
-    { id: couponCode_id, active: status },
+    formData,
     {
       headers: {
         "Content-Type": "application/json",
@@ -386,4 +403,30 @@ export const deleteDiscount = async (couponCode_id) => {
     }
   );
   return response.data;
+};
+
+export const createRazorpayOrder = async (amount) => {
+  try {
+    const response = await apiConnector("POST", RAZORPAY_API.CREATE_ORDER, {
+      amount,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error creating Razorpay order:", error);
+    throw error;
+  }
+};
+
+export const verifyRazorpayPayment = async (paymentData) => {
+  try {
+    const response = await apiConnector(
+      "POST",
+      RAZORPAY_API.VERIFY_PAYMENT,
+      paymentData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error verifying Razorpay payment:", error);
+    throw error;
+  }
 };

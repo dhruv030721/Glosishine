@@ -23,9 +23,11 @@ import {
   addDiscount,
   updateDiscountStatus,
   deleteDiscount,
+  updateDiscount,
 } from "../../Services/Operations/ProductServices";
 import CommonTable from "../../Components/CommonTable/CommonTable";
 import toast from "react-hot-toast";
+import { tailChase } from "ldrs";
 
 const GreenButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#064C3A",
@@ -55,6 +57,7 @@ const Discounts = () => {
   const [discounts, setDiscounts] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
   const [editingDiscount, setEditingDiscount] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     coupon_code: "",
     discount: "",
@@ -73,6 +76,7 @@ const Discounts = () => {
 
   const fetchDiscounts = async () => {
     try {
+      setLoading(true);
       const response = await getAllDiscounts();
       if (response.success) {
         setDiscounts(response.data);
@@ -81,6 +85,8 @@ const Discounts = () => {
       }
     } catch (error) {
       console.error("Error fetching discounts:", error);
+    } finally {
+      setLoading(false); // Ensure loading is set to false in all cases
     }
   };
 
@@ -122,13 +128,21 @@ const Discounts = () => {
   };
 
   const handleSubmit = async () => {
-    const action = editingDiscount ? updateDiscountStatus : addDiscount;
-    const actionData = editingDiscount
-      ? { id: editingDiscount.id, active: formData.active }
-      : formData;
+    const actionData = {
+      ...formData,
+      active: formData.active ? 1 : 0, // Convert boolean to 1 or 0
+    };
+
+    if (editingDiscount) {
+      actionData.id = editingDiscount.id;
+    }
+
+    const action = editingDiscount
+      ? updateDiscount(actionData)
+      : addDiscount(actionData);
 
     await toast.promise(
-      action(actionData),
+      action,
       {
         loading: "Processing...",
         success: (response) => {
@@ -168,7 +182,7 @@ const Discounts = () => {
 
   const handleStatusChange = async (id, newStatus) => {
     await toast.promise(
-      updateDiscountStatus(id, newStatus),
+      updateDiscountStatus({ id, active: newStatus }),
       {
         loading: "Updating status...",
         success: () => {
@@ -281,6 +295,19 @@ const Discounts = () => {
       formData.end_date
     );
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <l-tail-chase
+          size="60"
+          speed="2"
+          color="rgb(6,68,59)"
+          className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+        ></l-tail-chase>
+      </div>
+    );
+  }
 
   return (
     <Box className="p-2 sm:p-4 bg-gray-100 font-dm-sans">

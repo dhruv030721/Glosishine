@@ -84,8 +84,16 @@ const EditProduct = ({ id }) => {
     if (filteredProduct) {
       setFormdata({
         name: filteredProduct.product_name || "",
-        size: filteredProduct.size ? filteredProduct.size.split(",") : [],
-        color: filteredProduct.color ? filteredProduct.color.split(",") : [],
+        size: Array.isArray(filteredProduct.size)
+          ? filteredProduct.size
+          : filteredProduct.size
+          ? filteredProduct.size.split(",")
+          : [],
+        color: Array.isArray(filteredProduct.color)
+          ? filteredProduct.color
+          : filteredProduct.color
+          ? filteredProduct.color.split(",")
+          : [],
         regularprize: filteredProduct.regular_price || "",
         saleprize: filteredProduct.sale_price || "",
         gst: filteredProduct.gst || "",
@@ -187,7 +195,15 @@ const EditProduct = ({ id }) => {
           loading: "Updating Product...",
           success: (response) => {
             console.log(response);
-            handleClose(); // Close the dialog on success
+            handleClose();
+            // Update the context with the new product data
+            context.setGetdata((prevData) =>
+              prevData.map((product) =>
+                product.product_id === id
+                  ? { ...product, ...updatedFormData }
+                  : product
+              )
+            );
             return `${response.data.message}`;
           },
           error: (error) => {
@@ -195,16 +211,7 @@ const EditProduct = ({ id }) => {
           },
         },
         {
-          position: "bottom-right", // Set toast position here
-        },
-        {
-          style: {
-            fontFamily: "'Poppins', sans-serif",
-            fontSize: "14px",
-            fontWeight: "400",
-            lineHeight: "1.5",
-            color: "#333333",
-          },
+          position: "bottom-right",
         }
       );
     } catch (error) {

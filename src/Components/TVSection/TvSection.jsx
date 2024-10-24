@@ -115,7 +115,7 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
           ref={frameRef}
           src={tvFrameSvg}
           alt="TV Frame"
-          className="w-full h-auto"
+          className="w-full h-auto z-10"
         />
         <div
           className={`absolute inset-0 ${
@@ -129,7 +129,7 @@ const TVVideoSection = ({ videoUrl, videoClassName }) => {
             muted
             loop
             playsInline
-            className={`absolute object-cover ${videoClassName}`}
+            className={`absolute object-cover z-0 ${videoClassName}`}
           />
         </div>
       </div>

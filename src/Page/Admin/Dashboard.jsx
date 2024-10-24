@@ -55,7 +55,7 @@ const Dashboard = () => {
         } md:block md:w-[23%] bg-green-800 border-r dark:bg-bg-green dark:border-bg-green fixed md:static inset-0 z-50`}
       >
         <div className="flex flex-col h-screen">
-          <div className="flex items-center justify-between h-14 border-b dark:border-gray-600 px-4">
+          <div className="flex items-center justify-between h-14 border-b dark:border-white px-4">
             <div className="flex items-center gap-3">
               <img src={logo} alt="logo" className="aspect-video w-16" />
               <span className="text-xl font-dm-sans font-bold text-white dark:text-white">

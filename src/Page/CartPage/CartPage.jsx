@@ -10,7 +10,17 @@ import {
 } from "../../Slice/CartSlice";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App"; // Adjust the import path as needed
-import { getDiscount } from "../../Services/Operations/ProductServices";
+import {
+  clearAllCart,
+  getDiscount,
+} from "../../Services/Operations/ProductServices";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import {
+  createRazorpayOrder,
+  verifyRazorpayPayment,
+} from "../../Services/Operations/ProductServices";
+import logo from "../../assets/logos.jpg";
 
 const MAX_QUANTITY = 10; // Set the maximum quantity limit
 
@@ -84,21 +94,21 @@ export const CartPage = () => {
     }
 
     setLoadingItems((prev) => ({ ...prev, [itemId]: true }));
-    dispatch(updateQuantityAsync({ email, id: itemId, delta }))
-      .unwrap()
-      .then(() => {
-        toast.success(`Quantity updated`, {
+    toast
+      .promise(
+        dispatch(updateQuantityAsync({ email, id: itemId, delta })).unwrap(),
+        {
+          loading: "Updating quantity...",
+          success: "Quantity updated",
+          error: "Failed to update quantity",
+        },
+        {
           position: "bottom-right",
-        });
-        fetchCartItems(); // Fetch updated cart data
-      })
-      .catch((error) => {
-        toast.error("Failed to update quantity", {
-          position: "bottom-right",
-        });
-      })
+        }
+      )
       .finally(() => {
         setLoadingItems((prev) => ({ ...prev, [itemId]: false }));
+        fetchCartItems();
       });
   };
 
@@ -110,21 +120,21 @@ export const CartPage = () => {
       return;
     }
     setLoadingItems((prev) => ({ ...prev, [itemId]: true }));
-    dispatch(removeItemAsync({ email, product_id: itemId }))
-      .unwrap()
-      .then(() => {
-        toast.success("Item removed from cart", {
+    toast
+      .promise(
+        dispatch(removeItemAsync({ email, product_id: itemId })).unwrap(),
+        {
+          loading: "Removing item...",
+          success: "Item removed from cart",
+          error: "Failed to remove item from cart",
+        },
+        {
           position: "bottom-right",
-        });
-        fetchCartItems(); // Fetch updated cart data
-      })
-      .catch((error) => {
-        toast.error("Failed to remove item from cart", {
-          position: "bottom-right",
-        });
-      })
+        }
+      )
       .finally(() => {
         setLoadingItems((prev) => ({ ...prev, [itemId]: false }));
+        fetchCartItems();
       });
   };
 
@@ -136,42 +146,40 @@ export const CartPage = () => {
       return;
     }
 
-    try {
-      const response = await getDiscount(couponCode);
-      if (response.success && response.data.length > 0) {
-        const discount = response.data[0];
-        const currentDate = new Date();
-        const startDate = new Date(discount.start_date);
-        const endDate = new Date(discount.end_date);
+    toast.promise(
+      getDiscount(couponCode),
+      {
+        loading: "Applying coupon...",
+        success: (response) => {
+          if (response.success && response.data.length > 0) {
+            const discount = response.data[0];
+            const currentDate = new Date();
+            currentDate.setHours(0, 0, 0, 0); // Set to start of day
+            const startDate = new Date(discount.start_date);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(discount.end_date);
+            endDate.setHours(23, 59, 59, 999); // Set to end of day
 
-        if (
-          currentDate >= startDate &&
-          currentDate <= endDate &&
-          discount.active
-        ) {
-          setAppliedDiscount(discount);
-          toast.success(
-            `Coupon applied successfully! ${discount.discount}% off`,
-            {
-              position: "bottom-right",
+            if (
+              currentDate >= startDate &&
+              currentDate <= endDate &&
+              discount.active
+            ) {
+              setAppliedDiscount(discount);
+              return `Coupon applied successfully! ${discount.discount}% off`;
+            } else {
+              throw new Error("This coupon is not valid or has expired");
             }
-          );
-        } else {
-          toast.error("This coupon is not valid or has expired", {
-            position: "bottom-right",
-          });
-        }
-      } else {
-        toast.error("Invalid coupon code", {
-          position: "bottom-right",
-        });
-      }
-    } catch (error) {
-      console.error("Error applying coupon:", error);
-      toast.error("Failed to apply coupon", {
+          } else {
+            throw new Error("Invalid coupon code");
+          }
+        },
+        error: (err) => `Failed to apply coupon: ${err.message}`,
+      },
+      {
         position: "bottom-right",
-      });
-    }
+      }
+    );
   };
 
   // Calculate cart total and total discount
@@ -192,16 +200,115 @@ export const CartPage = () => {
   // Calculate final total
   const finalTotal = cartTotal - totalDiscount - couponDiscountAmount;
 
-  if (!email) {
+  const navigate = useNavigate();
+
+  const handleRazorpayPayment = async () => {
+    try {
+      const orderData = await createRazorpayOrder(finalTotal);
+
+      const loadRazorpay = () => {
+        return new Promise((resolve) => {
+          const script = document.createElement("script");
+          script.src = "https://checkout.razorpay.com/v1/checkout.js";
+          script.onload = () => {
+            resolve(true);
+          };
+          script.onerror = () => {
+            resolve(false);
+          };
+          document.body.appendChild(script);
+        });
+      };
+
+      const isRazorpayLoaded = await loadRazorpay();
+
+      if (!isRazorpayLoaded) {
+        toast.error("Razorpay SDK failed to load. Please try again later.");
+        return;
+      }
+
+      // Merge the received options with our custom options
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+        amount: finalTotal,
+        currency: "INR",
+        name: "Glosishine",
+        description: "Purchase from Your Store",
+        order_id: orderData.data,
+        handler: async (response) => {
+          toast.promise(
+            verifyRazorpayPayment(response),
+            {
+              loading: "Verifying payment...",
+              success: (verifyResponse) => {
+                if (verifyResponse.success) {
+                  clearAllCart(email);
+                  navigate("/ordersuccess");
+                  return "Payment successful & Cart has been cleared!";
+                } else {
+                  throw new Error("Payment verification failed");
+                }
+              },
+              error: "Payment verification failed. Please contact support.",
+            },
+            {
+              position: "bottom-right",
+            }
+          );
+        },
+        prefill: {
+          name: userContext?.user?.[0]?.name || "",
+          email: email,
+        },
+        theme: {
+          color: "#F37254",
+        },
+        // Merge the received options
+        ...orderData.options,
+        // Override some options if needed
+        remember_customer: true,
+        image: logo,
+      };
+
+      // If the color is null in the received options, use our default
+      if (!options.theme.color) {
+        options.theme.color = "#F37254";
+      }
+
+      const razorpayInstance = new window.Razorpay(options);
+      razorpayInstance.open();
+    } catch (error) {
+      console.error("Error creating Razorpay order:", error);
+      toast.error("An error occurred while initiating the payment.");
+    }
+  };
+
+  if (cartStatus === "loading") {
     return (
-      <div className="text-center text-bg-green h-80 flex flex-col justify-center items-center">
-        <h1 className="text-4xl font-bold">Please log in to view your cart.</h1>
+      <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
+        <l-tail-chase
+          size="60"
+          bg-opacity="0.2"
+          speed="2"
+          color="rgb(6,68,59)"
+          className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+        ></l-tail-chase>
       </div>
     );
   }
 
-  if (cartStatus === "loading") {
-    return <div>Loading cart...</div>;
+  if (!email && cartStatus !== "loading") {
+    return (
+      <div className="text-center text-bg-green h-80 flex flex-col justify-center items-center">
+        <h1 className="text-4xl font-bold">Please log in to view your cart.</h1>
+        <Link
+          to="/login"
+          className="mt-4 px-6 py-2 bg-bg-green text-white rounded-md hover:bg-green-800 transition-colors"
+        >
+          Log In
+        </Link>
+      </div>
+    );
   }
 
   return (
@@ -280,9 +387,6 @@ export const CartPage = () => {
                             </h3>
                             <p className="text-gray-500 text-sm md:text-base">
                               Size: {item?.size}
-                            </p>
-                            <p className="text-gray-500 text-sm md:text-base">
-                              Color: {item?.color}
                             </p>
                           </div>
                         </div>
@@ -371,7 +475,7 @@ export const CartPage = () => {
             onChange={(e) => setCouponCode(e.target.value)}
           />
           <button
-            className="w-full p-2 bg-black text-white rounded"
+            className="w-full p-2 bg-black text-white rounded disabled:cursor-not-allowed"
             disabled={cartItems.length === 0}
             onClick={handleApplyCoupon}
           >
@@ -383,10 +487,12 @@ export const CartPage = () => {
               <p>Cart Subtotal</p>
               <p>₹{cartTotal.toFixed(2)}</p>
             </div>
-            <div className="flex justify-between mb-2">
-              <p>Product Discount</p>
-              <p>−₹{totalDiscount.toFixed(2)}</p>
-            </div>
+            {totalDiscount > 0 && (
+              <div className="flex justify-between mb-2">
+                <p>Product Discount</p>
+                <p>−₹{totalDiscount.toFixed(2)}</p>
+              </div>
+            )}
             {appliedDiscount && (
               <div className="flex justify-between mb-2">
                 <p>Coupon Discount ({appliedDiscount.discount}%)</p>
@@ -398,10 +504,11 @@ export const CartPage = () => {
               <p>₹{finalTotal.toFixed(2)}</p>
             </div>
             <button
-              className="w-full mt-4 p-2 bg-orange-400 text-white rounded"
+              className="w-full mt-4 p-2 bg-bg-green text-white rounded disabled:cursor-not-allowed"
               disabled={cartItems.length === 0}
+              onClick={handleRazorpayPayment}
             >
-              Checkout
+              Proceed to Payment
             </button>
           </div>
         </div>

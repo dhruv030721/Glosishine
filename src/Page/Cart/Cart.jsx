@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
 import { Form, Link } from "react-router-dom";
 import brand from "../../assets/brand.svg";
@@ -12,7 +12,6 @@ import { IoAdd } from "react-icons/io5";
 import { FiHeart } from "react-icons/fi";
 import { IoRemove } from "react-icons/io5";
 import { IoCloudUploadOutline } from "react-icons/io5";
-import { useState } from "react";
 import ratingimage from "../../assets/ratingimage.png";
 import summar1 from "../../assets/summar1.jpg";
 import summar2 from "../../assets/summar2.jpg";
@@ -43,6 +42,7 @@ import "./Cart.css";
 import { FaHeart } from "react-icons/fa6";
 import { addItemAsync } from "../../Slice/CartSlice";
 import { updateQuantityAsync } from "../../Slice/CartSlice";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 const Cart = () => {
   const { id } = useParams();
@@ -50,9 +50,20 @@ const Cart = () => {
   const Appcontext = useContext(AppContext);
   const userContext = useContext(AppContext);
   const email = userContext?.user?.[0]?.email;
+
+  // Debugging: Log filterdata to check its value
   const filterdata = Appcontext.getdata.filter(
     (item) => item.product_id === id
   );
+  console.log("Filter Data:", filterdata);
+
+  // Convert size string to an array
+  const availableSizes = filterdata[0]?.size
+    ? filterdata[0].size.split(",")
+    : [];
+
+  // Debugging: Log availableSizes to check its value
+  console.log("Available Sizes:", availableSizes);
 
   const [value, setValue] = useState(1);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -71,6 +82,7 @@ const Cart = () => {
   const watchlist = useSelector((state) => state.watchlist);
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [favProductId, setFavProductId] = useState(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -251,7 +263,7 @@ const Cart = () => {
 
           if (favProduct) {
             setIsInWatchlist(true);
-            setFavProductId(favProduct.product_id); // Set the 'id' of the favorite product
+            setFavProductId(favProduct.id); // Set the 'id' of the favorite product
           } else {
             setIsInWatchlist(false);
           }
@@ -321,6 +333,22 @@ const Cart = () => {
     }
   };
 
+  const nextImage = () => {
+    setCurrentImageIndex((prevIndex) => {
+      const nextIndex = prevIndex + 2;
+      return nextIndex >= filterdata[0].images.length ? 0 : nextIndex;
+    });
+  };
+
+  const prevImage = () => {
+    setCurrentImageIndex((prevIndex) => {
+      const nextIndex = prevIndex - 2;
+      return nextIndex < 0
+        ? Math.max(filterdata[0].images.length - 2, 0)
+        : nextIndex;
+    });
+  };
+
   return (
     <div className="w-full">
       {filterdata.map((item) => (
@@ -339,12 +367,35 @@ const Cart = () => {
             <h1>Shirts</h1>
           </div>
           <div className="w-full flex flex-col lg:flex-row">
-            <div className="w-full lg:w-[60%] h-full grid grid-cols-2 gap-y-3 gap-x-3 px-10">
-              {item.images.map((item) => (
+            <div className="w-full lg:w-[60%] h-full px-10 relative">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {item.images
+                  .slice(currentImageIndex, currentImageIndex + 2)
+                  .map((image, index) => (
+                    <img
+                      key={index}
+                      src={image}
+                      alt=""
+                      className="w-full h-auto object-cover"
+                    />
+                  ))}
+              </div>
+              {item.images.length > 2 && (
                 <>
-                  <img src={item} alt="" className="w-full h-auto" />
+                  <button
+                    onClick={prevImage}
+                    className="absolute left-12 top-1/2 transform -translate-y-1/2 bg-bg-green hover:bg-green-800 text-white rounded-full p-2 shadow-md"
+                  >
+                    <MdChevronLeft size={24} />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-12 top-1/2 transform -translate-y-1/2 bg-bg-green hover:bg-green-800 text-white rounded-full p-2 shadow-md"
+                  >
+                    <MdChevronRight size={24} />
+                  </button>
                 </>
-              ))}
+              )}
             </div>
             <div className="w-full lg:w-[40%] px-5 lg:pr-10">
               <div data-aos="fade-up" data-aos-duration="1000">
@@ -375,7 +426,7 @@ const Cart = () => {
                 <div data-aos="zoom-in" data-aos-duration="2000">
                   <img src={payment} alt="" className="w-72 h-12" />
                 </div>
-                <div className="mt-5 flex flex-row gap-x-3">
+                {/* <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
                   <p className=" text-sm font-poppins">
                     Get this for Regular priceSale price
@@ -406,8 +457,8 @@ const Cart = () => {
                       GET10 On minimum order value of Rs.2499/-
                     </span>
                   </p>
-                </div>
-                <h1 className="mt-5 text-sm mb-1">Quantity</h1>
+                </div> */}
+                {/* <h1 className="mt-5 text-sm mb-1">Quantity</h1>
                 <div className="py-2 px-3 inline-block bg-white border border-gray-200 rounded-lg dark:bg-neutral-900 dark:border-neutral-700">
                   <div className="flex items-center gap-x-1.5">
                     <button
@@ -432,16 +483,23 @@ const Cart = () => {
                       <IoAdd />
                     </button>
                   </div>
-                </div>
+                </div> */}
                 <h1 className="mt-5 text-sm mb-1">Size</h1>
                 <div className="grid grid-cols-4 md:grid-cols-7 pb-4">
                   {sizes.map((size) => (
                     <button
                       key={size}
                       className={`border border-black w-12 p-1 rounded-sm ${
-                        selectedSize === size ? "bg-green-700 text-white" : ""
+                        selectedSize === size ? "bg-bg-green text-white" : ""
+                      } ${
+                        !availableSizes.includes(size)
+                          ? "opacity-50 cursor-not-allowed"
+                          : ""
                       }`}
-                      onClick={() => handleButtonClick(size)}
+                      onClick={() =>
+                        availableSizes.includes(size) && handleButtonClick(size)
+                      }
+                      disabled={!availableSizes.includes(size)}
                     >
                       {size}
                     </button>
@@ -458,7 +516,7 @@ const Cart = () => {
                   <button
                     onClick={handleClick}
                     className={`cursor-pointer group relative flex flex-row gap-x-3 text-black gap-1.5 p-2 items-center justify-center w-full h-12 border ${
-                      isInWatchlist ? "border-red-600" : "border-green-600"
+                      isInWatchlist ? "border-red-600" : "border-bg-green"
                     } bg-opacity-80 rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md`}
                   >
                     {isInWatchlist ? (
@@ -487,7 +545,7 @@ const Cart = () => {
                                             <p key={index}>&#x2022;<span className='ml-2 '>{spec}</span></p>
                                         ))}
                                     </div> */}
-                {/* <p className='text-md font-monserrat mt-5 '><span className='font-semibold mr-2'>Wash Care:</span>Cold machine wash. For more details see the wash care label attached </p>
+                {/* <p className='text-md font-poppins mt-5 '><span className='font-semibold mr-2'>Wash Care:</span>Cold machine wash. For more details see the wash care label attached </p>
                                     <p className='mt-5 pb-5 font-poppins border-b-[1px] border-black'>The product's actual color may vary slightly due to photographic lighting sources or your device.</p>
                                     <p className='mt-5 font-monserrat font-semibold'>Manufactured, Marketed & Packed By Finch</p>
                                     <p className='mt-5 font-monserrat'>{item.manufacturing_details}</p>

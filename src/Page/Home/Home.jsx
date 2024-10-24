@@ -210,7 +210,7 @@ const Home = () => {
   }
 
   return (
-    <div className="w-full h-full overflow-x-hidden">
+    <div className="w-full h-full overflow-hidden">
       <section data-aos="fade-up" className="mb-8 sm:mb-12 md:mb-16">
         <div className="flex items-center justify-center max-h-[90vh]">
           <Carousel
@@ -218,7 +218,7 @@ const Home = () => {
             prevArrow={({ handlePrev }) => (
               <button
                 onClick={handlePrev}
-                className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
+                className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -239,7 +239,7 @@ const Home = () => {
             nextArrow={({ handleNext }) => (
               <button
                 onClick={handleNext}
-                className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
+                className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -324,7 +324,7 @@ const Home = () => {
             </div>
             <button
               onClick={prevSlide}
-              className="absolute top-1/2 left-2 sm:left-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center"
+              className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -343,7 +343,7 @@ const Home = () => {
             </button>
             <button
               onClick={nextSlide}
-              className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-bg-green text-white rounded-full w-10 h-10 flex items-center justify-center"
+              className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -415,7 +415,51 @@ const Home = () => {
         data-aos="fade-up"
         className="mt-12 sm:mt-16 md:mt-20 mb-8 sm:mb-12 md:mb-16"
       >
-        <Carousel className="h-[75%]">
+        <Carousel
+          prevArrow={({ handlePrev }) => (
+            <button
+              onClick={handlePrev}
+              className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 19.5L8.25 12l7.5-7.5"
+                />
+              </svg>
+            </button>
+          )}
+          nextArrow={({ handleNext }) => (
+            <button
+              onClick={handleNext}
+              className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+            </button>
+          )}
+          className="h-[75%]"
+        >
           {imageSlider2.map((image, index) => (
             <div
               key={index}

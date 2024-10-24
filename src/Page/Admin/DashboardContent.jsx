@@ -18,6 +18,7 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import Collapse from "@mui/material/Collapse";
 import CommonTable from "../../Components/CommonTable/CommonTable";
 import { styled } from "@mui/material/styles";
+import { tailChase } from "ldrs";
 
 const BorderedCard = styled(Card)({
   boxShadow: "none",
@@ -30,10 +31,15 @@ const DashboardContent = () => {
   const [view, setView] = useState("latestOrders");
   const [orderStatuses, setOrderStatuses] = useState({});
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     setData(fetchDashboardData());
+    setLoading(false);
   }, []);
+
+  tailChase.register();
 
   const handleChange = (event) => {
     setView(event.target.value);
@@ -254,15 +260,25 @@ const DashboardContent = () => {
       </tr>
     </thead>
   );
-
-  if (!data) return <div>Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <l-tail-chase
+          size="60"
+          speed="2"
+          color="rgb(6,68,59)"
+          className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+        ></l-tail-chase>
+      </div>
+    );
+  }
 
   return (
     <Box className="p-2 sm:p-4 md:p-6 font-dm-sans bg-gray-100">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4 sm:gap-0">
         <Typography
           variant="h4"
-          className="font-bold text-green-600 text-2xl sm:text-3xl mb-2 sm:mb-0"
+          className="font-bold text-bg-green text-2xl sm:text-3xl mb-2 sm:mb-0"
         >
           Dashboard Overview
         </Typography>

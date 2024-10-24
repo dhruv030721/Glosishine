@@ -12,6 +12,7 @@ import Lottie from "lottie-react";
 import Loadinganimation from "../../assets/Loadinganimation.json";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
+import { tailChase } from "ldrs";
 
 const SetItems = () => {
   const initialImageArray = [
@@ -138,7 +139,7 @@ const SetItems = () => {
               type="button"
               onClick={onClickHandler}
               title={label}
-              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-bg-green  bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+              className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
             >
               <FaChevronRight className="text-white text-2xl" />
             </button>
@@ -207,13 +208,13 @@ const SetItems = () => {
 
   useEffect(() => {
     (async () => {
+      setLoading(true); // Set loading to true when starting to fetch data
       try {
         const data = await getContentItem();
         console.log("data", data);
         const imageslider1 = data.filter(
           (item) => item.type === "ImageSlider-1"
         );
-        // console.log("imageslider1", imageslider1);
         setImagesSlider1(imageslider1);
         const imageslider2 = data.filter(
           (item) => item.type === "ImageSlider-2"
@@ -223,23 +224,26 @@ const SetItems = () => {
         setAdvertisement(advertise);
         const feed = data.filter((item) => item.type === "Feed");
         setFeedImg(feed);
-        setLoading(false);
       } catch (error) {
         console.log(error);
+        toast.error("Failed to load content items");
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false when done, regardless of success or failure
       }
     })();
   }, [reloadCounter]);
 
+  tailChase.register();
+
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Lottie
-          animationData={Loadinganimation}
-          loop={true}
-          className="w-1/2 h-1/2"
-        />
+      <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
+        <l-tail-chase
+          size="60"
+          speed="2"
+          color="rgb(6,68,59)"
+          className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
+        ></l-tail-chase>
       </div>
     );
   }

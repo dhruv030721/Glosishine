@@ -16,18 +16,13 @@ const PricingStock = ({ formdata, setFormdata }) => {
     switch (name) {
       case "regularprize":
       case "saleprize":
-      case "gst":
-      case "stock":
-      case "discount":
+      case "brandname":
         if (!value)
           error = `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
         if (isNaN(value) || value < 0)
           error = `${
             name.charAt(0).toUpperCase() + name.slice(1)
           } must be a non-negative number`;
-        break;
-      case "brandname":
-        if (!value.trim()) error = "Brand name is required";
         break;
     }
     return error;
@@ -74,32 +69,6 @@ const PricingStock = ({ formdata, setFormdata }) => {
           type="text"
           name="brandname"
           value={formdata.brandname}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="GST %"
-          type="number"
-          name="gst"
-          value={formdata.gst}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Discount %"
-          type="number"
-          name="discount"
-          value={formdata.discount}
           onChange={handleChange}
           variant="outlined"
           className="font-poppins"

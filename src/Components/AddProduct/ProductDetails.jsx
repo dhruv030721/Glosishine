@@ -199,19 +199,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           onBlur={handleBlur}
         />
       </Grid>
-      <Grid item xs={12} md={6}>
-        <CommonInput
-          fullWidth
-          label="Length"
-          type="text"
-          name="length"
-          value={formdata.length}
-          onChange={handleChange}
-          variant="outlined"
-          className="font-poppins"
-          onBlur={handleBlur}
-        />
-      </Grid>
+      {/* Remove the Length field */}
       <Grid item xs={12} md={6}>
         <CommonInput
           fullWidth

@@ -175,7 +175,7 @@ const ProductList = ({
       data-aos-offset="0"
       className={`relative w-full h-full rounded-lg bg-white bg-opacity-30 backdrop-blur-lg border-2 border-bg-green transition-all duration-200 flex flex-col overflow-hidden ${className}`}
     >
-      <div className="relative flex flex-col overflow-hidden">
+      <div className="relative flex flex-col overflow-hidden object-cover">
         <a
           className="relative flex h-60 md:h-72 lg:h-80 xl:h-96 2xl:h-[28rem] 4xl:h-[40rem] overflow-hidden"
           href={`/${product.product_id}`}
