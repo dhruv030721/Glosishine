@@ -21,24 +21,32 @@ import {
   verifyRazorpayPayment,
 } from "../../Services/Operations/ProductServices";
 import logo from "../../assets/logos.jpg";
+import AddressCard from "../../Components/Address/AddressCard";
+import AddressModal from "../../Components/Address/AddressModal";
+import { GetBilling, GetShipping } from "../../Services/Operations/Auth";
 
 const MAX_QUANTITY = 10; // Set the maximum quantity limit
 
 export const CartPage = () => {
+  const { user } = useContext(AppContext);
   const cartItems = useSelector((state) => state.cart.items);
   const cartStatus = useSelector((state) => state.cart.status);
   const cartError = useSelector((state) => state.cart.error);
   const dispatch = useDispatch();
   const [retryCount, setRetryCount] = useState(0);
-  const userContext = useContext(AppContext);
-  const email = userContext?.user?.[0]?.email || "";
   const [loadingItems, setLoadingItems] = useState({});
   const [couponCode, setCouponCode] = useState("");
   const [appliedDiscount, setAppliedDiscount] = useState(null);
+  const [addressModalOpen, setAddressModalOpen] = useState(false);
+  const [addressType, setAddressType] = useState("billing");
+  const [billingAddresses, setBillingAddresses] = useState([]);
+  const [shippingAddresses, setShippingAddresses] = useState([]);
+  const [selectedBillingId, setSelectedBillingId] = useState(null);
+  const [selectedShippingId, setSelectedShippingId] = useState(null);
 
   const fetchCartItems = () => {
-    if (email) {
-      dispatch(fetchCartItemsAsync(email))
+    if (user?.[0]?.email) {
+      dispatch(fetchCartItemsAsync(user?.[0]?.email))
         .unwrap()
         .then(() => {
           setLoadingItems({});
@@ -58,7 +66,7 @@ export const CartPage = () => {
   useEffect(() => {
     // Fetch cart items when the component mounts
     fetchCartItems();
-  }, [email]); // Dependency on email ensures it refetches if the user changes
+  }, [user]); // Dependency on user ensures it refetches if the user changes
 
   useEffect(() => {
     if (cartStatus === "failed" && retryCount < 3) {
@@ -66,8 +74,45 @@ export const CartPage = () => {
     }
   }, [cartStatus, retryCount]);
 
+  useEffect(() => {
+    if (user?.[0]?.email) {
+      fetchCartItems();
+      fetchAddresses();
+    }
+  }, [user]);
+
+  const fetchAddresses = async () => {
+    try {
+      const email = user?.[0]?.email;
+      if (email) {
+        const billingResponse = await GetBilling(email);
+        const shippingResponse = await GetShipping(email);
+
+        const billingData = billingResponse.data.data || [];
+        const shippingData = shippingResponse.data.data || [];
+
+        setBillingAddresses(billingData);
+        setShippingAddresses(shippingData);
+
+        if (billingData.length > 0) {
+          setSelectedBillingId(billingData[0].id);
+        }
+        if (shippingData.length > 0) {
+          setSelectedShippingId(shippingData[0].id);
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching addresses:", error);
+    }
+  };
+
+  const openAddressModal = (type) => {
+    setAddressType(type);
+    setAddressModalOpen(true);
+  };
+
   const handleQuantityChange = (itemId, delta) => {
-    if (!email) {
+    if (!user?.[0]?.email) {
       toast.error("Please log in to update your cart", {
         position: "bottom-right",
       });
@@ -96,7 +141,9 @@ export const CartPage = () => {
     setLoadingItems((prev) => ({ ...prev, [itemId]: true }));
     toast
       .promise(
-        dispatch(updateQuantityAsync({ email, id: itemId, delta })).unwrap(),
+        dispatch(
+          updateQuantityAsync({ email: user?.[0]?.email, id: itemId, delta })
+        ).unwrap(),
         {
           loading: "Updating quantity...",
           success: "Quantity updated",
@@ -113,7 +160,7 @@ export const CartPage = () => {
   };
 
   const handleDeleteItem = (itemId) => {
-    if (!email) {
+    if (!user?.[0]?.email) {
       toast.error("Please log in to update your cart", {
         position: "bottom-right",
       });
@@ -122,7 +169,9 @@ export const CartPage = () => {
     setLoadingItems((prev) => ({ ...prev, [itemId]: true }));
     toast
       .promise(
-        dispatch(removeItemAsync({ email, product_id: itemId })).unwrap(),
+        dispatch(
+          removeItemAsync({ email: user?.[0]?.email, product_id: itemId })
+        ).unwrap(),
         {
           loading: "Removing item...",
           success: "Item removed from cart",
@@ -242,7 +291,7 @@ export const CartPage = () => {
               loading: "Verifying payment...",
               success: (verifyResponse) => {
                 if (verifyResponse.success) {
-                  clearAllCart(email);
+                  clearAllCart(user?.[0]?.email);
                   navigate("/ordersuccess");
                   return "Payment successful & Cart has been cleared!";
                 } else {
@@ -257,8 +306,8 @@ export const CartPage = () => {
           );
         },
         prefill: {
-          name: userContext?.user?.[0]?.name || "",
-          email: email,
+          name: user?.[0]?.name || "",
+          email: user?.[0]?.email || "",
         },
         theme: {
           color: "#F37254",
@@ -283,6 +332,58 @@ export const CartPage = () => {
     }
   };
 
+  const handleAddressUpdate = (type, newAddress) => {
+    if (type === "billing") {
+      setBillingAddresses((prev) => {
+        const index = prev.findIndex((addr) => addr.id === newAddress.id);
+        if (index !== -1) {
+          return prev.map((addr, i) => (i === index ? newAddress : addr));
+        } else {
+          return [...prev, newAddress];
+        }
+      });
+      setSelectedBillingId(newAddress.id);
+    } else {
+      setShippingAddresses((prev) => {
+        const index = prev.findIndex((addr) => addr.id === newAddress.id);
+        if (index !== -1) {
+          return prev.map((addr, i) => (i === index ? newAddress : addr));
+        } else {
+          return [...prev, newAddress];
+        }
+      });
+      setSelectedShippingId(newAddress.id);
+    }
+  };
+
+  useEffect(() => {
+    // Fetch billing and shipping addresses
+    const fetchAddresses = async () => {
+      try {
+        const billingResponse = await GetBilling(user?.[0]?.email);
+        const shippingResponse = await GetShipping(user?.[0]?.email);
+
+        setBillingAddresses(billingResponse.data.data || []);
+        setShippingAddresses(shippingResponse.data.data || []);
+
+        // Set the first address as selected if available
+        if (billingResponse.data.data?.length > 0) {
+          setSelectedBillingId(billingResponse.data.data[0].id);
+        }
+        if (shippingResponse.data.data?.length > 0) {
+          setSelectedShippingId(shippingResponse.data.data[0].id);
+        }
+      } catch (error) {
+        console.error("Error fetching addresses:", error);
+        toast.error("Failed to load addresses");
+      }
+    };
+
+    if (user?.[0]?.email) {
+      fetchAddresses();
+    }
+  }, [user]);
+
   if (cartStatus === "loading") {
     return (
       <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
@@ -297,7 +398,7 @@ export const CartPage = () => {
     );
   }
 
-  if (!email && cartStatus !== "loading") {
+  if (!user?.[0]?.email && cartStatus !== "loading") {
     return (
       <div className="text-center font-monserrat text-bg-green h-80 flex flex-col justify-center items-center">
         <h1 className="text-4xl font-bold">Please log in to view your cart.</h1>
@@ -465,6 +566,26 @@ export const CartPage = () => {
         </div>
 
         <div className="bg-white shadow-lg rounded-md p-6">
+          <h3 className="font-semibold text-lg mt-6 mb-4">Addresses</h3>
+          <AddressCard
+            title="Billing Address"
+            addresses={billingAddresses}
+            selectedId={selectedBillingId}
+            onSelectAddress={(id) => setSelectedBillingId(id)}
+            onEditAddress={() => openAddressModal("billing")}
+            onAddAddress={() => openAddressModal("billing")}
+          />
+          <div className="mt-4">
+            <AddressCard
+              title="Shipping Address"
+              addresses={shippingAddresses}
+              selectedId={selectedShippingId}
+              onSelectAddress={(id) => setSelectedShippingId(id)}
+              onEditAddress={() => openAddressModal("shipping")}
+              onAddAddress={() => openAddressModal("shipping")}
+            />
+          </div>
+
           <h3 className="font-semibold text-lg mt-6 mb-4">Coupon Code</h3>
           <input
             type="text"
@@ -505,7 +626,11 @@ export const CartPage = () => {
             </div>
             <button
               className="w-full mt-4 p-2 bg-bg-green text-white rounded disabled:cursor-not-allowed"
-              disabled={cartItems.length === 0}
+              disabled={
+                cartItems.length === 0 ||
+                !billingAddresses ||
+                !shippingAddresses
+              }
               onClick={handleRazorpayPayment}
             >
               Proceed to Payment
@@ -513,6 +638,18 @@ export const CartPage = () => {
           </div>
         </div>
       </div>
+
+      <AddressModal
+        open={addressModalOpen}
+        onClose={() => setAddressModalOpen(false)}
+        addressType={addressType}
+        address={
+          addressType === "billing"
+            ? billingAddresses?.find((addr) => addr.id === selectedBillingId)
+            : shippingAddresses?.find((addr) => addr.id === selectedShippingId)
+        }
+        onAddressUpdate={handleAddressUpdate}
+      />
     </div>
   );
 };

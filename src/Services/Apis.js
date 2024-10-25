@@ -69,3 +69,11 @@ export const RAZORPAY_API = {
   CREATE_ORDER: BASE_URL + "payment/index.php",
   VERIFY_PAYMENT: BASE_URL + "payment/verify-payment.php",
 };
+
+export const orderendpoints = {
+  ADDORDER_API: BASE_URL + "order/add-order.php",
+  UPDATEBILLING_API: BASE_URL + "order/save_billing_details.php",
+  UPDATESHIPPING_API: BASE_URL + "order/save_shipping_details.php",
+  GETBILLING_API: BASE_URL + "order/get_billing_details.php",
+  GETSHIPPING_API: BASE_URL + "order/get_shipping_details.php",
+};

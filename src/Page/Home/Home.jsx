@@ -319,7 +319,7 @@ const Home = () => {
                     onRemove={handleRemove}
                     watchlistItems={watchlistItems}
                     setWatchlistItems={setWatchlistItems}
-                    className="h-[450px] sm:h-[350px] md:h-auto" // Increase height for mobile
+                    className="h-[500px] sm:h-[350px] md:h-[500px]" // Increase height for mobile
                   />
                 </div>
               ))}
@@ -363,12 +363,14 @@ const Home = () => {
               </svg>
             </button>
             <div className="mt-10 w-full flex justify-center align-middle">
-              <div data-aos="fade-up">
-                <button className="bg-bg-green bg-opacity-100 text-center align-middle text-white border-bg-green rounded-lg text-lg font-semibold px-4 py-2 cursor-pointer transition-transform duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:-translate-y-1 hover:-translate-x-0.5 active:shadow-bg-green active:translate-y-0.5 active:translate-x-0.5 flex items-center">
-                  View all
+              <div data-aos="fade-up" className="hover:p-2">
+                <button className="bg-bg-green p-1 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:w-auto hover:px-4 group">
+                  <span className="hidden group-hover:inline mr-2 font-semibold">
+                    View all
+                  </span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6 ml-2"
+                    className="h-6 w-6"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"

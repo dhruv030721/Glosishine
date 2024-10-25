@@ -78,6 +78,8 @@ const EditProduct = ({ id }) => {
     stretchability: "",
     productphoto: [],
     discount: "", // Added discount field
+    category: "",
+    subcategory: "",
   });
 
   useEffect(() => {
@@ -121,6 +123,8 @@ const EditProduct = ({ id }) => {
         stretchability: filteredProduct.stretchability || "",
         productphoto: filteredProduct.images || [],
         discount: filteredProduct.discount || "",
+        category: filteredProduct.category || "",
+        subcategory: filteredProduct.subcategory || "",
       });
     }
   }, [filteredProduct]);

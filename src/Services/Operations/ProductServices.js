@@ -37,6 +37,8 @@ export async function addProduct({ productData }) {
   formData.append("number_of_pockets", parseInt(productData.noofpackets));
   formData.append("sleeve_style", productData.sleevestyle);
   formData.append("stretchability", productData.stretchability);
+  formData.append("category", productData.category);
+  formData.append("subcategory", productData.subcategory);
 
   productData.productphoto.forEach((element) => {
     formData.append(`product_photos[]`, element);
@@ -83,6 +85,8 @@ export async function updateProduct(data) {
   formData.append("number_of_pockets", productData.noofpocket);
   formData.append("sleeve_style", productData.sleevestyle);
   formData.append("stretchability", productData.stretchability);
+  formData.append("category", productData.category);
+  formData.append("subcategory", productData.subcategory);
 
   // Handle product photos
   if (productData.productphoto && productData.productphoto.length > 0) {

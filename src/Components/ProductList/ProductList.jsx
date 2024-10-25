@@ -243,21 +243,22 @@ const ProductList = ({
 
         <div className="mt-4 z-10 flex flex-col text-center px-4">
           <a href={`/${product.product_id}`} className="w-full">
-            <h5 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-semibold text-black mb-2">
+            <h5 className="text-sm  md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-semibold text-black mb-2">
               {product.product_name}
             </h5>
           </a>
 
+          <span className="text-xxs bg-bg-green p-1 w-fit mx-auto font-semibold rounded-md md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-white">
+            ({product.discount}% OFF)
+          </span>
+
           <div className="w-full flex items-center justify-between mb-2">
-            <div className="flex flex-col items-start space-y-1">
+            <div className="flex flex-row items-center space-x-2 md:space-x-1">
               <span className="text-md md:text-[20px] lg:text-md xl:text-xxs 2xl:text-xs 4xl:text-sm text-black font-bold">
                 ₹{product.sale_price}
               </span>
               <span className="text-xs md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-gray-500 line-through">
                 ₹{product.regular_price}
-              </span>
-              <span className="text-xxs md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-bg-green">
-                ({product.discount}% OFF)
               </span>
             </div>
 

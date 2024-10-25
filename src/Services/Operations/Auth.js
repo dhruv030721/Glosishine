@@ -1,6 +1,11 @@
 import { apiConnector } from "../Apiconnector";
 import { jwtDecode } from "jwt-decode";
-import { adminendpoints, authendpoints, userendpoints } from "../Apis";
+import {
+  adminendpoints,
+  authendpoints,
+  orderendpoints,
+  userendpoints,
+} from "../Apis";
 import { setItem } from "../LocalStorageService";
 
 const {
@@ -14,6 +19,13 @@ const {
 } = authendpoints;
 const { ADMIN_LOGIN } = adminendpoints;
 const { GETUSER_API } = userendpoints;
+const {
+  UPDATEBILLING_API,
+  UPDATESHIPPING_API,
+  GETBILLING_API,
+  GETSHIPPING_API,
+  ADDORDER_API,
+} = orderendpoints;
 
 export default class Global {
   static token;
@@ -89,3 +101,66 @@ export async function verifyOTP(otp, email) {
   const response = await apiConnector("POST", VERIFY_OTP, { otp, email });
   return response;
 }
+
+export const UpdateBilling = async (billingData) => {
+  try {
+    const response = await apiConnector("POST", UPDATEBILLING_API, billingData);
+    return response.data;
+  } catch (error) {
+    console.error("Error updating billing address:", error);
+    throw error;
+  }
+};
+
+export const UpdateShipping = async (shippingData) => {
+  try {
+    const response = await apiConnector(
+      "POST",
+      UPDATESHIPPING_API,
+      shippingData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error updating shipping address:", error);
+    throw error;
+  }
+};
+
+export async function GetBilling(email) {
+  const response = await apiConnector("POST", GETBILLING_API, { email });
+  return response;
+}
+
+export async function GetShipping(email) {
+  const response = await apiConnector("POST", GETSHIPPING_API, { email });
+  return response;
+}
+
+export async function AddOrder(data) {
+  const response = await apiConnector("POST", ADDORDER_API, data);
+  return response;
+}
+
+export const SaveBilling = async (billingData) => {
+  try {
+    const response = await apiConnector("POST", UPDATEBILLING_API, billingData);
+    return response.data;
+  } catch (error) {
+    console.error("Error saving billing address:", error);
+    throw error;
+  }
+};
+
+export const SaveShipping = async (shippingData) => {
+  try {
+    const response = await apiConnector(
+      "POST",
+      UPDATESHIPPING_API,
+      shippingData
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error saving shipping address:", error);
+    throw error;
+  }
+};

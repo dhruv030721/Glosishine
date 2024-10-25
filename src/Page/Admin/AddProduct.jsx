@@ -69,6 +69,8 @@ const AddProduct = ({ product }) => {
     productid: product?.productid || "",
     stretchability: product?.stretchability || "",
     productphoto: product?.productphoto || [],
+    category: product?.category || "",
+    subcategory: product?.subcategory || "",
   });
 
   const [errors, setErrors] = useState({});

@@ -126,6 +126,28 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
     "Brown",
   ];
 
+  const handleCategoryChange = (event) => {
+    const category = event.target.value;
+    setFormdata({
+      ...formdata,
+      category: category,
+      subcategory: "", // Reset subcategory when category changes
+    });
+  };
+
+  const handleSubcategoryChange = (event) => {
+    setFormdata({
+      ...formdata,
+      subcategory: event.target.value,
+    });
+  };
+
+  const categories = ["MENS", "WOMENS"];
+  const subcategories = {
+    MENS: ["Shirts", "Tshirts", "Pants", "Men's Cord Set"],
+    WOMENS: ["Shirts", "Tshirts", "Kurtas", "Women's Cord Set"],
+  };
+
   return (
     <>
       <Grid item xs={12} md={6} className="font-poppins">
@@ -209,6 +231,65 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
             classes: { notchedOutline: "border-none" },
           }}
         />
+      </Grid>
+
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel
+            id="category-label"
+            style={{
+              color: "green",
+              fontWeight: "bold",
+              backgroundColor: "white",
+              padding: "0px 5px",
+            }}
+          >
+            Category
+          </InputLabel>
+          <CustomSelect
+            labelId="category-label"
+            id="category"
+            value={formdata.category || ""}
+            onChange={handleCategoryChange}
+            renderValue={(selected) => selected}
+          >
+            {categories.map((category) => (
+              <CustomMenuItem key={category} value={category}>
+                {category}
+              </CustomMenuItem>
+            ))}
+          </CustomSelect>
+        </FormControl>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <FormControl fullWidth>
+          <InputLabel
+            id="subcategory-label"
+            style={{
+              color: "green",
+              fontWeight: "bold",
+              backgroundColor: "white",
+              padding: "0px 5px",
+            }}
+          >
+            Sub-category
+          </InputLabel>
+          <CustomSelect
+            labelId="subcategory-label"
+            id="subcategory"
+            value={formdata.subcategory || ""}
+            onChange={handleSubcategoryChange}
+            disabled={!formdata.category}
+            renderValue={(selected) => selected}
+          >
+            {formdata.category &&
+              subcategories[formdata.category].map((subcategory) => (
+                <CustomMenuItem key={subcategory} value={subcategory}>
+                  {subcategory}
+                </CustomMenuItem>
+              ))}
+          </CustomSelect>
+        </FormControl>
       </Grid>
       <Grid item xs={12} md={6}>
         <CommonInput

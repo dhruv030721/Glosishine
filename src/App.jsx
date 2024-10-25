@@ -54,7 +54,9 @@ const cookies = new Cookies();
 function App() {
   const [getdata, setGetdata] = useState([]);
   const [token, setToken] = useState();
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
+  const [billingAddress, setBillingAddress] = useState(null);
+  const [shippingAddress, setShippingAddress] = useState(null);
   const [adminToken, setAdminToken] = useState([]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [CartProducts, setCartProducts] = useState([]);
@@ -143,6 +145,10 @@ function App() {
           setIsDrawerOpen,
           setCartProducts,
           isAdminAuthenticated,
+          billingAddress,
+          setBillingAddress,
+          shippingAddress,
+          setShippingAddress,
         }}
       >
         <ScrollToTop />
