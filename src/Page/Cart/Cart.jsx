@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
-import { Form, Link } from "react-router-dom";
+import { Form, Link, useNavigate } from "react-router-dom";
 import brand from "../../assets/brand.svg";
 import info from "../../assets/info.svg";
 import { RiShare2Line } from "react-icons/ri";
@@ -85,7 +85,7 @@ const Cart = () => {
   const [favProductId, setFavProductId] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
-
+  const navigate = useNavigate();
   tailChase.register();
 
   const handleImageUpload = (event) => {
@@ -140,80 +140,81 @@ const Cart = () => {
     AOS.init();
     AOS.refresh();
   }, []);
-  const buttonStyles = (buttonType) => {
-    return activeButton === buttonType
-      ? "w-[35%] p-3 bg-white text-black"
-      : "w-[35%] p-3 bg-gray-600 text-white";
-  };
 
-  const renderContent = () => {
-    switch (activeButton) {
-      case "shipping":
-        return (
-          <>
-            <p>All Orders are usually shipped within 48 hours.</p>
-            <p>
-              COD orders will be shipped only if order confirmation is given via
-              WhatsApp/Phone.
-            </p>
-            <p>
-              <a href="#">For more details click here</a>
-            </p>
-          </>
-        );
-      case "returnPolicy":
-        return (
-          <>
-            <p>
-              We offer 7 days hassle-free returns & exchange from the date of
-              delivery. We DO NOT offer reverse pick-up services. You’ll have to
-              courier the product(s) to the following address: No.7, Ground
-              Floor, Uniform Factory, 6th Cross, H Siddaiah Road, Sudhamanagar,
-              Bengaluru - 560027
-            </p>
-            <p>
-              <a href="#">For more about Return & Exchange Policy click here</a>
-            </p>
-          </>
-        );
-      case "placeReturn":
-        return (
-          <>
-            <p>
-              To place any return/exchange, <a href="#">Click here</a>
-            </p>
-          </>
-        );
-      default:
-        return null;
-    }
-  };
+  // const buttonStyles = (buttonType) => {
+  //   return activeButton === buttonType
+  //     ? "w-[35%] p-3 bg-white text-black"
+  //     : "w-[35%] p-3 bg-gray-600 text-white";
+  // };
 
-  const addToCartHandler = (id) => {
-    if (Appcontext.CartProducts.map((item) => item.product_id !== id)) {
-      const product = Appcontext.getdata.find((item) => item.product_id === id);
-      product.quantity = 1;
-      Appcontext.setCartProducts([...Appcontext.CartProducts, product]);
-      Appcontext.setIsDrawerOpen(true);
-    } else {
-      Appcontext.setIsDrawerOpen(true);
-    }
-  };
+  // const renderContent = () => {
+  //   switch (activeButton) {
+  //     case "shipping":
+  //       return (
+  //         <>
+  //           <p>All Orders are usually shipped within 48 hours.</p>
+  //           <p>
+  //             COD orders will be shipped only if order confirmation is given via
+  //             WhatsApp/Phone.
+  //           </p>
+  //           <p>
+  //             <a href="#">For more details click here</a>
+  //           </p>
+  //         </>
+  //       );
+  //     case "returnPolicy":
+  //       return (
+  //         <>
+  //           <p>
+  //             We offer 7 days hassle-free returns & exchange from the date of
+  //             delivery. We DO NOT offer reverse pick-up services. You’ll have to
+  //             courier the product(s) to the following address: No.7, Ground
+  //             Floor, Uniform Factory, 6th Cross, H Siddaiah Road, Sudhamanagar,
+  //             Bengaluru - 560027
+  //           </p>
+  //           <p>
+  //             <a href="#">For more about Return & Exchange Policy click here</a>
+  //           </p>
+  //         </>
+  //       );
+  //     case "placeReturn":
+  //       return (
+  //         <>
+  //           <p>
+  //             To place any return/exchange, <a href="#">Click here</a>
+  //           </p>
+  //         </>
+  //       );
+  //     default:
+  //       return null;
+  //   }
+  // };
 
-  const handleIncrement = (productId) => {
-    dispatch(updateQuantityAsync({ email, id: productId, delta: 1 }));
-  };
+  // const addToCartHandler = (id) => {
+  //   if (Appcontext.CartProducts.map((item) => item.product_id !== id)) {
+  //     const product = Appcontext.getdata.find((item) => item.product_id === id);
+  //     product.quantity = 1;
+  //     Appcontext.setCartProducts([...Appcontext.CartProducts, product]);
+  //     Appcontext.setIsDrawerOpen(true);
+  //   } else {
+  //     Appcontext.setIsDrawerOpen(true);
+  //   }
+  // };
 
-  const handleDecrement = (productId) => {
-    dispatch(updateQuantityAsync({ email, id: productId, delta: -1 }));
-  };
+  // const handleIncrement = (productId) => {
+  //   dispatch(updateQuantityAsync({ email, id: productId, delta: 1 }));
+  // };
 
-  const handleAddToCart = (item, quantity) => {
+  // const handleDecrement = (productId) => {
+  //   dispatch(updateQuantityAsync({ email, id: productId, delta: -1 }));
+  // };
+
+  const handleAddToCart = async (item, quantity) => {
     if (!selectedSize) {
       toast.error("Please select a size before adding to cart", {
         position: "bottom-right",
       });
-      return;
+      return false; // Return false to indicate failure
     }
 
     const itemToAdd = {
@@ -223,22 +224,27 @@ const Cart = () => {
       size: selectedSize,
     };
 
-    dispatch(addItemAsync(itemToAdd))
-      .unwrap()
-      .then(() => {
-        toast.success("Item added to cart", {
-          position: "bottom-right",
-        });
-      })
-      .catch((error) => {
-        console.error("Failed to add item to cart:", error);
-        toast.error("Failed to add item to cart", {
-          position: "bottom-right",
-        });
+    try {
+      await dispatch(addItemAsync(itemToAdd)).unwrap();
+      toast.success("Item added to cart", {
+        position: "bottom-right",
       });
+      return true; // Return true to indicate success
+    } catch (error) {
+      console.error("Failed to add item to cart:", error);
+      toast.error("Failed to add item to cart", {
+        position: "bottom-right",
+      });
+      return false; // Return false to indicate failure
+    }
   };
 
-  const handleAddToWatchlist = async () => {};
+  const handleBuyNow = async (item, quantity) => {
+    const success = await handleAddToCart(item, quantity);
+    if (success) {
+      navigate("/cart");
+    }
+  };
 
   useEffect(() => {
     setLoading(true);
@@ -528,7 +534,12 @@ const Cart = () => {
                     >
                       Add to cart
                     </button>
-                    <BuyNow />
+                    <button
+                      onClick={() => handleBuyNow(item, value)}
+                      className="cursor-pointer group relative flex text-white bg-bg-green gap-1.5 p-2 items-center justify-center w-full h-12 border border-green-600 rounded-lg hover:bg-opacity-100 transition font-semibold shadow-md"
+                    >
+                      Buy Now
+                    </button>
                     <button
                       onClick={handleClick}
                       className={`cursor-pointer group relative flex flex-row gap-x-3 text-black gap-1.5 p-2 items-center justify-center w-full h-12 border ${
@@ -563,8 +574,8 @@ const Cart = () => {
                                     </div> */}
                   {/* <p className='text-md font-montserrat mt-5 '><span className='font-semibold mr-2'>Wash Care:</span>Cold machine wash. For more details see the wash care label attached </p>
                                     <p className='mt-5 pb-5 font-montserrat border-b-[1px] border-black'>The product's actual color may vary slightly due to photographic lighting sources or your device.</p>
-                                    <p className='mt-5 font-monserrat font-semibold'>Manufactured, Marketed & Packed By Finch</p>
-                                    <p className='mt-5 font-monserrat'>{item.manufacturing_details}</p>
+                                    <p className='mt-5 font-montserrat font-semibold'>Manufactured, Marketed & Packed By Finch</p>
+                                    <p className='mt-5 font-montserrat'>{item.manufacturing_details}</p>
                                     <p className='text-md font-montserrat mt-5 '><span className='font-semibold mr-2'>Country Of Origin:</span>{item.country_of_origin}</p> */}
                 </div>
               </div>

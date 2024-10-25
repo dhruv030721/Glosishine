@@ -52,7 +52,7 @@ const Dashboard = () => {
       <div
         className={`${
           isSidebarOpen ? "block" : "hidden"
-        } md:block md:w-[23%] bg-green-800 border-r dark:bg-bg-green dark:border-bg-green fixed md:static inset-0 z-50`}
+        } md:block md:w-[23%] bg-bg-green border-r dark:bg-bg-green dark:border-bg-green fixed md:static inset-0 z-50`}
       >
         <div className="flex flex-col h-screen">
           <div className="flex items-center justify-between h-14 border-b dark:border-white px-4">

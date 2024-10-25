@@ -3,6 +3,8 @@ const BASE_URL = "/v1/";
 export const authendpoints = {
   LOGIN_API: BASE_URL + "auth/login.php",
   REGISTER_API: BASE_URL + "user/signup-user.php",
+  FORGOTPASSWORD_API: BASE_URL + "auth/forgot-password.php?email=",
+  CHANGEPASSWORD_API: BASE_URL + "auth/change-password.php",
   SEND_OTP: BASE_URL + "auth/send-otp.php?email=",
   VERIFY_OTP: BASE_URL + "auth/verify-otp.php",
   CONTINUEWITHGOOGLE: BASE_URL + "auth/google-login/google-oauth.php",

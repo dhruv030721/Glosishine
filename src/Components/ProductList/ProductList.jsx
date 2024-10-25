@@ -132,12 +132,26 @@ const ProductList = ({
       return;
     }
 
+    // Parse the size string and select the first available size
+    const availableSizes = product.size
+      ? product.size.split(",").map((s) => s.trim())
+      : [];
+    const defaultSize = availableSizes.length > 0 ? availableSizes[0] : null;
+
+    if (!defaultSize) {
+      toast.error("No size available for this product", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
     try {
       await toast.promise(
         dispatch(
           addItemAsync({
             email,
             product_id: product.product_id,
+            size: defaultSize,
             quantity: 1,
             // Add other necessary product details here
           })
@@ -175,9 +189,9 @@ const ProductList = ({
       data-aos-offset="0"
       className={`relative w-full h-full rounded-lg bg-white bg-opacity-30 backdrop-blur-lg border-2 border-bg-green transition-all duration-200 flex flex-col overflow-hidden ${className}`}
     >
-      <div className="relative flex flex-col overflow-hidden object-cover">
+      <div className="relative flex flex-col overflow-hidden object-cover h-full">
         <a
-          className="relative flex h-60 md:h-72 lg:h-80 xl:h-96 2xl:h-[28rem] 4xl:h-[40rem] overflow-hidden"
+          className="relative flex h-[100%] sm:h-[90%] md:h-[80%] lg:h-80 xl:h-96 2xl:h-[28rem] 4xl:h-[40rem] overflow-hidden"
           href={`/${product.product_id}`}
         >
           <img
@@ -227,15 +241,15 @@ const ProductList = ({
           )}
         </button>
 
-        <div className="mt-4 z-10 flex flex-col items-start justify-center text-center px-4">
-          <a href={`/${product.product_id}`}>
+        <div className="mt-4 z-10 flex flex-col text-center px-4">
+          <a href={`/${product.product_id}`} className="w-full">
             <h5 className="text-sm md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-semibold text-black mb-2">
               {product.product_name}
             </h5>
           </a>
 
           <div className="w-full flex items-center justify-between mb-2">
-            <div className="flex items-center space-x-1">
+            <div className="flex flex-col items-start space-y-1">
               <span className="text-md md:text-[20px] lg:text-md xl:text-xxs 2xl:text-xs 4xl:text-sm text-black font-bold">
                 ₹{product.sale_price}
               </span>

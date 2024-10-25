@@ -38,6 +38,7 @@ import TVVideoSection from "../../Components/TVSection/TvSection";
 import { getFavProduct } from "../../Services/Operations/ProductServices";
 import { removeFromWatchlist } from "../../Slice/watchlistSlice";
 import yellowLine from "../../assets/Yellow-Line.svg";
+import styled from "@emotion/styled";
 
 const Home = () => {
   const Appcontext = useContext(AppContext);
@@ -218,7 +219,7 @@ const Home = () => {
             prevArrow={({ handlePrev }) => (
               <button
                 onClick={handlePrev}
-                className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+                className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -226,7 +227,7 @@ const Home = () => {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-4 h-4 md:w-6 md:h-6"
                 >
                   <path
                     strokeLinecap="round"
@@ -239,7 +240,7 @@ const Home = () => {
             nextArrow={({ handleNext }) => (
               <button
                 onClick={handleNext}
-                className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+                className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -247,7 +248,7 @@ const Home = () => {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  className="w-6 h-6"
+                  className="w-4 h-4 md:w-6 md:h-6"
                 >
                   <path
                     strokeLinecap="round"
@@ -318,13 +319,14 @@ const Home = () => {
                     onRemove={handleRemove}
                     watchlistItems={watchlistItems}
                     setWatchlistItems={setWatchlistItems}
+                    className="h-[450px] sm:h-[350px] md:h-auto" // Increase height for mobile
                   />
                 </div>
               ))}
             </div>
             <button
               onClick={prevSlide}
-              className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+              className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -332,7 +334,7 @@ const Home = () => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-4 h-4 md:w-6 md:h-6"
               >
                 <path
                   strokeLinecap="round"
@@ -343,7 +345,7 @@ const Home = () => {
             </button>
             <button
               onClick={nextSlide}
-              className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+              className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -351,7 +353,7 @@ const Home = () => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-4 h-4 md:w-6 md:h-6"
               >
                 <path
                   strokeLinecap="round"
@@ -360,10 +362,24 @@ const Home = () => {
                 />
               </svg>
             </button>
-            <div className="mt-10 w-full flex justify-center">
+            <div className="mt-10 w-full flex justify-center align-middle">
               <div data-aos="fade-up">
-                <button className="bg-white bg-opacity-80 text-bg-green border-2 border-bg-green rounded-lg text-lg font-semibold px-4 py-2 cursor-pointer transition-transform duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:-translate-y-1 hover:-translate-x-0.5 active:shadow-bg-green active:translate-y-0.5 active:translate-x-0.5">
+                <button className="bg-bg-green bg-opacity-100 text-center align-middle text-white border-bg-green rounded-lg text-lg font-semibold px-4 py-2 cursor-pointer transition-transform duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:-translate-y-1 hover:-translate-x-0.5 active:shadow-bg-green active:translate-y-0.5 active:translate-x-0.5 flex items-center">
                   View all
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6 ml-2"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 7l5 5m0 0l-5 5m5-5H6"
+                    />
+                  </svg>
                 </button>
               </div>
             </div>
@@ -419,7 +435,7 @@ const Home = () => {
           prevArrow={({ handlePrev }) => (
             <button
               onClick={handlePrev}
-              className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+              className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -427,7 +443,7 @@ const Home = () => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-4 h-4 md:w-6 md:h-6"
               >
                 <path
                   strokeLinecap="round"
@@ -440,7 +456,7 @@ const Home = () => {
           nextArrow={({ handleNext }) => (
             <button
               onClick={handleNext}
-              className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-2 z-10"
+              className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -448,7 +464,7 @@ const Home = () => {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-6 h-6"
+                className="w-4 h-4 md:w-6 md:h-6"
               >
                 <path
                   strokeLinecap="round"

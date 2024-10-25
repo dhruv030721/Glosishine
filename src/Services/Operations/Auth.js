@@ -3,8 +3,15 @@ import { jwtDecode } from "jwt-decode";
 import { adminendpoints, authendpoints, userendpoints } from "../Apis";
 import { setItem } from "../LocalStorageService";
 
-const { CONTINUEWITHGOOGLE, REGISTER_API, LOGIN_API, SEND_OTP, VERIFY_OTP } =
-  authendpoints;
+const {
+  CONTINUEWITHGOOGLE,
+  REGISTER_API,
+  LOGIN_API,
+  SEND_OTP,
+  VERIFY_OTP,
+  FORGOTPASSWORD_API,
+  CHANGEPASSWORD_API,
+} = authendpoints;
 const { ADMIN_LOGIN } = adminendpoints;
 const { GETUSER_API } = userendpoints;
 
@@ -57,6 +64,19 @@ export async function RegisterUser(data) {
 
 export async function ContinueWithGoogle() {
   const response = await apiConnector("GET", CONTINUEWITHGOOGLE);
+  return response;
+}
+
+export async function ForgotPassword(email) {
+  const response = await apiConnector("GET", FORGOTPASSWORD_API + email);
+  return response;
+}
+
+export async function ChangePassword(email, password) {
+  const response = await apiConnector("POST", CHANGEPASSWORD_API, {
+    email,
+    password,
+  });
   return response;
 }
 
