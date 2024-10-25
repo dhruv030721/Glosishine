@@ -9,7 +9,7 @@ import {
   GetBilling,
   GetShipping,
 } from "../../Services/Operations/Auth";
-import { FaChevronRight, FaCog, FaPlus } from "react-icons/fa";
+import { FaChevronRight, FaCog, FaPlus, FaSignOutAlt } from "react-icons/fa";
 import AddressCard from "../../Components/Address/AddressCard";
 import CommonTable from "../../Components/CommonTable/CommonTable";
 import Modal from "@mui/joy/Modal";
@@ -117,11 +117,13 @@ const Account = () => {
         }
       });
     }
+
+    window.location.reload();
   };
 
   const UserProfile = ({ userData }) => (
     <div className="flex items-center gap-4">
-      <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
+      <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gray-300 rounded-full flex items-center justify-center">
         <img
           src={userData.profile_img || "https://via.placeholder.com/150"}
           alt="User"
@@ -129,18 +131,23 @@ const Account = () => {
         />
       </div>
       <div>
-        <h2 className="text-2xl font-poppins font-bold">{userData.name}</h2>
-        <p className="text-gray-500 font-monserrat">{userData.email}</p>
+        <h2 className="text-xl sm:text-2xl font-poppins font-bold">
+          {userData.name}
+        </h2>
+        <p className="text-sm sm:text-base text-gray-500 font-monserrat">
+          {userData.email}
+        </p>
       </div>
     </div>
   );
 
   const LogoutButton = ({ onLogout }) => (
     <button
-      className="px-6 py-2 bg-red-600 text-white font-poppins rounded-md hover:bg-red-700 transition-colors"
+      className="sm:px-6 p-2 bg-red-600 text-white font-poppins rounded-md hover:bg-red-700 transition-colors absolute top-4 right-4 sm:static"
       onClick={onLogout}
     >
-      Logout
+      <span className="hidden sm:inline text-sm sm:text-base">Logout</span>
+      <FaSignOutAlt className="sm:hidden" size={20} />
     </button>
   );
 
@@ -148,31 +155,32 @@ const Account = () => {
     <Modal keepMounted open={open} onClose={onClose}>
       <ModalDialog
         sx={{
-          width: "30%",
-          height: "20%",
-          "@media (max-width:440px)": {
-            height: "17%",
-            width: "65%",
+          maxWidth: "90%",
+          width: {
+            xs: "300px",
+            sm: "400px",
+            md: "450px",
           },
-          "@media (max-width:380px)": {
-            height: "22%",
-            width: "70%",
+          padding: {
+            xs: "16px",
+            sm: "24px",
           },
+          borderRadius: "8px",
         }}
       >
-        <div>
-          <div className="text-xl font-dm-sans text-black">
+        <div className="text-center">
+          <h2 className="text-xl font-bold mb-4 font-dm-sans text-black">
             Are you sure you want to log out?
-          </div>
-          <div className="flex flex-row justify-end gap-4 mt-3">
+          </h2>
+          <div className="flex flex-col sm:flex-row justify-center gap-3 mt-6">
             <button
-              className="text-black bg-slate-200 hover:bg-bg-green hover:text-white text-lg font-poppins items-center flex justify-center p-2 rounded-lg w-24 font-semibold"
+              className="w-full sm:w-auto px-4 py-2 text-black bg-gray-200 hover:bg-gray-300 text-base font-poppins rounded-lg font-semibold transition-colors"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
-              className="text-white bg-red-600 hover:bg-red-700 text-lg font-poppins items-center flex justify-center p-2 rounded-lg w-24 font-semibold"
+              className="w-full sm:w-auto px-4 py-2 text-white bg-red-600 hover:bg-red-700 text-base font-poppins rounded-lg font-semibold transition-colors"
               onClick={onLogout}
             >
               Confirm
@@ -184,8 +192,8 @@ const Account = () => {
   );
 
   const OrderHistory = ({ orders }) => (
-    <div className="bg-bg-green bg-opacity-10 rounded-lg p-6">
-      <h2 className="text-xl font-bold mb-4 font-outfit text-bg-green">
+    <div className="bg-bg-green bg-opacity-10 rounded-lg p-4 sm:p-6">
+      <h2 className="text-lg sm:text-xl font-bold mb-4 font-outfit text-bg-green">
         Order History
       </h2>
       <div className="overflow-x-auto">
@@ -194,41 +202,38 @@ const Account = () => {
           renderHeader={() => (
             <thead>
               <tr className="bg-bg-green text-white">
-                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
                   Order ID
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
                   Date
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
                   Total
                 </th>
-                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
                   Status
-                </th>
-                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
-                  Actions
                 </th>
               </tr>
             </thead>
           )}
           renderRow={(order) => (
             <tr key={order.id} className="bg-white">
-              <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-bg-green">
+              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-bg-green">
                 #{order.id}
               </td>
-              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                 {order.date}
               </td>
-              <td className="px-4 py-4 whitespace-nowrap text-sm text-bg-green">
+              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-bg-green">
                 ₹{order.total}
               </td>
-              <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
                 {order.status}
               </td>
-              <td className="px-4 py-4 whitespace-nowrap text-sm">
+              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
                 <button className="text-bg-green hover:text-green-700 transition-colors">
-                  <FaChevronRight size={16} />
+                  <FaChevronRight size={14} sm:size={16} />
                 </button>
               </td>
             </tr>
@@ -293,18 +298,13 @@ const Account = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
-      <div className="container mx-auto py-8">
-        <div className="bg-white rounded-lg shadow-lg p-8">
-          <div className="flex justify-between items-center">
+      <div className="container mx-auto py-4 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8">
+        <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 relative">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">
             <UserProfile userData={userData} />
-            <button
-              onClick={() => setSettingsOpen(true)}
-              className="text-bg-green hover:text-green-700 transition-colors"
-            >
-              <FaCog size={24} />
-            </button>
+            <LogoutButton onLogout={() => setSettingsOpen(true)} />
           </div>
-          <div className="mt-8 grid gap-6">
+          <div className="mt-6 sm:mt-8 grid gap-4 sm:gap-6 md:grid-cols-2">
             <AddressCard
               title="Billing Address"
               addresses={billingAddresses}
@@ -325,7 +325,9 @@ const Account = () => {
               }
               onAddAddress={() => openAddressModal("shipping")}
             />
-            <OrderHistory orders={userData?.orders || []} />
+            <div className="md:col-span-2">
+              <OrderHistory orders={userData?.orders || []} />
+            </div>
           </div>
         </div>
       </div>
@@ -339,7 +341,7 @@ const Account = () => {
         address={editingAddress}
         onAddressUpdate={handleAddressUpdate}
       />
-      <SettingsModal
+      <LogoutModal
         open={settingsOpen}
         onClose={() => setSettingsOpen(false)}
         onLogout={logoutHandler}
