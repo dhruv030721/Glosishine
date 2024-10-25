@@ -91,10 +91,10 @@ const Account = () => {
     navigate("/");
   };
 
-  const openAddressModal = (type, address) => {
+  const openAddressModal = (type, address = null) => {
     setAddressType(type);
-    setAddressModalOpen(true);
     setEditingAddress(address);
+    setAddressModalOpen(true);
   };
 
   const handleAddressUpdate = (type, newAddress) => {
@@ -310,7 +310,9 @@ const Account = () => {
               addresses={billingAddresses}
               selectedId={selectedBillingId}
               onSelectAddress={setSelectedBillingId}
-              onEditAddress={(address) => openAddressModal("billing", address)}
+              onEditAddress={(id, address) =>
+                openAddressModal("billing", address)
+              }
               onAddAddress={() => openAddressModal("billing")}
             />
             <AddressCard
@@ -318,7 +320,9 @@ const Account = () => {
               addresses={shippingAddresses}
               selectedId={selectedShippingId}
               onSelectAddress={setSelectedShippingId}
-              onEditAddress={(address) => openAddressModal("shipping", address)}
+              onEditAddress={(id, address) =>
+                openAddressModal("shipping", address)
+              }
               onAddAddress={() => openAddressModal("shipping")}
             />
             <OrderHistory orders={userData?.orders || []} />

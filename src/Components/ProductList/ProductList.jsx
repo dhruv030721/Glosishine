@@ -248,18 +248,19 @@ const ProductList = ({
             </h5>
           </a>
 
-          <span className="text-xxs bg-bg-green p-1 w-fit mx-auto font-semibold rounded-md md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-white">
-            ({product.discount}% OFF)
-          </span>
-
           <div className="w-full flex items-center justify-between mb-2">
-            <div className="flex flex-row items-center space-x-2 md:space-x-1">
-              <span className="text-md md:text-[20px] lg:text-md xl:text-xxs 2xl:text-xs 4xl:text-sm text-black font-bold">
+            <div className="flex flex-col items-start space-x-2 md:space-x-1">
+              <span className="text-md  md:text-[20px] lg:text-md xl:text-xxs 2xl:text-xs 4xl:text-sm text-black font-bold">
                 ₹{product.sale_price}
               </span>
-              <span className="text-xs md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-gray-500 line-through">
-                ₹{product.regular_price}
-              </span>
+              <div className="flex flex-row items-center space-x-2 md:space-x-3">
+                <span className="text-sm font-semibold md:text-sm lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-gray-500 line-through">
+                  ₹{product.regular_price}
+                </span>
+                <span className="text-xxs bg-bg-green py-1 px-2 w-fit mx-auto font-semibold rounded-md md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-white">
+                  ({product.discount}% OFF)
+                </span>
+              </div>
             </div>
 
             <button

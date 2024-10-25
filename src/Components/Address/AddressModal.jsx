@@ -14,17 +14,17 @@ const AddressModal = ({
   onAddressUpdate,
 }) => {
   const { user } = useContext(AppContext);
-  const [id, setId] = useState(null);
   const [streetAddress, setStreetAddress] = useState("");
   const [city, setCity] = useState("");
   const [state, setState] = useState("");
   const [postcode, setPostcode] = useState("");
   const [contact, setContact] = useState("");
   const [orderNotes, setOrderNotes] = useState("");
+  const [id, setId] = useState(null);
 
   useEffect(() => {
     if (address) {
-      setId(address.id);
+      setId(address.id || null);
       setStreetAddress(address.street_address || "");
       setCity(address.city || "");
       setState(address.state || "");
@@ -50,43 +50,40 @@ const AddressModal = ({
       return;
     }
 
-    const newAddress = {
-      email,
-      [`${addressType}_details`]: {
-        contact,
-        street_address: streetAddress,
-        city,
-        state,
-        postcode,
-        ...(addressType === "shipping" && { order_notes: orderNotes }),
-      },
+    const addressDetails = {
+      contact,
+      street_address: streetAddress,
+      city,
+      state,
+      postcode,
+      ...(addressType === "shipping" && { order_notes: orderNotes }),
     };
 
-    if (id) {
-      newAddress[`${addressType}_details`].id = id;
+    const newAddress = {
+      email,
+      id,
+      // Use the correct key based on addressType
+      [addressType === "billing" ? "billing_details" : "shipping_details"]:
+        addressDetails,
+    };
+
+    // Select the correct update function based on addressType
+    const updateFunction =
+      addressType === "billing" ? UpdateBilling : UpdateShipping;
+
+    try {
+      const response = await updateFunction(newAddress);
+      onAddressUpdate(addressType, response.data);
+      onClose();
+      toast.success(
+        `${
+          addressType.charAt(0).toUpperCase() + addressType.slice(1)
+        } address updated successfully!`
+      );
+    } catch (error) {
+      console.error(`Failed to update ${addressType} address:`, error);
+      toast.error(`Failed to update ${addressType} address`);
     }
-
-    const updatePromise = (
-      addressType === "billing" ? UpdateBilling : UpdateShipping
-    )(newAddress);
-
-    toast.promise(
-      updatePromise,
-      {
-        loading: "Updating address...",
-        success: (response) => {
-          onAddressUpdate(addressType, response.data);
-          onClose();
-          return "Address updated successfully!";
-        },
-        error: "Failed to update address",
-      },
-      {
-        style: {
-          minWidth: "250px",
-        },
-      }
-    );
   };
 
   return (
@@ -104,7 +101,7 @@ const AddressModal = ({
           maxWidth: 500,
           borderRadius: "md",
           boxShadow: "lg",
-          p: 0, // Remove padding
+          p: 0,
         }}
       >
         <div className="bg-bg-green text-white p-4 rounded-t-lg">
