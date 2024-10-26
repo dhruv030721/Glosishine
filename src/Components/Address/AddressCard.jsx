@@ -11,6 +11,7 @@ const AddressCard = ({
   onSelectAddress,
   onEditAddress,
   onAddAddress,
+  className,
 }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -69,7 +70,7 @@ const AddressCard = ({
   return (
     <>
       <div
-        className="bg-bg-green bg-opacity-10 rounded-lg p-4 cursor-pointer"
+        className={`bg-bg-green bg-opacity-10 rounded-lg p-4 cursor-pointer ${className}`}
         onClick={toggleModal}
       >
         <h3 className="text-bg-green font-semibold text-lg mb-2">{title}</h3>

@@ -8,6 +8,7 @@ import {
   inventoryendpoints,
   discountendpoints,
   RAZORPAY_API,
+  dashboardendpoints,
 } from "../Apis";
 import Cookies from "js-cookie"; // Make sure to install and import js-cookie
 
@@ -141,6 +142,23 @@ export async function getReview(id) {
   const response = await apiConnector(
     "GET",
     reviewendpoints.GETREVIEW_API + id
+  );
+  return response;
+}
+
+export async function getNewDropProduct() {
+  const response = await apiConnector(
+    "GET",
+    productendpoints.GETNEWDROPPRODUCT_API
+  );
+  return response;
+}
+
+export async function updateNewDropStatus(id, status) {
+  const response = await apiConnector(
+    "POST",
+    productendpoints.NEWDROPSTATUS_API,
+    { product_id: id, status }
   );
   return response;
 }
@@ -409,6 +427,7 @@ export const deleteDiscount = async (couponCode_id) => {
   return response.data;
 };
 
+//payments
 export const createRazorpayOrder = async (amount) => {
   try {
     const response = await apiConnector("POST", RAZORPAY_API.CREATE_ORDER, {
@@ -433,4 +452,13 @@ export const verifyRazorpayPayment = async (paymentData) => {
     console.error("Error verifying Razorpay payment:", error);
     throw error;
   }
+};
+
+//dashboard
+export const getDashboardData = async () => {
+  const response = await apiConnector(
+    "GET",
+    dashboardendpoints.GETDASHBOARD_API
+  );
+  return response.data;
 };

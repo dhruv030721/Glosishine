@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react/no-unescaped-entities */
 import React, { useState, useEffect } from "react";
 import { fetchDashboardData } from "../../Services/MockApi";
@@ -19,7 +20,9 @@ import Collapse from "@mui/material/Collapse";
 import CommonTable from "../../Components/CommonTable/CommonTable";
 import { styled } from "@mui/material/styles";
 import { tailChase } from "ldrs";
-
+import { getDashboardData } from "../../Services/Operations/ProductServices";
+import { UpdateOrderStatus } from "../../Services/Operations/Auth";
+import { toast } from "react-hot-toast";
 const BorderedCard = styled(Card)({
   boxShadow: "none",
   border: "1px solid #e0e0e0", // Light gray border
@@ -34,9 +37,22 @@ const DashboardContent = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setLoading(true);
-    setData(fetchDashboardData());
-    setLoading(false);
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await getDashboardData();
+        if (response.success) {
+          setData(response.data);
+        } else {
+          console.error("Failed to fetch dashboard data:", response.message);
+        }
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+      setLoading(false);
+    };
+
+    fetchData();
   }, []);
 
   tailChase.register();
@@ -45,22 +61,55 @@ const DashboardContent = () => {
     setView(event.target.value);
   };
 
-  const handleStatusChange = (orderId, newStatus) => {
-    setOrderStatuses((prev) => ({
-      ...prev,
-      [orderId]: newStatus,
-    }));
+  const handleStatusChange = async (orderId, newStatus) => {
+    toast.promise(
+      UpdateOrderStatus({
+        order_id: orderId,
+        order_status: newStatus,
+      }),
+      {
+        loading: "Updating order status...",
+        success: (response) => {
+          if (response.data.success) {
+            setOrderStatuses((prev) => ({
+              ...prev,
+              [orderId]: newStatus,
+            }));
+            setData((prevData) => ({
+              ...prevData,
+              latestOrders: prevData.latestOrders.map((order) =>
+                order.order_id === orderId
+                  ? { ...order, order_status: newStatus }
+                  : order
+              ),
+            }));
+            return "Order status updated successfully";
+          } else {
+            throw new Error(
+              response.data.message || "Failed to update order status"
+            );
+          }
+        },
+        error: (error) => {
+          console.error("Error updating order status:", error);
+          return (
+            error.message || "An error occurred while updating order status"
+          );
+        },
+      },
+      { position: "bottom-right" }
+    );
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "Processing":
+      case "PROCESSING":
         return "bg-yellow-100 text-yellow-800";
-      case "Accepted":
+      case "PENDING":
         return "bg-green-100 text-green-800";
-      case "Cancelled":
+      case "CANCELLED":
         return "bg-red-100 text-red-800";
-      case "Shipped":
+      case "DELIVERED":
         return "bg-blue-100 text-blue-800";
       default:
         return "bg-gray-100 text-gray-800";
@@ -77,28 +126,21 @@ const DashboardContent = () => {
     switch (view) {
       case "latestOrders":
         return {
-          title: "Latest 5 Orders",
+          title: "Latest Orders",
           count: data.latestOrders.length,
-          earnings: data.latestOrders.reduce(
-            (acc, order) => acc + order.amount,
-            0
-          ),
+          earnings: parseFloat(data.totalEarnings),
         };
       case "todayOrders":
         return {
           title: "Today's Orders",
           count: data.todayOrders,
-          earnings: data.latestOrders
-            .filter(
-              (order) => order.date === new Date().toISOString().split("T")[0]
-            )
-            .reduce((acc, order) => acc + order.amount, 0),
+          earnings: parseFloat(data.totalEarnings),
         };
       case "totalOrders":
         return {
           title: "Total Orders",
           count: data.totalOrders,
-          earnings: data.totalEarnings,
+          earnings: parseFloat(data.totalEarnings),
         };
       default:
         return { title: "Overview", count: 0, earnings: 0 };
@@ -108,18 +150,18 @@ const DashboardContent = () => {
   const summaryData = getSummaryData();
 
   const renderRow = (order, index) => (
-    <React.Fragment key={order.id}>
+    <React.Fragment key={order.order_id}>
       <tr>
         <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
           {index + 1}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
-          <div className="text-sm font-medium text-bg-green">{`SC${order.date.replace(
-            /-/g,
-            "/"
-          )}/000${order.id}`}</div>
+          <div className="text-sm font-medium text-bg-green">
+            {order.order_id}
+          </div>
           <div className="text-sm text-gray-500">
-            {order.date} - {order.time}
+            {new Date(order.created_at).toLocaleDateString()} -{" "}
+            {new Date(order.created_at).toLocaleTimeString()}
           </div>
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
@@ -127,14 +169,17 @@ const DashboardContent = () => {
             <div className="flex-shrink-0 h-10 w-10">
               <img
                 className="h-10 w-10 rounded-full object-cover"
-                src={defaultImage}
+                src={
+                  order.order_items[0]?.product_details.image_url ||
+                  defaultImage
+                }
                 alt=""
               />
             </div>
             <div className="ml-4">
               <div className="text-sm font-medium text-bg-green">
-                {order?.items?.map((item, index) => (
-                  <p key={index}>{item.name}</p>
+                {order.order_items.map((item, index) => (
+                  <p key={index}>{item.product_details.name}</p>
                 ))}
               </div>
               <div className="text-sm text-gray-500">{order.email}</div>
@@ -142,14 +187,21 @@ const DashboardContent = () => {
           </div>
         </td>
         <td className="px-4 py-4 whitespace-nowrap text-sm text-bg-green">
-          ₹ {order.amount}
+          ₹{" "}
+          {order.order_items
+            .reduce(
+              (total, item) =>
+                total + parseFloat(item.product_details.price) * item.quantity,
+              0
+            )
+            .toFixed(2)}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
           <Select
-            value={orderStatuses[order.id] || "Processing"}
-            onChange={(e) => handleStatusChange(order.id, e.target.value)}
+            value={orderStatuses[order.order_id] || order.order_status}
+            onChange={(e) => handleStatusChange(order.order_id, e.target.value)}
             className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusColor(
-              orderStatuses[order.id] || "Processing"
+              orderStatuses[order.order_id] || order.order_status
             )}`}
             sx={{
               borderRadius: "9999px",
@@ -165,74 +217,87 @@ const DashboardContent = () => {
               ".MuiSelect-select": { py: 1 }, // Adjust y-axis padding here
             }}
           >
-            <MenuItem value="Processing">Processing</MenuItem>
-            <MenuItem value="Accepted">Accepted</MenuItem>
-            <MenuItem value="Cancelled">Cancelled</MenuItem>
-            <MenuItem value="Shipped">Shipped</MenuItem>
+            <MenuItem value="PENDING">Pending</MenuItem>
+            <MenuItem value="PROCESSING">Processing</MenuItem>
+            <MenuItem value="DELIVERED">Delivered</MenuItem>
+            <MenuItem value="CANCELLED">Cancelled</MenuItem>
           </Select>
         </td>
         <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
           <button
             className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition-colors duration-200"
-            onClick={() => toggleOrderDetails(order.id)}
+            onClick={() => toggleOrderDetails(order.order_id)}
           >
-            {expandedOrder === order.id ? "Hide details" : "See details"}
+            {expandedOrder === order.order_id ? "Hide details" : "See details"}
           </button>
         </td>
       </tr>
-      <tr>
-        <td colSpan="6" className="px-4 py-4">
-          <Collapse in={expandedOrder === order.id}>
+      {expandedOrder === order.order_id && (
+        <tr>
+          <td colSpan="6" className="px-4 py-4">
             <div className="bg-gray-50 p-4 rounded-md">
               <h4 className="font-bold mb-2">Order Details</h4>
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="px-4 py-2 text-left">Product</th>
-                    <th className="px-4 py-2 text-left">SKU</th>
+                    <th className="px-4 py-2 text-left">Size</th>
                     <th className="px-4 py-2 text-left">Price</th>
                     <th className="px-4 py-2 text-left">Quantity</th>
                     <th className="px-4 py-2 text-left">Total</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {order.items &&
-                    order.items.map((item, itemIndex) => (
-                      <tr key={itemIndex} className="border-t border-gray-200">
-                        <td className="px-4 py-2">
-                          <div className="flex items-center">
-                            <img
-                              src={defaultImage}
-                              alt={item.name}
-                              className="w-10 h-10 object-cover mr-2"
-                            />
-                            {item.name}
-                          </div>
-                        </td>
-                        <td className="px-4 py-2">{item.sku}</td>
-                        <td className="px-4 py-2 text-bg-green">
-                          ₹{item.price}
-                        </td>
-                        <td className="px-4 py-2">{item.quantity}</td>
-                        <td className="px-4 py-2">
-                          ₹{item.price * item.quantity}
-                        </td>
-                      </tr>
-                    ))}
+                  {order.order_items.map((item, itemIndex) => (
+                    <tr key={itemIndex} className="border-t border-gray-200">
+                      <td className="px-4 py-2">
+                        <div className="flex items-center">
+                          <img
+                            src={item.product_details.image_url || defaultImage}
+                            alt={item.product_details.name}
+                            className="w-10 h-10 object-cover mr-2"
+                          />
+                          {item.product_details.name}
+                        </div>
+                      </td>
+                      <td className="px-4 py-2">{item.size}</td>
+                      <td className="px-4 py-2 text-bg-green">
+                        ₹{parseFloat(item.product_details.price).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-2">{item.quantity}</td>
+                      <td className="px-4 py-2">
+                        ₹
+                        {(
+                          parseFloat(item.product_details.price) * item.quantity
+                        ).toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
                 <tfoot>
                   <tr className="border-t border-gray-200 font-bold">
                     <td colSpan="4" className="px-4 py-2 text-right">
                       Total:
                     </td>
-                    <td className="px-4 py-2">₹{order.amount}</td>
+                    <td className="px-4 py-2">
+                      ₹
+                      {order.order_items
+                        .reduce(
+                          (total, item) =>
+                            total +
+                            parseFloat(item.product_details.price) *
+                              item.quantity,
+                          0
+                        )
+                        .toFixed(2)}
+                    </td>
                   </tr>
                 </tfoot>
               </table>
             </div>
-          </Collapse>
-        </td>
-      </tr>
+          </td>
+        </tr>
+      )}
     </React.Fragment>
   );
 
@@ -282,26 +347,31 @@ const DashboardContent = () => {
         >
           Dashboard Overview
         </Typography>
-        <FormControl variant="outlined" className="w-full sm:w-1/2 md:w-1/4">
-          <InputLabel style={{ color: "green" }}>View</InputLabel>
-          <Select
-            value={view}
-            onChange={handleChange}
-            label="View"
-            style={{ color: "green", borderColor: "green" }}
+        <div className="hidden ">
+          <FormControl
+            variant="outlined"
+            className="w-full sm:w-1/2 md:w-1/4 hidden"
           >
-            <MenuItem value="latestOrders">Latest 5 Orders</MenuItem>
-            <MenuItem value="todayOrders">Today's Orders</MenuItem>
-            <MenuItem value="totalOrders">Total Orders</MenuItem>
-          </Select>
-        </FormControl>
+            <InputLabel style={{ color: "green" }}>View</InputLabel>
+            <Select
+              value={view}
+              onChange={handleChange}
+              label="View"
+              style={{ color: "green", borderColor: "green" }}
+            >
+              <MenuItem value="latestOrders">Latest 5 Orders</MenuItem>
+              <MenuItem value="todayOrders">Today's Orders</MenuItem>
+              <MenuItem value="totalOrders">Total Orders</MenuItem>
+            </Select>
+          </FormControl>
+        </div>
       </div>
       <Grid container spacing={3} className="mb-6">
         {[
           {
             icon: InventoryIcon,
             title: "Products",
-            value: data?.products || 0,
+            value: data?.totalProducts || 0,
           },
           {
             icon: ShoppingCartIcon,
@@ -316,7 +386,7 @@ const DashboardContent = () => {
           {
             icon: MonetizationOnIcon,
             title: "Total Earning",
-            value: `₹ ${data?.totalEarnings || 0}`,
+            value: `₹ ${parseFloat(data?.totalEarnings || 0).toFixed(2)}`,
           },
         ].map((item, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
@@ -330,12 +400,16 @@ const DashboardContent = () => {
                   <Typography
                     variant="h6"
                     className="font-bold text-gray-600 text-sm sm:text-base"
+                    sx={{
+                      fontFamily: "montserrat",
+                      fontWeight: "bold",
+                    }}
                   >
                     {item.title}
                   </Typography>
                   <Typography
-                    variant="h4"
-                    className="text-green-600 text-xl sm:text-2xl font-bold"
+                    variant="h5"
+                    className="text-green-600 text-sm sm:text-sm font-bold"
                   >
                     {item.value}
                   </Typography>
@@ -349,7 +423,7 @@ const DashboardContent = () => {
         <BorderedCard>
           <CardContent>
             <Typography variant="h6" className="font-bold mb-4 text-green-600">
-              {summaryData.title}
+              {view === "latestOrders" ? "Latest Orders" : "Today's Orders"}
             </Typography>
             {view === "latestOrders" && (
               <div className="overflow-x-auto">

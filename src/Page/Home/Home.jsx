@@ -35,7 +35,10 @@ import ScribbleLineImg from "../../assets/ScribbleLineImg.png";
 import ProductList from "../../Components/ProductList/ProductList";
 import { tailChase } from "ldrs";
 import TVVideoSection from "../../Components/TVSection/TvSection";
-import { getFavProduct } from "../../Services/Operations/ProductServices";
+import {
+  getFavProduct,
+  getNewDropProduct,
+} from "../../Services/Operations/ProductServices";
 import { removeFromWatchlist } from "../../Slice/watchlistSlice";
 import yellowLine from "../../assets/Yellow-Line.svg";
 import styled from "@emotion/styled";
@@ -50,6 +53,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [watchlistItems, setWatchlistItems] = useState([]);
+  const [newDropProducts, setNewDropProducts] = useState([]);
 
   const itemsPerPage = {
     mobile: 1,
@@ -87,19 +91,20 @@ const Home = () => {
   const activeSlideRef = useRef(null);
 
   const nextSlide = useCallback(() => {
-    setCurrentIndex(
-      (prevIndex) =>
-        (prevIndex + 1) % (Appcontext.getdata.length - currentItemsPerPage + 1)
+    setCurrentIndex((prevIndex) =>
+      prevIndex + currentItemsPerPage >= newDropProducts.length
+        ? 0
+        : prevIndex + currentItemsPerPage
     );
-  }, [Appcontext.getdata.length, currentItemsPerPage]);
+  }, [currentItemsPerPage, newDropProducts.length]);
 
   const prevSlide = useCallback(() => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0
-        ? Appcontext.getdata.length - currentItemsPerPage
-        : prevIndex - 1
+      prevIndex - currentItemsPerPage < 0
+        ? Math.max(newDropProducts.length - currentItemsPerPage, 0)
+        : prevIndex - currentItemsPerPage
     );
-  }, [Appcontext.getdata.length, currentItemsPerPage]);
+  }, [currentItemsPerPage, newDropProducts.length]);
 
   useEffect(() => {
     AOS.init({
@@ -146,6 +151,14 @@ const Home = () => {
           }
         }
 
+        // Fetch new drop products
+        const newDropData = await getNewDropProduct();
+        if (Array.isArray(newDropData.data.data)) {
+          setNewDropProducts(newDropData.data.data);
+        } else {
+          console.error("Expected an array for new drop products data.");
+        }
+
         setLoading(false);
       } catch (error) {
         console.log(error);
@@ -160,7 +173,7 @@ const Home = () => {
     }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(timer);
-  }, [nextSlide]);
+  }, [nextSlide, newDropProducts]);
 
   const addToCart = (id) => {
     if (Appcontext.CartProducts.map((item) => item.product_id !== id)) {
@@ -308,7 +321,7 @@ const Home = () => {
                 }%)`,
               }}
             >
-              {Appcontext.getdata.map((product, index) => (
+              {newDropProducts.map((product, index) => (
                 <div
                   key={product.product_id}
                   className="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/5 px-2"
@@ -319,7 +332,7 @@ const Home = () => {
                     onRemove={handleRemove}
                     watchlistItems={watchlistItems}
                     setWatchlistItems={setWatchlistItems}
-                    className="h-[500px] sm:h-[350px] md:h-[500px]" // Increase height for mobile
+                    className="min-h-[500px] sm:min-h-[350px] md:min-h-[500px]"
                   />
                 </div>
               ))}
@@ -365,9 +378,11 @@ const Home = () => {
             <div className="mt-10 w-full flex justify-center align-middle">
               <div data-aos="fade-up" className="hover:p-2">
                 <button className="bg-bg-green p-1 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:w-auto hover:px-4 group">
-                  <span className="hidden group-hover:inline mr-2 font-semibold">
-                    View all
-                  </span>
+                  <a href="/newdrops">
+                    <span className="hidden group-hover:inline mr-2 font-semibold">
+                      View all
+                    </span>
+                  </a>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-6 w-6"

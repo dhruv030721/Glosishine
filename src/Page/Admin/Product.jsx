@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useCallback, useContext, useState, useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
 import toast from "react-hot-toast";
@@ -5,20 +6,25 @@ import { AppContext } from "../../App.jsx";
 import {
   deleteProduct,
   getProduct,
+  getNewDropProduct,
+  updateNewDropStatus,
 } from "../../Services/Operations/ProductServices.js";
 import EditProduct from "./EditProduct.jsx";
 import { tailChase } from "ldrs";
-import { Typography } from "@mui/material";
+import { Typography, Switch } from "@mui/material";
+import CommonTable from "../../Components/CommonTable/CommonTable.jsx";
 
 const Product = () => {
   const Appcontext = useContext(AppContext);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
+  const [newDropProducts, setNewDropProducts] = useState({});
 
   tailChase.register();
 
   useEffect(() => {
     fetchProducts();
+    fetchNewDropProducts();
   }, []);
 
   const fetchProducts = async () => {
@@ -28,7 +34,20 @@ const Product = () => {
     } catch (error) {
       console.error("Error fetching products:", error);
     } finally {
-      setLoading(false); // Set loading to false after fetching
+      setLoading(false);
+    }
+  };
+
+  const fetchNewDropProducts = async () => {
+    try {
+      const newDropData = await getNewDropProduct();
+      const newDropMap = {};
+      newDropData.data.data.forEach((product) => {
+        newDropMap[product.product_id] = product.new_drops === 1;
+      });
+      setNewDropProducts(newDropMap);
+    } catch (error) {
+      console.error("Error fetching new drop products:", error);
     }
   };
 
@@ -36,39 +55,130 @@ const Product = () => {
     setProducts(updatedProducts);
   };
 
-  const deleteProductHandler = useCallback(
-    async (id) => {
-      await toast.promise(
-        deleteProduct(id),
-        {
-          loading: "Processing....",
-          success: (response) => {
-            Appcontext.setGetdata((product) =>
-              product.filter((product) => product.product_id !== id)
-            );
-            return `${response.data.message}`;
-          },
-          error: (error) => {
-            return `${error.response.data.message}`;
-          },
+  const handleNewDropToggle = async (productId, currentStatus) => {
+    const newStatus = !currentStatus;
+    try {
+      await updateNewDropStatus(productId, newStatus.toString());
+      setNewDropProducts((prev) => ({ ...prev, [productId]: newStatus }));
+      toast.success(`New Drop status updated for product ${productId}`, {
+        position: "bottom-right",
+      });
+    } catch (error) {
+      console.error("Error updating new drop status:", error);
+      toast.error("Failed to update New Drop status", {
+        position: "bottom-right",
+      });
+    }
+  };
+
+  const deleteProductHandler = useCallback(async (id) => {
+    await toast.promise(
+      deleteProduct(id),
+      {
+        loading: "Processing....",
+        success: (response) => {
+          setProducts((prevProducts) =>
+            prevProducts.filter((product) => product.product_id !== id)
+          );
+          return `${response.data.message}`;
         },
-        {
-          position: "bottom-right", // Set toast position here
+        error: (error) => {
+          return `${error.response.data.message}`;
         },
-        {
-          style: {
-            fontFamily: "'dm-sans', sans-serif",
-            fontSize: "14px",
-            fontWeight: "400",
-            lineHeight: "1.5",
-          },
-        }
-      );
-    },
-    [Appcontext.setGetdata]
+      },
+      {
+        position: "bottom-right",
+      }
+    );
+  }, []);
+
+  const renderHeader = () => (
+    <thead className="w-full">
+      <tr className="bg-bg-green text-white">
+        <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Product
+        </th>
+        <th className="px-2 sm:px-4 py-2 text-center text-xs font-medium uppercase tracking-wider hidden sm:table-cell">
+          Price
+        </th>
+        <th className="px-2 sm:px-4 py-2 text-center text-xs font-medium uppercase tracking-wider hidden md:table-cell">
+          Size
+        </th>
+        <th className="px-2 sm:px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">
+          New Drop
+        </th>
+        <th className="px-2 sm:px-4 py-2 text-center text-xs font-medium uppercase tracking-wider">
+          Action
+        </th>
+      </tr>
+    </thead>
   );
 
-  console.log(products);
+  const renderRow = (product, index) => (
+    <tr
+      key={product.product_id}
+      className="border-t border-gray-200 text-bg-green"
+    >
+      <td className="px-2 sm:px-4 py-4">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center">
+          <img
+            src={product.images[0] || "default-image-url"}
+            alt={product.product_name}
+            className="w-16 h-16 sm:w-28 sm:h-full object-cover rounded-md mr-0 sm:mr-4 mb-2 sm:mb-0"
+          />
+          <div>
+            <h3 className="font-semibold text-sm sm:text-base">
+              {product.product_name}
+            </h3>
+            <p className="text-gray-500 text-xs sm:text-sm">
+              Brand: {product.brand_name}
+            </p>
+            <p className="text-gray-500 text-xs sm:text-sm">
+              Product ID: {product.product_id}
+            </p>
+            <p className="text-gray-500 text-xs sm:text-sm sm:hidden">
+              Price: ₹{product.sale_price}
+            </p>
+            <p className="text-gray-500 text-xs sm:text-sm md:hidden">
+              Size: {product.size}
+            </p>
+          </div>
+        </div>
+      </td>
+      <td className="px-2 sm:px-4 py-4 text-center hidden sm:table-cell">
+        ₹{product.sale_price}
+      </td>
+      <td className="px-2 sm:px-4 py-4 text-center hidden md:table-cell">
+        {product.size}
+      </td>
+      <td className="px-2 sm:px-4 py-4 text-center">
+        <Switch
+          checked={newDropProducts[product.product_id] || false}
+          onChange={() =>
+            handleNewDropToggle(
+              product.product_id,
+              newDropProducts[product.product_id]
+            )
+          }
+          color="success"
+        />
+      </td>
+      <td className="px-2 sm:px-4 py-4 text-center">
+        <div className="flex justify-center gap-2">
+          <EditProduct
+            id={product.product_id}
+            onProductUpdate={handleProductUpdate}
+          />
+          <button
+            onClick={() => deleteProductHandler(product.product_id)}
+            className="border-2 border-red-500 border-dashed rounded-lg p-2"
+          >
+            <FaTrash className="w-3 h-3 sm:w-4 sm:h-4" color="red" />
+          </button>
+        </div>
+      </td>
+    </tr>
+  );
 
   if (loading) {
     return (
@@ -87,89 +197,23 @@ const Product = () => {
     <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">
       <Typography
         variant="h4"
-        className="font-bold text-bg-green text-2xl sm:text-3xl mb-2 sm:mb-0"
+        className="font-bold text-bg-green text-xl sm:text-2xl md:text-3xl mb-4"
       >
         Products
       </Typography>
 
-      <div className="grid grid-cols-1 gap-4 sm:gap-6">
-        <div className="col-span-1">
-          <div className="p-3 sm:p-4 md:p-6 bg-white border-2 border-gray-200 rounded-md">
-            <div className="hidden sm:grid grid-cols-12 gap-2 mb-4 p-2 sm:p-4 bg-gray-100 rounded-md">
-              <div className="col-span-5 text-left">
-                <h3 className="font-semibold">Product</h3>
-              </div>
-              <div className="col-span-2 text-center">
-                <h3 className="font-semibold">Price</h3>
-              </div>
-              <div className="col-span-2 text-center">
-                <h3 className="font-semibold">Size</h3>
-              </div>
-              <div className="col-span-3 text-center">
-                <h3 className="font-semibold">Actions</h3>
-              </div>
-            </div>
-
-            {products.length > 0 ? (
-              products.map((product) => (
-                <div
-                  key={product.product_id}
-                  className="flex flex-col sm:grid sm:grid-cols-12 gap-4 items-center mb-6 p-3 sm:p-4 bg-white rounded-md shadow-sm"
-                >
-                  <div className="w-full sm:col-span-5 flex items-center">
-                    <img
-                      src={product.images[0] || "default-image-url"}
-                      alt={product.product_name}
-                      className="w-20 sm:w-24 h-20 sm:h-24 object-cover rounded-md"
-                    />
-                    <div className="ml-3 sm:ml-4">
-                      <h3 className="font-semibold text-base sm:text-lg">
-                        {product.product_name}
-                      </h3>
-                      <p className="text-gray-500 text-sm">
-                        Brand: {product.brand_name}
-                      </p>
-                      <p className="text-gray-500 text-sm">
-                        Product ID: {product.product_id}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-full sm:col-span-7 flex justify-between sm:justify-around items-center mt-3 sm:mt-0">
-                    <div className="text-center">
-                      <p className="text-base sm:text-lg font-semibold">
-                        ₹{product.sale_price}
-                      </p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-base sm:text-lg font-semibold">
-                        {product.size}
-                      </p>
-                    </div>
-                    <div className="flex gap-2">
-                      <EditProduct
-                        id={product.product_id}
-                        onProductUpdate={handleProductUpdate}
-                      />
-                      <button
-                        onClick={() => deleteProductHandler(product.product_id)}
-                        className="border-2 border-red-500 border-dashed rounded-lg p-2"
-                      >
-                        <FaTrash
-                          className="w-4 h-4 sm:w-5 sm:h-5"
-                          color="red"
-                        />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="p-4 text-center text-gray-500">
-                No products found.
-              </div>
-            )}
+      <div className="bg-white border-2 border-gray-200 rounded-md overflow-x-auto">
+        {products.length > 0 ? (
+          <CommonTable
+            data={products}
+            renderHeader={renderHeader}
+            renderRow={renderRow}
+          />
+        ) : (
+          <div className="p-4 text-center text-gray-500">
+            No products found.
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

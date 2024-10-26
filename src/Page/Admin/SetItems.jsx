@@ -226,7 +226,9 @@ const SetItems = () => {
         setFeedImg(feed);
       } catch (error) {
         console.log(error);
-        toast.error("Failed to load content items");
+        toast.error("Failed to load content items", {
+          position: "bottom-right",
+        });
       } finally {
         setLoading(false); // Set loading to false when done, regardless of success or failure
       }

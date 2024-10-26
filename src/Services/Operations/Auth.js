@@ -25,6 +25,9 @@ const {
   GETBILLING_API,
   GETSHIPPING_API,
   ADDORDER_API,
+  GETORDERS_API,
+  GETUSERORDERS_API,
+  UPDATEORDERSTATUS_API,
 } = orderendpoints;
 
 export default class Global {
@@ -138,6 +141,21 @@ export async function GetShipping(email) {
 
 export async function AddOrder(orderData) {
   const response = await apiConnector("POST", ADDORDER_API, orderData);
+  return response;
+}
+
+export async function GetOrders() {
+  const response = await apiConnector("GET", GETORDERS_API);
+  return response.data;
+}
+
+export async function GetUserOrders(email) {
+  const response = await apiConnector("POST", GETUSERORDERS_API, { email });
+  return response;
+}
+
+export async function UpdateOrderStatus(orderData) {
+  const response = await apiConnector("POST", UPDATEORDERSTATUS_API, orderData);
   return response;
 }
 

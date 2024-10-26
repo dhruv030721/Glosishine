@@ -19,8 +19,10 @@ export const userendpoints = {
 export const productendpoints = {
   ADDPRODUCTS_API: BASE_URL + "product/add-product.php",
   GETPRODUCT_API: BASE_URL + "product/get-products.php",
+  GETNEWDROPPRODUCT_API: BASE_URL + "product/get-new-drops-products.php",
   UPDATEPRODUCT_API: BASE_URL + "product/update-product.php",
   DELETEPRODUCT_API: BASE_URL + "product/delete-product.php/?product_id=",
+  NEWDROPSTATUS_API: BASE_URL + "product/change-product-new-drops-status.php",
 };
 
 export const favproductendpoints = {
@@ -72,8 +74,15 @@ export const RAZORPAY_API = {
 
 export const orderendpoints = {
   ADDORDER_API: BASE_URL + "order/add-order.php",
+  GETORDERS_API: BASE_URL + "order/get-order.php",
+  GETUSERORDERS_API: BASE_URL + "order/get-user-orders.php",
   UPDATEBILLING_API: BASE_URL + "order/save_billing_details.php",
   UPDATESHIPPING_API: BASE_URL + "order/save_shipping_details.php",
   GETBILLING_API: BASE_URL + "order/get_billing_details.php",
   GETSHIPPING_API: BASE_URL + "order/get_shipping_details.php",
+  UPDATEORDERSTATUS_API: BASE_URL + "order/update-order-status.php",
+};
+
+export const dashboardendpoints = {
+  GETDASHBOARD_API: BASE_URL + "dashboard/dashboard.php",
 };

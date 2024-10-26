@@ -46,6 +46,7 @@ import ScrollToTop from "./Components/ScrollToTop/ScrollToTop";
 import "./App.css";
 import OrderSuccess from "./Page/OrdersSuccess/OrderSuccess";
 import OrderFailed from "./Page/OrderFailed/OrderFailed";
+import NewDrops from "./Page/Newdrops/NewDrops";
 
 export const AppContext = createContext();
 
@@ -183,6 +184,7 @@ function App() {
             <Route path="womenswear" element={<NotFound />} />
             <Route path="ordersuccess" element={<OrderSuccess />} />
             <Route path="orderfailed" element={<OrderFailed />} />
+            <Route path="newdrops" element={<NewDrops />} />
             <Route path="*" element={<NotFound />} />
           </Route>
 

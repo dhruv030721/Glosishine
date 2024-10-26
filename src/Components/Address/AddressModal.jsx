@@ -46,7 +46,9 @@ const AddressModal = ({
     e.preventDefault();
     const email = user?.[0]?.email;
     if (!email) {
-      toast.error("User email not found");
+      toast.error("User email not found", {
+        position: "bottom-right",
+      });
       return;
     }
 
@@ -78,11 +80,14 @@ const AddressModal = ({
       toast.success(
         `${
           addressType.charAt(0).toUpperCase() + addressType.slice(1)
-        } address updated successfully!`
+        } address updated successfully!`,
+        { position: "bottom-right" }
       );
     } catch (error) {
       console.error(`Failed to update ${addressType} address:`, error);
-      toast.error(`Failed to update ${addressType} address`);
+      toast.error(`Failed to update ${addressType} address`, {
+        position: "bottom-right",
+      });
     }
   };
 

@@ -69,7 +69,9 @@ const ForgotPassword = () => {
   const handleChangePassword = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
-      toast.error("Passwords do not match");
+      toast.error("Passwords do not match", {
+        position: "bottom-right",
+      });
       return;
     }
     setIsLoading(true);

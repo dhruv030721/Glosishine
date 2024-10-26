@@ -310,7 +310,16 @@ export const CartPage = () => {
                   shipping_details_id: selectedShippingId.toString(),
                   payment_type: "Online",
                   order_status: "PENDING",
+                  discount: appliedDiscount
+                    ? appliedDiscount.discount.toString()
+                    : "",
                 },
+                order_items: cartItems.map((item) => ({
+                  product_id: item.product_id,
+                  size: item.size,
+                  quantity: item.quantity.toString(),
+                  price: (item.regular_price * item.quantity).toString(),
+                })),
               };
 
               const addOrderResponse = await AddOrder(orderData);
@@ -363,7 +372,14 @@ export const CartPage = () => {
         shipping_details_id: selectedShippingId.toString(),
         payment_type: "COD",
         order_status: "PENDING",
+        discount: appliedDiscount ? appliedDiscount.discount.toString() : "",
       },
+      order_items: cartItems.map((item) => ({
+        product_id: item.product_id,
+        size: item.size,
+        quantity: item.quantity.toString(),
+        price: (item.regular_price * item.quantity).toString(),
+      })),
     };
 
     toast.promise(
@@ -374,13 +390,16 @@ export const CartPage = () => {
         }
         await clearAllCart(user?.[0]?.email);
         navigate("/ordersuccess");
+        return response.message;
       })(),
       {
         loading: "Placing your order...",
-        success: "Order placed successfully!",
-        error: "Failed to place order. Please try again.",
+        success: (message) => `${message}`,
+        error: (err) => `${err.message}`,
       },
-      { position: "bottom-right" }
+      {
+        position: "bottom-right",
+      }
     );
   };
 

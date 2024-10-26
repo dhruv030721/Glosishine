@@ -10,6 +10,7 @@ import { IoMdMail } from "react-icons/io";
 import { RiLockPasswordLine } from "react-icons/ri";
 
 const cookies = new Cookies();
+tailChase.register();
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(AppContext);
@@ -47,7 +48,8 @@ const Login = () => {
             fontWeight: "400",
             lineHeight: "1.5",
           },
-        }
+        },
+        { position: "bottom-right" }
       );
     } catch (error) {
       console.error("Login failed:", error);
@@ -141,7 +143,7 @@ const Login = () => {
             </Link>
           </div>
           <button
-            className="ring-offset-background font-monserrat text-xl focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-green-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+            className="ring-offset-background font-monserrat focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-green-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             type="submit"
           >
             Login

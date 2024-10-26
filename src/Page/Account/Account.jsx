@@ -8,6 +8,7 @@ import {
   getUser,
   GetBilling,
   GetShipping,
+  GetUserOrders,
 } from "../../Services/Operations/Auth";
 import { FaChevronRight, FaCog, FaPlus, FaSignOutAlt } from "react-icons/fa";
 import AddressCard from "../../Components/Address/AddressCard";
@@ -37,6 +38,9 @@ const Account = () => {
   const [selectedBillingId, setSelectedBillingId] = useState(null);
   const [selectedShippingId, setSelectedShippingId] = useState(null);
   const [editingAddress, setEditingAddress] = useState(null);
+  const [expandedOrder, setExpandedOrder] = useState(null);
+
+  const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
 
   const getUserInfo = useCallback(async () => {
@@ -67,6 +71,10 @@ const Account = () => {
       const shippingData = shippingResponse.data.data || [];
       setShippingAddresses(shippingData);
       setSelectedShippingId(shippingData[0]?.id || null);
+
+      // Fetch user orders
+      const ordersResponse = await GetUserOrders(email);
+      setOrders(ordersResponse.data.data || []);
 
       // Open billing address modal if either address is missing
       if (billingData.length === 0 || shippingData.length === 0) {
@@ -191,53 +199,173 @@ const Account = () => {
     </Modal>
   );
 
+  const toggleOrderDetails = (orderId) => {
+    setExpandedOrder(expandedOrder === orderId ? null : orderId);
+  };
+
+  const renderRow = (order, index) => (
+    <React.Fragment key={order.order_id} className="w-full">
+      <tr>
+        <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+          {index + 1}
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap">
+          <div className="text-sm font-medium text-bg-green">
+            {order.order_id}
+          </div>
+          <div className="text-sm text-gray-500">
+            {new Date(order.created_at).toLocaleDateString()} -{" "}
+            {new Date(order.created_at).toLocaleTimeString()}
+          </div>
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap">
+          <div className="flex items-center">
+            <div className="flex-shrink-0 h-10 w-10">
+              <img
+                className="h-10 w-10 rounded-full object-cover"
+                src={order.order_items[0]?.product_details.image_url}
+                alt=""
+              />
+            </div>
+            <div className="ml-4">
+              <div className="text-sm font-medium text-bg-green">
+                {order.order_items[0]?.product_details.name}
+                {order.order_items.length > 1 &&
+                  ` (+${order.order_items.length - 1} more)`}
+              </div>
+            </div>
+          </div>
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap text-sm text-bg-green">
+          ₹{" "}
+          {order.order_items
+            .reduce(
+              (total, item) =>
+                total + parseFloat(item.product_details.price) * item.quantity,
+              0
+            )
+            .toFixed(2)}
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap">
+          <span
+            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full`}
+          >
+            {order.order_status}
+          </span>
+        </td>
+        <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
+          <button
+            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition-colors duration-200"
+            onClick={() => toggleOrderDetails(order.order_id)}
+          >
+            {expandedOrder === order.order_id ? "Hide details" : "See details"}
+          </button>
+        </td>
+      </tr>
+      {expandedOrder === order.order_id && (
+        <tr>
+          <td colSpan="6" className="px-4 py-4">
+            <div className="bg-gray-50 p-4 rounded-md">
+              <h4 className="font-bold mb-2">Order Details</h4>
+              <table className="min-w-full bg-white border border-gray-200">
+                <thead>
+                  <tr className="bg-gray-100">
+                    <th className="px-4 py-2 text-left">Product</th>
+                    <th className="px-4 py-2 text-left">Size</th>
+                    <th className="px-4 py-2 text-left">Price</th>
+                    <th className="px-4 py-2 text-left">Quantity</th>
+                    <th className="px-4 py-2 text-left">Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {order.order_items.map((item, itemIndex) => (
+                    <tr key={itemIndex} className="border-t border-gray-200">
+                      <td className="px-4 py-2">
+                        <div className="flex items-center">
+                          <img
+                            src={item.product_details.image_url}
+                            alt={item.product_details.name}
+                            className="w-10 h-10 object-cover mr-2"
+                          />
+                          {item.product_details.name}
+                        </div>
+                      </td>
+                      <td className="px-4 py-2">{item.size}</td>
+                      <td className="px-4 py-2 text-bg-green">
+                        ₹{parseFloat(item.product_details.price).toFixed(2)}
+                      </td>
+                      <td className="px-4 py-2">{item.quantity}</td>
+                      <td className="px-4 py-2">
+                        ₹
+                        {(
+                          parseFloat(item.product_details.price) * item.quantity
+                        ).toFixed(2)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+                <tfoot>
+                  <tr className="border-t border-gray-200 font-bold">
+                    <td colSpan="4" className="px-4 py-2 text-right">
+                      Total:
+                    </td>
+                    <td className="px-4 py-2">
+                      ₹
+                      {order.order_items
+                        .reduce(
+                          (total, item) =>
+                            total +
+                            parseFloat(item.product_details.price) *
+                              item.quantity,
+                          0
+                        )
+                        .toFixed(2)}
+                    </td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </td>
+        </tr>
+      )}
+    </React.Fragment>
+  );
+
+  const renderHeader = () => (
+    <thead>
+      <tr className="bg-bg-green text-white">
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          #
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Order ID
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Product
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Amount
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Status
+        </th>
+        <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          Action
+        </th>
+      </tr>
+    </thead>
+  );
+
   const OrderHistory = ({ orders }) => (
-    <div className="bg-bg-green bg-opacity-10 rounded-lg p-4 sm:p-6">
+    <div className="bg-bg-green bg-opacity-10 rounded-lg p-4 sm:p-6 w-full">
       <h2 className="text-lg sm:text-xl font-bold mb-4 font-outfit text-bg-green">
         Order History
       </h2>
       <div className="overflow-x-auto">
         <CommonTable
           data={orders}
-          renderHeader={() => (
-            <thead>
-              <tr className="bg-bg-green text-white">
-                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
-                  Order ID
-                </th>
-                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
-                  Date
-                </th>
-                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
-                  Total
-                </th>
-                <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
-                  Status
-                </th>
-              </tr>
-            </thead>
-          )}
-          renderRow={(order) => (
-            <tr key={order.id} className="bg-white">
-              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-bg-green">
-                #{order.id}
-              </td>
-              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
-                {order.date}
-              </td>
-              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-bg-green">
-                ₹{order.total}
-              </td>
-              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-500">
-                {order.status}
-              </td>
-              <td className="px-2 sm:px-4 py-2 sm:py-4 whitespace-nowrap text-xs sm:text-sm">
-                <button className="text-bg-green hover:text-green-700 transition-colors">
-                  <FaChevronRight size={14} sm:size={16} />
-                </button>
-              </td>
-            </tr>
-          )}
+          renderHeader={renderHeader}
+          renderRow={renderRow}
         />
       </div>
     </div>
@@ -325,8 +453,8 @@ const Account = () => {
               }
               onAddAddress={() => openAddressModal("shipping")}
             />
-            <div className="md:col-span-2">
-              <OrderHistory orders={userData?.orders || []} />
+            <div className="md:col-span-2 overflow-scroll xl:overflow-auto">
+              <OrderHistory orders={orders} />
             </div>
           </div>
         </div>

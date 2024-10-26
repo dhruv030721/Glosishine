@@ -134,7 +134,9 @@ const Register = () => {
       );
     } catch (error) {
       console.error("OTP verification or registration failed:", error);
-      toast.error("OTP verification or registration failed.");
+      toast.error("OTP verification or registration failed.", {
+        position: "bottom-right",
+      });
     }
   };
 
@@ -291,7 +293,7 @@ const Register = () => {
               </div>
             </div>
             <button
-              className="ring-offset-background font-monserrat text-xl focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-green-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+              className="ring-offset-background font-monserrat focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-green-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
               type="submit"
             >
               Create Account
