@@ -33,7 +33,7 @@ import { getContentItem } from "../../Services/Operations/ContentItem";
 import tvFrameSvg from "../../assets/TVFrame.png";
 import ScribbleLineImg from "../../assets/ScribbleLineImg.png";
 import ProductList from "../../Components/ProductList/ProductList";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 import TVVideoSection from "../../Components/TVSection/TvSection";
 import {
   getFavProduct,
@@ -85,7 +85,7 @@ const Home = () => {
     setWatchlistItems((prev) => prev.filter((item) => item.id !== id));
   };
 
-  tailChase.register();
+  ring2.register();
 
   // Create a ref to track the active slide
   const activeSlideRef = useRef(null);
@@ -211,13 +211,13 @@ const Home = () => {
     return (
       <>
         <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
-          <l-tail-chase
-            size="60"
+          <l-ring-2
+            size="40"
             bg-opacity="0.2"
-            speed="2"
+            speed="0.5"
             color="rgb(6,68,59)"
             className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-          ></l-tail-chase>
+          ></l-ring-2>
         </div>
       </>
     );
@@ -276,9 +276,8 @@ const Home = () => {
                 {new Array(length).fill("").map((_, i) => (
                   <span
                     key={i}
-                    className={`block h-3 w-3 cursor-pointer rounded-full transition-colors content-[''] ${
-                      activeIndex === i ? "bg-white" : "bg-white/50"
-                    }`}
+                    className={`block h-3 w-3 cursor-pointer rounded-full transition-colors content-[''] ${activeIndex === i ? "bg-white" : "bg-white/50"
+                      }`}
                     onClick={() => setActiveIndex(i)}
                   />
                 ))}
@@ -316,9 +315,8 @@ const Home = () => {
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${
-                  currentIndex * (100 / currentItemsPerPage)
-                }%)`,
+                transform: `translateX(-${currentIndex * (100 / currentItemsPerPage)
+                  }%)`,
               }}
             >
               {newDropProducts.map((product, index) => (
@@ -375,34 +373,33 @@ const Home = () => {
                 />
               </svg>
             </button>
-            <div className="mt-10 w-full flex justify-center align-middle">
-              <div data-aos="fade-up" className="hover:p-2">
-                <button className="bg-bg-green p-1 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 ease-in-out shadow-md hover:shadow-bg-green hover:w-auto hover:px-4 group">
-                  <a href="/newdrops">
-                    <span className="hidden group-hover:inline mr-2 font-semibold">
-                      View all
-                    </span>
-                  </a>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-6 w-6"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 7l5 5m0 0l-5 5m5-5H6"
-                    />
-                  </svg>
-                </button>
+            <div className="mt-10 w-full flex justify-end align-middle">
+              <div data-aos="fade-up" className="">
+                <a className="flex align-middle justify-center items-center gap-x-5" href="/newdrops">
+                  <span className="font-signika text-bg-green text-xl">View All</span>
+                  <button className="bg-bg-green p-1 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 ease-in-out shadow-md hover:animate-bounce group">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-6 w-6"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 7l5 5m0 0l-5 5m5-5H6"
+                      />
+                    </svg>
+                  </button>
+                </a>
               </div>
             </div>
           </div>
         </div>
       </section>
+
 
       <section
         data-aos="fade-up"
