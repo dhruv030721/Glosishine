@@ -10,7 +10,7 @@ import {
   updateNewDropStatus,
 } from "../../Services/Operations/ProductServices.js";
 import EditProduct from "./EditProduct.jsx";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 import { Typography, Switch } from "@mui/material";
 import CommonTable from "../../Components/CommonTable/CommonTable.jsx";
 
@@ -20,7 +20,7 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const [newDropProducts, setNewDropProducts] = useState({});
 
-  tailChase.register();
+  ring2.register();
 
   useEffect(() => {
     fetchProducts();
@@ -96,6 +96,9 @@ const Product = () => {
     <thead className="w-full">
       <tr className="bg-bg-green text-white">
         <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+          #
+        </th>
+        <th className="px-2 sm:px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
           Product
         </th>
         <th className="px-2 sm:px-4 py-2 text-center text-xs font-medium uppercase tracking-wider hidden sm:table-cell">
@@ -119,6 +122,9 @@ const Product = () => {
       key={product.product_id}
       className="border-t border-gray-200 text-bg-green"
     >
+      <td className="px-2 sm:px-4 py-4">
+        <div className="text-sm font-medium text-bg-green">{index + 1}</div>
+      </td>
       <td className="px-2 sm:px-4 py-4">
         <div className="flex flex-col sm:flex-row items-start sm:items-center">
           <img
@@ -183,12 +189,12 @@ const Product = () => {
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
-        <l-tail-chase
+        <l-ring-2
           size="60"
           speed="2"
           color="rgb(6,68,59)"
           className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-        ></l-tail-chase>
+        ></l-ring-2>
       </div>
     );
   }

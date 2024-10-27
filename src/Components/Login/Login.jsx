@@ -5,12 +5,12 @@ import { LoginUser } from "../../Services/Operations/Auth";
 import { useNavigate } from "react-router-dom";
 import Cookies from "universal-cookie";
 import { AppContext } from "../../App";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 import { IoMdMail } from "react-icons/io";
 import { RiLockPasswordLine } from "react-icons/ri";
 
 const cookies = new Cookies();
-tailChase.register();
+ring2.register();
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(AppContext);
@@ -62,13 +62,13 @@ const Login = () => {
     <div className="p-4 sm:p-8 md:p-10 w-full flex items-center justify-center bg-gray-100">
       {isLoading && (
         <div className="absolute inset-0 flex flex-col justify-center items-center bg-white bg-opacity-80 z-50">
-          <l-tail-chase
+          <l-ring-2
             size="60"
             bg-opacity="0.2"
             speed="2"
             color="rgb(6,68,59)"
             className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-          ></l-tail-chase>
+          ></l-ring-2>
         </div>
       )}
       <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 bg-white p-8 rounded-xl shadow-md">

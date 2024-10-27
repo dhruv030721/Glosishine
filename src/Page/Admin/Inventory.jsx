@@ -25,7 +25,7 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import InventoryIcon from "@mui/icons-material/Inventory";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 
 // Styled components for custom button and dialog
 const GreenButton = styled(Button)(({ theme }) => ({
@@ -75,7 +75,7 @@ const Inventory = () => {
   const products = Appcontext.getdata || [];
   const [loading, setLoading] = useState(true);
 
-  tailChase.register();
+  ring2.register();
 
   useEffect(() => {
     console.log("Products loaded:", products);
@@ -268,12 +268,12 @@ const Inventory = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <l-tail-chase
+        <l-ring-2
           size="60"
           speed="2"
           color="rgb(6,68,59)"
           className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-        ></l-tail-chase>
+        ></l-ring-2>
       </div>
     );
   }

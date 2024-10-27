@@ -142,10 +142,11 @@ const BasicInformation = ({ formdata, setFormdata, handleSizeChange }) => {
     });
   };
 
-  const categories = ["MENS", "WOMENS"];
+  const categories = ["MENS", "WOMENS", "KIDS"];
   const subcategories = {
-    MENS: ["Shirts", "Tshirts", "Pants", "Men's Cord Set"],
-    WOMENS: ["Shirts", "Tshirts", "Kurtas", "Women's Cord Set"],
+    MENS: ["Men's Shirts", "Men's Cord Set"],
+    WOMENS: ["Women's Shirts", "Women's Cord Set"],
+    KIDS: ["Baby Wear Set"],
   };
 
   return (

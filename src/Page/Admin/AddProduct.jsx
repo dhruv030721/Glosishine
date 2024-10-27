@@ -146,6 +146,43 @@ const AddProduct = ({ product }) => {
     setCompleted({});
   };
 
+  const resetForm = () => {
+    setActiveStep(0);
+    setCompleted({});
+    setFormdata({
+      name: "",
+      size: [],
+      regularprize: "",
+      saleprize: "",
+      weight: "",
+      stock: "",
+      countryorigin: "",
+      fabric: "",
+      fitshape: "",
+      nack: "",
+      quantity: "",
+      occupation: "",
+      patent: "",
+      patenttype: "",
+      sleevelength: "",
+      chestsize: "",
+      lengthsize: "",
+      designname: "",
+      sku: "",
+      brandname: "",
+      productdesc: "",
+      noofpocket: "",
+      sleevestyle: "",
+      productid: "",
+      stretchability: "",
+      productphoto: [],
+      category: "",
+      subcategory: "",
+    });
+    setErrors({});
+    setIsStepValid(false);
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
@@ -159,15 +196,7 @@ const AddProduct = ({ product }) => {
             error: (error) => `${error.message}`,
           },
           {
-            position: "bottom-right", // Set toast position here
-          },
-          {
-            style: {
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: "14px",
-              fontWeight: "400",
-              lineHeight: "1.5",
-            },
+            position: "bottom-right",
           }
         );
       } else {
@@ -180,12 +209,12 @@ const AddProduct = ({ product }) => {
             error: (error) => `${error.message}`,
           },
           {
-            position: "bottom-right", // Set toast position here
+            position: "bottom-right",
           }
         );
 
-        // Reload the page after successful product addition
-        window.location.reload();
+        // Reset the form instead of reloading the page
+        resetForm();
       }
     } catch (error) {
       console.error("Submit failed:", error);

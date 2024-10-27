@@ -12,7 +12,7 @@ import Lottie from "lottie-react";
 import Loadinganimation from "../../assets/Loadinganimation.json";
 import { Carousel } from "react-responsive-carousel";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 
 const SetItems = () => {
   const initialImageArray = [
@@ -235,17 +235,17 @@ const SetItems = () => {
     })();
   }, [reloadCounter]);
 
-  tailChase.register();
+  ring2.register();
 
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
-        <l-tail-chase
+        <l-ring-2
           size="60"
           speed="2"
           color="rgb(6,68,59)"
           className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-        ></l-tail-chase>
+        ></l-ring-2>
       </div>
     );
   }

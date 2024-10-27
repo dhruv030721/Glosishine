@@ -29,7 +29,7 @@ const ProductList = ({
   const [isInCart, setIsInCart] = useState(false);
 
   useEffect(() => {
-    const favProduct = watchlistItems.find(
+    const favProduct = watchlistItems?.find(
       (favItem) => favItem.product_id === product.product_id
     );
     if (favProduct) {
@@ -189,7 +189,7 @@ const ProductList = ({
       data-aos-offset="0"
       className={`relative w-full h-full rounded-lg bg-white bg-opacity-30 backdrop-blur-lg border-2 border-bg-green transition-all duration-200 flex flex-col overflow-hidden ${className}`}
     >
-      <div className="relative flex flex-col overflow-hidden object-cover h-full">
+      <div className="relative flex flex-col overflow-hidden object-cover h-full font-signika">
         <a
           className="relative flex h-[100%] sm:h-[90%] md:h-[80%] lg:h-80 xl:h-96 2xl:h-[28rem] 4xl:h-[40rem] overflow-hidden"
           href={`/${product.product_id}`}

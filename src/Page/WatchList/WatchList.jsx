@@ -6,7 +6,7 @@ import { getFavProduct } from "../../Services/Operations/ProductServices";
 import ProductList from "../../Components/ProductList/ProductList";
 import Cookies from "universal-cookie";
 import { AppContext } from "../../App";
-// import { tailChase } from "ldrs";
+// import { ring2 } from "ldrs";
 
 export const WatchList = () => {
   const dispatch = useDispatch();
@@ -59,19 +59,19 @@ export const WatchList = () => {
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen">
-        <l-tail-chase
+        <l-ring-2
           size="60"
           bg-opacity="0.2"
           speed="2"
           color="rgb(6,68,59)"
           className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-        ></l-tail-chase>
+        ></l-ring-2>
       </div>
     );
   }
 
   return (
-    <div className="p-6 bg-gray-100 font-montserrat">
+    <div className="p-6 bg-gray-100 font-signika">
       <div>
         <h1 className="text-2xl font-bold mb-4">Shopping Bag</h1>
         <h2 className="text-lg mb-6">

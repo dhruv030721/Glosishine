@@ -1,13 +1,13 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdMail, IoMdLock } from "react-icons/io";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 import { authendpoints } from "../../Services/Apis";
 import { apiConnector } from "../../Services/Apiconnector";
 import toast from "react-hot-toast";
 import { ChangePassword, verifyOTP } from "../../Services/Operations/Auth";
 
-tailChase.register();
+ring2.register();
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState("");
@@ -243,11 +243,7 @@ const ForgotPassword = () => {
     <div className="p-4 sm:p-8 md:p-10 w-full min-h-screen flex items-center justify-center bg-gray-100">
       {isLoading && (
         <div className="fixed inset-0 flex flex-col justify-center items-center bg-white bg-opacity-80 z-50">
-          <l-tail-chase
-            size="40"
-            speed="1.75"
-            color="rgb(6,68,59)"
-          ></l-tail-chase>
+          <l-ring-2 size="40" speed="1.75" color="rgb(6,68,59)"></l-ring-2>
         </div>
       )}
       <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 bg-white p-8 rounded-xl shadow-md">

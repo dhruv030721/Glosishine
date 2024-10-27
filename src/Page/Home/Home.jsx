@@ -25,7 +25,6 @@ import photo12 from "../../assets/photo12.jpg";
 import { Link } from "react-router-dom";
 import AOS from "aos";
 // import Loadinganimation from '../../assets/Loadinganimation.json'
-import "aos/dist/aos.css";
 // import Lottie from 'lottie-react';
 import CircularLoader from "../../Components/CircularLoader/CircularLoader";
 import { AppContext } from "../../App";
@@ -107,12 +106,6 @@ const Home = () => {
   }, [currentItemsPerPage, newDropProducts.length]);
 
   useEffect(() => {
-    AOS.init({
-      duration: 500,
-      once: false,
-      mirror: true,
-    });
-
     (async () => {
       try {
         const data = await getContentItem();
@@ -276,8 +269,9 @@ const Home = () => {
                 {new Array(length).fill("").map((_, i) => (
                   <span
                     key={i}
-                    className={`block h-3 w-3 cursor-pointer rounded-full transition-colors content-[''] ${activeIndex === i ? "bg-white" : "bg-white/50"
-                      }`}
+                    className={`block h-3 w-3 cursor-pointer rounded-full transition-colors content-[''] ${
+                      activeIndex === i ? "bg-white" : "bg-white/50"
+                    }`}
                     onClick={() => setActiveIndex(i)}
                   />
                 ))}
@@ -315,8 +309,9 @@ const Home = () => {
             <div
               className="flex transition-transform duration-500 ease-in-out"
               style={{
-                transform: `translateX(-${currentIndex * (100 / currentItemsPerPage)
-                  }%)`,
+                transform: `translateX(-${
+                  currentIndex * (100 / currentItemsPerPage)
+                }%)`,
               }}
             >
               {newDropProducts.map((product, index) => (
@@ -330,7 +325,7 @@ const Home = () => {
                     onRemove={handleRemove}
                     watchlistItems={watchlistItems}
                     setWatchlistItems={setWatchlistItems}
-                    className="min-h-[500px] sm:min-h-[350px] md:min-h-[500px]"
+                    className="min-h-[400px] sm:min-h-[350px] md:min-h-[500px]"
                   />
                 </div>
               ))}
@@ -373,11 +368,16 @@ const Home = () => {
                 />
               </svg>
             </button>
-            <div className="mt-10 w-full flex justify-end align-middle">
+            <div className="mt-10 w-full flex justify-center md:justify-end align-middle">
               <div data-aos="fade-up" className="">
-                <a className="flex align-middle justify-center items-center gap-x-5" href="/newdrops">
-                  <span className="font-signika text-bg-green text-xl">View All</span>
-                  <button className="bg-bg-green p-1 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 ease-in-out shadow-md hover:animate-bounce group">
+                <a
+                  className="flex align-middle justify-center items-center gap-x-5"
+                  href="/newdrops"
+                >
+                  <span className="font-signika text-bg-green text-xl">
+                    View All
+                  </span>
+                  <button className="bg-bg-green p-1 text-white rounded-full w-12 h-12 flex items-center justify-center transition-all duration-300 ease-in-out shadow-md group">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6"
@@ -399,7 +399,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
 
       <section
         data-aos="fade-up"

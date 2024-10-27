@@ -19,7 +19,7 @@ import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import Collapse from "@mui/material/Collapse";
 import CommonTable from "../../Components/CommonTable/CommonTable";
 import { styled } from "@mui/material/styles";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 import { getDashboardData } from "../../Services/Operations/ProductServices";
 import { UpdateOrderStatus } from "../../Services/Operations/Auth";
 import { toast } from "react-hot-toast";
@@ -55,7 +55,7 @@ const DashboardContent = () => {
     fetchData();
   }, []);
 
-  tailChase.register();
+  ring2.register();
 
   const handleChange = (event) => {
     setView(event.target.value);
@@ -328,12 +328,12 @@ const DashboardContent = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <l-tail-chase
+        <l-ring-2
           size="60"
           speed="2"
           color="rgb(6,68,59)"
           className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-        ></l-tail-chase>
+        ></l-ring-2>
       </div>
     );
   }

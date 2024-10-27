@@ -1,39 +1,32 @@
-import { useState, useEffect } from "react";
-import { getNewDropProduct } from "../../Services/Operations/ProductServices";
+import { useState, useEffect, useContext } from "react";
+import { useParams } from "react-router-dom";
 import ProductList from "../../Components/ProductList/ProductList";
 import { ring2 } from "ldrs";
-import toast from "react-hot-toast";
 import yellowLine from "../../assets/Yellow-Line.svg";
-const NewDrops = () => {
+import { AppContext } from "../../App";
+
+const SubCategoryPage = () => {
+  const { categoryName, subCategoryName } = useParams();
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [watchlistItems, setWatchlistItems] = useState([]);
+  const { getdata: AllProducts } = useContext(AppContext);
 
   ring2.register();
 
   useEffect(() => {
-    fetchNewDropProducts();
-  }, []);
+    fetchSubCategoryProducts();
+  }, [categoryName, subCategoryName, AllProducts]);
 
-  const fetchNewDropProducts = async () => {
-    try {
-      setLoading(true);
-      const response = await getNewDropProduct();
-      if (response.data && Array.isArray(response.data.data)) {
-        setProducts(response.data.data);
-      } else {
-        toast.error("Failed to fetch new drop products", {
-          position: "bottom-right",
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching new drop products:", error);
-      toast.error("An error occurred while fetching products", {
-        position: "bottom-right",
-      });
-    } finally {
-      setLoading(false);
-    }
+  const fetchSubCategoryProducts = () => {
+    setLoading(true);
+    const filteredProducts = AllProducts.filter(
+      (product) =>
+        `${product.category}`.toLowerCase() === categoryName.toLowerCase() &&
+        `${product.subcategory}`.toLowerCase() === subCategoryName.toLowerCase()
+    );
+    setProducts(filteredProducts);
+    setLoading(false);
   };
 
   if (loading) {
@@ -45,10 +38,10 @@ const NewDrops = () => {
   }
 
   return (
-    <div className="container p-6 bg-gray-100 font-montserrat !min-w-[100%]">
+    <div className="container p-6 bg-gray-100 font-montserrat !min-w-full">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-bg-green mb-2 font-signika">
-          New Drops
+          {subCategoryName.toUpperCase()}
         </h1>
         <img
           src={yellowLine}
@@ -57,8 +50,8 @@ const NewDrops = () => {
         />
       </div>
       {products.length === 0 ? (
-        <p className="text-center text-gray-500 w-screen">
-          No new drop products available at the moment.
+        <p className="text-center text-gray-500">
+          No products available for this subcategory at the moment.
         </p>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
@@ -77,4 +70,4 @@ const NewDrops = () => {
   );
 };
 
-export default NewDrops;
+export default SubCategoryPage;

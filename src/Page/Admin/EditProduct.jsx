@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useCallback } from "react";
 import {
   Dialog,
   DialogTitle,
@@ -29,6 +29,7 @@ const EditProduct = ({ id }) => {
   const context = useContext(AppContext);
   const [open, setOpen] = useState(false);
   const [filteredProduct, setFilteredProduct] = useState(null);
+  const [key, setKey] = useState(0);
 
   useEffect(() => {
     if (context && context.getdata) {
@@ -167,9 +168,11 @@ const EditProduct = ({ id }) => {
     setOpen(true);
   };
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setOpen(false);
-  };
+    setActiveStep(0);
+    setKey((prevKey) => prevKey + 1);
+  }, []);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -228,7 +231,7 @@ const EditProduct = ({ id }) => {
   }
 
   return (
-    <div>
+    <div key={key}>
       <button
         className="border-2 border-green-700 border-dashed rounded-lg p-2"
         onClick={handleClickOpen}

@@ -26,8 +26,6 @@ import ShippingPolicy from "./Page/ShippingPolicy/ShippingPolicy";
 import ReturnExchange from "./Page/ReturnExchange/ReturnExchange";
 import Account from "./Page/Account/Account";
 import Cart from "./Page/Cart/Cart";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import { createContext, useContext, useEffect, useState } from "react";
 import ForgotPassword from "./Components/Login/ForgotPassword";
 import Admin from "./Page/Admin/Admin";
@@ -47,6 +45,8 @@ import "./App.css";
 import OrderSuccess from "./Page/OrdersSuccess/OrderSuccess";
 import OrderFailed from "./Page/OrderFailed/OrderFailed";
 import NewDrops from "./Page/Newdrops/NewDrops";
+import CategoryPage from "./Page/CategoryPage/CategoryPage";
+import SubCategoryPage from "./Page/SubCategoryPage/SubCategoryPage";
 
 export const AppContext = createContext();
 
@@ -78,8 +78,6 @@ function App() {
   // console.log("getdata->", getdata);
 
   useEffect(() => {
-    AOS.init();
-    AOS.refresh();
     const token = cookies.get("Access-Token");
     const admintoken = cookies.get("Admin-Access-Token");
     setAdminToken(admintoken);
@@ -180,11 +178,14 @@ function App() {
             <Route path="mosttrending" element={<MostTrending />} />
             <Route path="bundledeal" element={<BundleDeal />} />
             <Route path="watchlist" element={<WatchList />} />
-            <Route path="menswear" element={<NotFound />} />
-            <Route path="womenswear" element={<NotFound />} />
             <Route path="ordersuccess" element={<OrderSuccess />} />
             <Route path="orderfailed" element={<OrderFailed />} />
             <Route path="newdrops" element={<NewDrops />} />
+            <Route path="/category/:categoryName" element={<CategoryPage />} />
+            <Route
+              path="/category/:categoryName/:subCategoryName"
+              element={<SubCategoryPage />}
+            />
             <Route path="*" element={<NotFound />} />
           </Route>
 

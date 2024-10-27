@@ -6,7 +6,7 @@ import {
   FormControl,
   InputLabel,
 } from "@mui/material";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
 import { toast } from "react-hot-toast";
 import defaultImage from "../../assets/photo11.jpg";
 import { GetOrders, UpdateOrderStatus } from "../../Services/Operations/Auth";
@@ -17,7 +17,7 @@ const Orders = () => {
   const [filter, setFilter] = useState("ALL");
   const [expandedOrder, setExpandedOrder] = useState(null);
 
-  tailChase.register();
+  ring2.register();
 
   useEffect(() => {
     fetchOrders();
@@ -109,12 +109,12 @@ const Orders = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <l-tail-chase
+        <l-ring-2
           size="60"
           speed="2"
           color="rgb(6,68,59)"
           className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-        ></l-tail-chase>
+        ></l-ring-2>
       </div>
     );
   }
@@ -155,6 +155,9 @@ const Orders = () => {
             <thead className="bg-bg-green text-white">
               <tr>
                 <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
+                  #
+                </th>
+                <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
                   Order ID
                 </th>
                 <th className="px-4 py-2 text-left text-xs font-medium uppercase tracking-wider">
@@ -172,9 +175,14 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredOrders.map((order) => (
+              {filteredOrders.map((order, index) => (
                 <>
                   <tr key={order.order_id}>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-bg-green">
+                        {index + 1}
+                      </div>
+                    </td>
                     <td className="px-4 py-4 whitespace-nowrap">
                       <div className="text-sm font-medium text-bg-green">
                         {order.order_id}
@@ -262,8 +270,8 @@ const Orders = () => {
                   </tr>
                   {expandedOrder === order.order_id && (
                     <tr>
-                      <td colSpan="5" className="px-4 py-4">
-                        <div className="bg-gray-50 p-4 rounded-md">
+                      <td colSpan="6" className="px-4 py-4 w-inherit">
+                        <div className="bg-gray-50 p-4 rounded-md w-full">
                           <h4 className="font-bold mb-2">Order Details</h4>
                           <table className="min-w-full bg-white border border-gray-200">
                             <thead>

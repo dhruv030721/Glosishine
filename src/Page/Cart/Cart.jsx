@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState } from "react";
 import { MdOutlineChevronRight } from "react-icons/md";
@@ -15,8 +16,6 @@ import { IoCloudUploadOutline } from "react-icons/io5";
 import ratingimage from "../../assets/ratingimage.png";
 import summar1 from "../../assets/summar1.jpg";
 import summar2 from "../../assets/summar2.jpg";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import BuyNow from "../../Components/BuyNow/BuyNow";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../../App";
@@ -43,7 +42,9 @@ import { FaHeart } from "react-icons/fa6";
 import { addItemAsync } from "../../Slice/CartSlice";
 import { updateQuantityAsync } from "../../Slice/CartSlice";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
-import { tailChase } from "ldrs";
+import { ring2 } from "ldrs";
+import { Carousel } from "@material-tailwind/react";
+import ProductList from "../../Components/ProductList/ProductList";
 
 const Cart = () => {
   const { id } = useParams();
@@ -85,8 +86,34 @@ const Cart = () => {
   const [favProductId, setFavProductId] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const allProducts = Appcontext.getdata;
+  const relatedProducts = allProducts
+    .filter((product) => product.category === filterdata[0].category)
+    .slice(0, 5);
   const navigate = useNavigate();
-  tailChase.register();
+  ring2.register();
+
+  const [deliveryDates, setDeliveryDates] = useState({ start: "", end: "" });
+
+  useEffect(() => {
+    const calculateDeliveryDates = () => {
+      const today = new Date();
+      const startDate = new Date(today.setDate(today.getDate() + 3));
+      const endDate = new Date(today.setDate(today.getDate() + 4)); // This will be 7 days from the original date
+
+      const formatDate = (date) => {
+        const options = { weekday: "long", month: "long", day: "numeric" };
+        return date.toLocaleDateString("en-US", options);
+      };
+
+      setDeliveryDates({
+        start: formatDate(startDate),
+        end: formatDate(endDate),
+      });
+    };
+
+    calculateDeliveryDates();
+  }, []);
 
   const handleImageUpload = (event) => {
     const files = event.target.files;
@@ -136,10 +163,7 @@ const Cart = () => {
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
   };
-  useEffect(() => {
-    AOS.init();
-    AOS.refresh();
-  }, []);
+  useEffect(() => {}, []);
 
   // const buttonStyles = (buttonType) => {
   //   return activeButton === buttonType
@@ -363,33 +387,72 @@ const Cart = () => {
     <div className="w-full">
       {loading ? (
         <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
-          <l-tail-chase
+          <l-ring-2
             size="60"
             bg-opacity="0.2"
             speed="2"
             color="rgb(6,68,59)"
             className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
-          ></l-tail-chase>
+          ></l-ring-2>
         </div>
       ) : (
         filterdata.map((item) => (
           <>
-            <div className="w-full font-montserrat mt-5 pl-10 mb-5 flex flex-row h-10 items-center gap-x-3">
+            <div className="w-full font-montserrat mt-5 px-4 lg:px-10 mb-5 flex flex-row h-10 items-center gap-x-3 overflow-x-auto whitespace-nowrap overflow-y-hidden">
               <Link to="/">Home</Link>
               <MdOutlineChevronRight
                 className="h-full flex items-center mt-1"
                 size={17}
               />
-              <Link to="/">Shirts</Link>
-              <MdOutlineChevronRight
-                className="h-full flex items-center mt-1"
-                size={17}
-              />
-              <h1>Shirts</h1>
+              <Link to={`/category/${item.category}`}>{item.category}</Link>
+              {item.subcategory && (
+                <>
+                  <MdOutlineChevronRight
+                    className="h-full flex items-center mt-1"
+                    size={17}
+                  />
+                  <Link to={`/category/${item.category}/${item.subcategory}`}>
+                    {item.subcategory}
+                  </Link>
+                </>
+              )}
             </div>
             <div className="w-full flex flex-col lg:flex-row">
-              <div className="w-full lg:w-[60%] h-full px-10 relative">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div className="w-full lg:w-[60%] h-full px-4 lg:px-10 relative">
+                <Carousel
+                  showArrows={true}
+                  showStatus={false}
+                  showThumbs={false}
+                  infiniteLoop={true}
+                  prevArrow={({ handlePrev }) => (
+                    <button
+                      onClick={handlePrev}
+                      className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
+                    >
+                      <MdChevronLeft size={24} />
+                    </button>
+                  )}
+                  nextArrow={({ handleNext }) => (
+                    <button
+                      onClick={handleNext}
+                      className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
+                    >
+                      <MdChevronRight size={24} />
+                    </button>
+                  )}
+                  className="md:hidden" // Hide on larger screens
+                >
+                  {item.images.map((image, index) => (
+                    <div key={index}>
+                      <img
+                        src={image}
+                        alt=""
+                        className="w-full h-auto object-cover"
+                      />
+                    </div>
+                  ))}
+                </Carousel>
+                <div className="hidden md:grid grid-cols-2 gap-3">
                   {item.images
                     .slice(currentImageIndex, currentImageIndex + 2)
                     .map((image, index) => (
@@ -405,13 +468,13 @@ const Cart = () => {
                   <>
                     <button
                       onClick={prevImage}
-                      className="absolute left-12 top-1/2 transform -translate-y-1/2 bg-bg-green hover:bg-green-800 text-white rounded-full p-2 shadow-md"
+                      className="hidden md:block absolute left-12 top-1/2 transform -translate-y-1/2 opacity-50 bg-bg-green hover:opacity-100 text-white rounded-full p-2 shadow-md"
                     >
                       <MdChevronLeft size={24} />
                     </button>
                     <button
                       onClick={nextImage}
-                      className="absolute right-12 top-1/2 transform -translate-y-1/2 bg-bg-green hover:bg-green-800 text-white rounded-full p-2 shadow-md"
+                      className="hidden md:block absolute right-12 top-1/2 transform -translate-y-1/2 opacity-50 bg-bg-green hover:opacity-100 text-white rounded-full p-2 shadow-md"
                     >
                       <MdChevronRight size={24} />
                     </button>
@@ -562,9 +625,16 @@ const Cart = () => {
                   <p className="text-md font-montserrat mt-4">
                     {item.product_description}
                   </p>
-                  <button className="text-sm flex h-8 items-center font-monserrat gap-x-1 hover:underline mb-5">
-                    <RiShare2Line size={18} />
-                    Share
+                  <button className="text-sm flex items-center font-monserrat gap-x-2 text-bg-green hover:bg-bg-green hover:text-white py-2 px-4 border-2 border-bg-green rounded-lg hover:shadow-md">
+                    <a
+                      href={window.location.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center"
+                    >
+                      <RiShare2Line size={20} className="mr-2" />
+                      <span className="font-semibold">Share</span>
+                    </a>
                   </button>
                   {/* <p className='text-lg font-monserrat mt-5 font-semibold'>Product Specification:</p>
                                     <div className='ml-10 font-montserrat mt-7'>
@@ -581,79 +651,85 @@ const Cart = () => {
               </div>
             </div>
 
-            <div className="flex gap-7 p-7">
-              <div className="lg:w-[60%]">
-                <div className="flex border-2 border-black border-dashed font-monserrat p-5 w-98 gap-2">
-                  <div className="flex flex-col">
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-7 p-4 lg:p-7">
+              <div className="w-full lg:w-[60%]">
+                <div className="flex flex-col sm:flex-row border-2 border-black border-dashed h-full font-montserrat p-4 sm:p-5 w-full gap-4 sm:gap-2">
+                  <div className="flex flex-row sm:flex-col items-center sm:items-start">
                     <img
                       src={IconDelivery}
                       alt="IconDelivery"
-                      className="w-auto h-16 mt-1 mr-2"
+                      className="w-12 h-12 sm:w-16 sm:h-16 mr-4 sm:mr-0 sm:mb-2"
                     />
                     <p className="font-bold">Delivery</p>
                   </div>
                   <div className="flex flex-col">
-                    <li className="font-bold">
+                    <li className="font-bold text-sm sm:text-base">
                       All Orders are usually shipped within 48 hours.
                     </li>
-                    <li>
+                    <li className="text-sm sm:text-base">
                       COD orders will be shipped only if order confirmation is
                       given via WhatsApp/Phone.
-                    </li>
-                    <li>
-                      <a href="#">For more details click here</a>
                     </li>
                   </div>
                 </div>
 
-                <div className="flex border-2 border-black border-dashed border-t-0 font-monserrat p-5 w-98 gap-5">
-                  <div className="flex flex-col">
+                <div className="hidden flex-col sm:flex-row border-2 border-black border-dashed border-t-0 font-montserrat p-4 sm:p-5 w-full gap-4 sm:gap-5">
+                  <div className="flex flex-row sm:flex-col items-center sm:items-start">
                     <img
                       src={IconReturn}
-                      alt=""
-                      className="w-auto h-16 mt-1 mr-2"
+                      alt="IconReturn"
+                      className="w-12 h-12 sm:w-16 sm:h-16 mr-4 sm:mr-0 sm:mb-2"
                     />
                     <p className="font-bold">Returns</p>
                   </div>
                   <div className="flex flex-col">
-                    <li>
+                    <li className="text-sm sm:text-base">
                       We offer 7 days hassle-free returns & exchange from the
                       date of delivery.
                     </li>
-                    <li>We DO NOT offer reverse pick-up services.</li>
-                    <li>
-                      You’ll have to courier the product(s) to the following
+                    <li className="text-sm sm:text-base">
+                      We DO NOT offer reverse pick-up services.
+                    </li>
+                    <li className="text-sm sm:text-base">
+                      You'll have to courier the product(s) to the following
                       address: No.7, Ground Floor, Uniform Factory, 6th Cross, H
                       Siddaiah Road, Sudhamanagar, Bengaluru - 560027
                     </li>
-                    <li>
-                      <a href="#">
+                    <li className="text-sm sm:text-base">
+                      <a href="#" className="text-blue-600 hover:underline">
                         For more about Return & Exchange Policy click here
                       </a>
                     </li>
                   </div>
                 </div>
               </div>
-              <div className="flex justify-center items-center h-32 font-monserrat border-2 border-black border-dashed p-5">
-                <img
-                  src={IconSecure}
-                  alt=""
-                  className="w-auto h-16 mt-1 mr-2"
-                />
+              <div className="flex flex-col sm:flex-row justify-center items-start h-auto font-montserrat border-2 border-black border-dashed p-4 sm:p-5 mt-4 lg:mt-0">
+                <div className="flex flex-row sm:flex-col items-start sm:items-start">
+                  <img
+                    src={IconSecure}
+                    alt="IconSecure"
+                    className="w-12 h-12 sm:w-16 sm:h-16 sm:mb-0 sm:mr-4"
+                  />
+                  <p className="font-bold align-top text-center md:text-left">
+                    Assured Delivery
+                  </p>
+                </div>
                 <div>
-                  <li>
+                  <li className="text-sm sm:text-base">
                     Order Now 🎁 & Get it Between 🔥
-                    <span className="font-semibold">
-                      Thursday June 13th - Monday June 17th
+                    <span className="font-semibold block text-center sm:text-left sm:inline mt-2 sm:mt-0 w-full text-xs md:text-md sm:text-base">
+                      {deliveryDates.start} - {deliveryDates.end}
                     </span>
                   </li>
-                  <li className="mt-3">If ordered before today 11:59 PM</li>
+                  <li className="mt-3 text-sm sm:text-base">
+                    If ordered before today 11:59 PM
+                  </li>
                 </div>
               </div>
             </div>
 
             <div className="mt-7 border-black w-full flex flex-col md:flex-row pl-4 pr-4 lg:pl-10 lg:pr-10 bg-yellow-100 border-b-2 border-t-2">
-              <div className="w-full md:w-[50%] p-4 lg:p-10">
+              <div className="w-full md:w-[50%] p-4 lg:p-10 hidden">
                 <p className="text-black text-3xl md:text-4xl lg:text-5xl font-mono font-semibold">
                   <span className="text-yellow-600 mr-3">5000+</span>PEOPLE
                   <br /> LOVES US
@@ -948,7 +1024,7 @@ const Cart = () => {
             </div>
             <div className="p-7">
               <h1 className="text-2xl font-semibold ml-5 font-serif">
-                Similar Product
+                Related Products
               </h1>
               <div className="w-full p-5">
                 <div
@@ -956,291 +1032,14 @@ const Cart = () => {
                   data-aos-anchor-placement="top-bottom"
                   data-aos-duration="3000"
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 justify-center gap-x-3 gap-y-6">
-                    <Link to="/cart" className="flex flex-col overflow-hidden">
-                      <div className="relative flex h-60 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
-                        <img
-                          className="peer absolute top-0 right-0 h-full w-full object-cover"
-                          src={summar1}
-                          alt="product image"
-                        />
-                        <img
-                          className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-                          src={summar2}
-                          alt="product image"
-                        />
-                        <svg
-                          className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-                          />
-                        </svg>
-                        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-                          39% OFF
-                        </span>
-                      </div>
-                      <div className="mt-4">
-                        <h5 className="text-sm font-mono font-semibold flex justify-center w-full text-black">
-                          Summer Platinum Cotton Shirt
-                        </h5>
-                        <div className="mt-2 mb-5 flex items-center justify-between">
-                          <p className="w-full flex justify-evenly">
-                            <span className="text-sm text-black font-bold line-through">
-                              Rs. 1,470.00
-                            </span>
-                            <span className="text-sm text-green-700 font-bold text-bleck">
-                              Rs. 1,299.00
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-
-                    {/* Repeat the Link block for more products */}
-                    <Link to="/cart" className="flex flex-col overflow-hidden">
-                      <div className="relative flex h-60 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
-                        <img
-                          className="peer absolute top-0 right-0 h-full w-full object-cover"
-                          src={summar1}
-                          alt="product image"
-                        />
-                        <img
-                          className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-                          src={summar2}
-                          alt="product image"
-                        />
-                        <svg
-                          className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-                          />
-                        </svg>
-                        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-                          39% OFF
-                        </span>
-                      </div>
-                      <div className="mt-4">
-                        <h5 className="text-sm font-mono font-semibold flex justify-center w-full text-black">
-                          Summer Platinum Cotton Shirt
-                        </h5>
-                        <div className="mt-2 mb-5 flex items-center justify-between">
-                          <p className="w-full flex justify-evenly">
-                            <span className="text-sm text-black font-bold line-through">
-                              Rs. 1,470.00
-                            </span>
-                            <span className="text-sm text-green-700 font-bold text-bleck">
-                              Rs. 1,299.00
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                    <Link to="/cart" className="flex flex-col overflow-hidden">
-                      <div className="relative flex h-60 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
-                        <img
-                          className="peer absolute top-0 right-0 h-full w-full object-cover"
-                          src={summar1}
-                          alt="product image"
-                        />
-                        <img
-                          className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-                          src={summar2}
-                          alt="product image"
-                        />
-                        <svg
-                          className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-                          />
-                        </svg>
-                        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-                          39% OFF
-                        </span>
-                      </div>
-                      <div className="mt-4">
-                        <h5 className="text-sm font-mono font-semibold flex justify-center w-full text-black">
-                          Summer Platinum Cotton Shirt
-                        </h5>
-                        <div className="mt-2 mb-5 flex items-center justify-between">
-                          <p className="w-full flex justify-evenly">
-                            <span className="text-sm text-black font-bold line-through">
-                              Rs. 1,470.00
-                            </span>
-                            <span className="text-sm text-green-700 font-bold text-bleck">
-                              Rs. 1,299.00
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                    <Link to="/cart" className="flex flex-col overflow-hidden">
-                      <div className="relative flex h-60 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
-                        <img
-                          className="peer absolute top-0 right-0 h-full w-full object-cover"
-                          src={summar1}
-                          alt="product image"
-                        />
-                        <img
-                          className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-                          src={summar2}
-                          alt="product image"
-                        />
-                        <svg
-                          className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-                          />
-                        </svg>
-                        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-                          39% OFF
-                        </span>
-                      </div>
-                      <div className="mt-4">
-                        <h5 className="text-sm font-mono font-semibold flex justify-center w-full text-black">
-                          Summer Platinum Cotton Shirt
-                        </h5>
-                        <div className="mt-2 mb-5 flex items-center justify-between">
-                          <p className="w-full flex justify-evenly">
-                            <span className="text-sm text-black font-bold line-through">
-                              Rs. 1,470.00
-                            </span>
-                            <span className="text-sm text-green-700 font-bold text-bleck">
-                              Rs. 1,299.00
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                    <Link to="/cart" className="flex flex-col overflow-hidden">
-                      <div className="relative flex h-60 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
-                        <img
-                          className="peer absolute top-0 right-0 h-full w-full object-cover"
-                          src={summar1}
-                          alt="product image"
-                        />
-                        <img
-                          className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-                          src={summar2}
-                          alt="product image"
-                        />
-                        <svg
-                          className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-                          />
-                        </svg>
-                        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-                          39% OFF
-                        </span>
-                      </div>
-                      <div className="mt-4">
-                        <h5 className="text-sm font-mono font-semibold flex justify-center w-full text-black">
-                          Summer Platinum Cotton Shirt
-                        </h5>
-                        <div className="mt-2 mb-5 flex items-center justify-between">
-                          <p className="w-full flex justify-evenly">
-                            <span className="text-sm text-black font-bold line-through">
-                              Rs. 1,470.00
-                            </span>
-                            <span className="text-sm text-green-700 font-bold text-bleck">
-                              Rs. 1,299.00
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
-                    <Link to="/cart" className="flex flex-col overflow-hidden">
-                      <div className="relative flex h-60 sm:h-72 md:h-80 lg:h-96 overflow-hidden">
-                        <img
-                          className="peer absolute top-0 right-0 h-full w-full object-cover"
-                          src={summar1}
-                          alt="product image"
-                        />
-                        <img
-                          className="peer peer-hover:right-0 absolute top-0 -right-96 h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-                          src={summar2}
-                          alt="product image"
-                        />
-                        <svg
-                          className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-                          xmlns="http://www.w3.org/2000/svg"
-                          aria-hidden="true"
-                          role="img"
-                          width="1em"
-                          height="1em"
-                          preserveAspectRatio="xMidYMid meet"
-                          viewBox="0 0 32 32"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-                          />
-                        </svg>
-                        <span className="absolute top-0 left-0 m-2 rounded-full bg-black px-2 text-center text-sm font-medium text-white">
-                          39% OFF
-                        </span>
-                      </div>
-                      <div className="mt-4">
-                        <h5 className="text-sm font-mono font-semibold flex justify-center w-full text-black">
-                          Summer Platinum Cotton Shirt
-                        </h5>
-                        <div className="mt-2 mb-5 flex items-center justify-between">
-                          <p className="w-full flex justify-evenly">
-                            <span className="text-sm text-black font-bold line-through">
-                              Rs. 1,470.00
-                            </span>
-                            <span className="text-sm text-green-700 font-bold text-bleck">
-                              Rs. 1,299.00
-                            </span>
-                          </p>
-                        </div>
-                      </div>
-                    </Link>
+                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 justify-center gap-4">
+                    {relatedProducts.map((product) => (
+                      <ProductList
+                        key={product.product_id}
+                        product={product}
+                        className="min-h-[400px] md:min-h-[500px]"
+                      />
+                    ))}
                   </div>
                 </div>
               </div>
