@@ -11,6 +11,29 @@ import { toast } from "react-hot-toast";
 import defaultImage from "../../assets/photo11.jpg";
 import { GetOrders, UpdateOrderStatus } from "../../Services/Operations/Auth";
 
+const formatToIST = (utcDateString) => {
+  try {
+    // Create a date object from the UTC string
+    const date = new Date(utcDateString);
+
+    // Add 5 hours and 30 minutes for IST conversion
+    const istDate = new Date(date.getTime() + 5.5 * 60 * 60 * 1000);
+
+    return istDate.toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    });
+  } catch (error) {
+    console.error("Error formatting date:", error);
+    return utcDateString; // Return original string if formatting fails
+  }
+};
+
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -188,8 +211,7 @@ const Orders = () => {
                         {order.order_id}
                       </div>
                       <div className="text-sm text-gray-500">
-                        {new Date(order.created_at).toLocaleDateString()} -{" "}
-                        {new Date(order.created_at).toLocaleTimeString()}
+                        {formatToIST(order.created_at)}
                       </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
@@ -242,7 +264,7 @@ const Orders = () => {
                           ".MuiOutlinedInput-notchedOutline": {
                             border: "none",
                           },
-                          "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                          "&.MuiFocused .MuiOutlinedInput-notchedOutline": {
                             border: "none",
                           },
                           "&:hover .MuiOutlinedInput-notchedOutline": {
