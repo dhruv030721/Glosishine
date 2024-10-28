@@ -489,7 +489,7 @@ const Cart = () => {
               </div>
               <div className="w-full lg:w-[40%] px-5 lg:pr-10">
                 <div data-aos="fade-up" data-aos-duration="1000">
-                  <h1 className="text-2xl font-dm-sans font-semibold">
+                  <h1 className="text-2xl font-signika font-semibold">
                     {item.product_name}
                   </h1>
                   <div className="flex flex-row font-montserrat gap-x-3 mt-3">
@@ -1010,10 +1010,10 @@ const Cart = () => {
                       />
                     ))}
                     <div className="flex flex-col flex-grow">
-                      <h1 className="text-lg font-dm-sans mb-2">
+                      <h1 className="text-lg font-signika mb-2">
                         Title: {item.title}
                       </h1>
-                      <p className="font-dm-sans mb-2 text-sm">
+                      <p className="font-signika mb-2 text-sm">
                         Review: {item.review}
                       </p>
                       <div className="flex items-center text-base text-green-600 gap-x-1 mb-2">

@@ -133,25 +133,57 @@ const Account = () => {
     window.location.reload();
   };
 
-  const UserProfile = ({ userData }) => (
-    <div className="flex items-center gap-4">
-      <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-gray-300 rounded-full flex items-center justify-center">
-        <img
-          src={userData.profile_img || "https://via.placeholder.com/150"}
-          alt="User"
-          className="rounded-full w-full h-full object-cover"
-        />
+  const UserProfile = ({ userData }) => {
+    // Function to get initials from name
+    const getInitials = (name) => {
+      const names = name.split(" ");
+      if (names.length >= 2) {
+        return `${names[0][0]}${names[names.length - 1][0]}`.toUpperCase();
+      }
+      return name[0].toUpperCase();
+    };
+
+    // Array of gradient combinations that complement your UI
+    const gradients = [
+      "from-green-900 to-teal-900",
+      "from-emerald-900 to-cyan-900",
+      "from-teal-900 to-emerald-900",
+      "from-green-900 to-emerald-900",
+      "from-teal-900 to-green-900",
+    ];
+
+    // Use a consistent gradient based on user's name
+    const gradientIndex = userData.name.length % gradients.length;
+    const gradient = gradients[gradientIndex];
+
+    return (
+      <div className="flex items-center gap-4">
+        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center overflow-hidden">
+          {userData.profile_img ? (
+            <img
+              src={userData.profile_img}
+              alt={userData.name}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div
+              className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl sm:text-2xl md:text-3xl`}
+            >
+              {getInitials(userData.name)}
+            </div>
+          )}
+        </div>
+        <div>
+          <h2 className="text-xl sm:text-2xl font-poppins font-bold">
+            {userData.name}
+          </h2>
+          <p className="text-sm sm:text-base text-gray-500 font-monserrat">
+            {userData.email}
+          </p>
+        </div>
       </div>
-      <div>
-        <h2 className="text-xl sm:text-2xl font-poppins font-bold">
-          {userData.name}
-        </h2>
-        <p className="text-sm sm:text-base text-gray-500 font-monserrat">
-          {userData.email}
-        </p>
-      </div>
-    </div>
-  );
+    );
+  };
 
   const LogoutButton = ({ onLogout }) => (
     <button
@@ -181,7 +213,7 @@ const Account = () => {
         }}
       >
         <div className="text-center">
-          <h2 className="text-xl font-bold mb-4 font-dm-sans text-black">
+          <h2 className="text-xl font-bold mb-4 font-signika text-black">
             Are you sure you want to log out?
           </h2>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-6">

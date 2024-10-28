@@ -4,6 +4,7 @@ import ProductList from "../../Components/ProductList/ProductList";
 import { ring2 } from "ldrs";
 import yellowLine from "../../assets/Yellow-Line.svg";
 import { AppContext } from "../../App";
+import { getFavProduct } from "../../Services/Operations/ProductServices";
 
 const SubCategoryPage = () => {
   const { categoryName, subCategoryName } = useParams();
@@ -11,12 +12,32 @@ const SubCategoryPage = () => {
   const [loading, setLoading] = useState(true);
   const [watchlistItems, setWatchlistItems] = useState([]);
   const { getdata: AllProducts } = useContext(AppContext);
+  const userContext = useContext(AppContext);
 
   ring2.register();
 
   useEffect(() => {
     fetchSubCategoryProducts();
   }, [categoryName, subCategoryName, AllProducts]);
+
+  useEffect(() => {
+    const fetchWatchlistItems = async () => {
+      const email = userContext?.user?.[0]?.email;
+      if (email) {
+        try {
+          const favProducts = await getFavProduct(email);
+          if (favProducts?.data?.data) {
+            setWatchlistItems(favProducts.data.data);
+          }
+        } catch (error) {
+          console.log("No favorite products found:", error);
+          setWatchlistItems([]);
+        }
+      }
+    };
+
+    fetchWatchlistItems();
+  }, [userContext?.user]);
 
   const fetchSubCategoryProducts = () => {
     setLoading(true);

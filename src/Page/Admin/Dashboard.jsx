@@ -58,7 +58,7 @@ const Dashboard = () => {
           <div className="flex items-center justify-between h-14 border-b dark:border-white px-4">
             <div className="flex items-center gap-3">
               <img src={logo} alt="logo" className="aspect-video w-16" />
-              <span className="text-xl font-dm-sans font-bold text-white dark:text-white">
+              <span className="text-xl font-signika font-bold text-white dark:text-white">
                 Glosishine Admin
               </span>
             </div>
@@ -66,7 +66,7 @@ const Dashboard = () => {
               <IoMdClose size={24} />
             </button>
           </div>
-          <div className="flex flex-col font-dm-sans flex-1 overflow-y-auto mt-2 gap-y-3">
+          <div className="flex flex-col font-signika flex-1 overflow-y-auto mt-2 gap-y-3">
             <button
               className={`flex items-center px-6 py-2 ml-2 mr-2 rounded-md text-lg text-white`}
               onClick={() => handleItemClick("dashboard")}
@@ -119,7 +119,7 @@ const Dashboard = () => {
           </div>
           <React.Fragment>
             <button
-              className="flex items-center font-dm-sans text-white mb-5 px-6 ml-2 mr-2 rounded-md py-2 text-lg"
+              className="flex items-center font-signika text-white mb-5 px-6 ml-2 mr-2 rounded-md py-2 text-lg"
               onClick={() => setOpen(true)}
             >
               <LuLogOut className="w-6 h-6 mr-2" />
@@ -136,19 +136,19 @@ const Dashboard = () => {
                 }}
               >
                 <div>
-                  <div className="text-xl font-dm-sans text-black">
+                  <div className="text-xl font-signika text-black">
                     Are you sure you want to log out?
                   </div>
                   <div className="flex flex-row justify-end gap-4 mt-3">
                     <button
-                      className="text-black bg-slate-200 text-lg font-dm-sans items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
+                      className="text-black bg-slate-200 text-lg font-signika items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
                       onClick={() => setOpen(false)}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={handleLogout}
-                      className=" text-white bg-red-600 text-lg font-dm-sans items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
+                      className=" text-white bg-red-600 text-lg font-signika items-center flex  justify-center p-2 rounded-lg w-24 font-semibold"
                     >
                       Confirm
                     </button>

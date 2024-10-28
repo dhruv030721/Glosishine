@@ -317,7 +317,7 @@ const Discounts = () => {
   }
 
   return (
-    <Box className="p-2 sm:p-4 bg-gray-100 font-dm-sans">
+    <Box className="p-2 sm:p-4 bg-gray-100 font-signika">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4 sm:gap-0">
         <Typography
           variant={isMobile ? "h5" : "h4"}

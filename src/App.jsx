@@ -172,7 +172,7 @@ function App() {
             <Route path="returnexchange" element={<ReturnExchange />} />
             <Route path="account" element={<Account />} />
             <Route path="cart" element={<CartPage />} />
-            <Route path=":id" element={<Cart />} />
+            <Route path="/product/:id" element={<Cart />} />
             <Route path="forgotpassword" element={<ForgotPassword />} />
             <Route path="newarrivals" element={<NewArrivals />} />
             <Route path="mosttrending" element={<MostTrending />} />

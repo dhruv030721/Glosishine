@@ -200,7 +200,7 @@ const Product = () => {
   }
 
   return (
-    <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">
+    <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-signika">
       <Typography
         variant="h4"
         className="font-bold text-bg-green text-xl sm:text-2xl md:text-3xl mb-4"

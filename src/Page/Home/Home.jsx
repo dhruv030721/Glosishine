@@ -53,6 +53,7 @@ const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [watchlistItems, setWatchlistItems] = useState([]);
   const [newDropProducts, setNewDropProducts] = useState([]);
+  const [autoPlay, setAutoPlay] = useState(true);
 
   const itemsPerPage = {
     mobile: 1,
@@ -185,12 +186,23 @@ const Home = () => {
   }, [Appcontext?.user]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
-      nextSlide();
-    }, 5000); // Change slide every 5 seconds
+    let timer;
+    if (autoPlay) {
+      timer = setInterval(() => {
+        nextSlide();
+      }, 5000); // Change slide every 5 seconds
+    }
 
-    return () => clearInterval(timer);
-  }, [nextSlide, newDropProducts]);
+    return () => {
+      if (timer) {
+        clearInterval(timer);
+      }
+    };
+  }, [nextSlide, autoPlay]);
+
+  // Add these handlers for pause/resume functionality
+  const handleMouseEnter = () => setAutoPlay(false);
+  const handleMouseLeave = () => setAutoPlay(true);
 
   const addToCart = (id) => {
     if (Appcontext.CartProducts.map((item) => item.product_id !== id)) {
@@ -243,9 +255,15 @@ const Home = () => {
   return (
     <div className="w-full h-full overflow-hidden">
       <section data-aos="fade-up" className="mb-8 sm:mb-12 md:mb-16">
-        <div className="flex items-center justify-center max-h-[90vh]">
+        <div
+          className="flex items-center justify-center max-h-[90vh]"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
           <Carousel
             className="h-auto"
+            autoplay={autoPlay}
+            loop={true}
             prevArrow={({ handlePrev }) => (
               <button
                 onClick={handlePrev}
@@ -421,6 +439,84 @@ const Home = () => {
               </div>
             </div>
           </div>
+        </div>
+      </section>
+
+      <section data-aos="fade-up" className="mb-8 sm:mb-12 md:mb-16">
+        <div
+          className="flex items-center justify-center max-h-[90vh]"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          <Carousel
+            className="h-auto"
+            autoplay={autoPlay}
+            loop={true}
+            prevArrow={({ handlePrev }) => (
+              <button
+                onClick={handlePrev}
+                className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4 md:w-6 md:h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 19.5L8.25 12l7.5-7.5"
+                  />
+                </svg>
+              </button>
+            )}
+            nextArrow={({ handleNext }) => (
+              <button
+                onClick={handleNext}
+                className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth="1.5"
+                  stroke="currentColor"
+                  className="w-4 h-4 md:w-6 md:h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </button>
+            )}
+            navigation={({ setActiveIndex, activeIndex, length }) => (
+              <div className="absolute bottom-4 left-2/4 z-50 flex -translate-x-2/4 gap-2">
+                {new Array(length).fill("").map((_, i) => (
+                  <span
+                    key={i}
+                    className={`block h-3 w-3 cursor-pointer rounded-full transition-colors content-[''] ${
+                      activeIndex === i ? "bg-white" : "bg-white/50"
+                    }`}
+                    onClick={() => setActiveIndex(i)}
+                  />
+                ))}
+              </div>
+            )}
+          >
+            {advertisement.map((image, index) => (
+              <img
+                key={index}
+                src={image.url}
+                alt={`image ${index + 1}`}
+                className="max-h-full max-w-full object-contain w-full hidden"
+              />
+            ))}
+          </Carousel>
         </div>
       </section>
 

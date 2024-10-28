@@ -5,11 +5,14 @@ import {
   MenuItem,
   FormControl,
   InputLabel,
+  TextField,
+  InputAdornment,
 } from "@mui/material";
 import { ring2 } from "ldrs";
 import { toast } from "react-hot-toast";
 import defaultImage from "../../assets/photo11.jpg";
 import { GetOrders, UpdateOrderStatus } from "../../Services/Operations/Auth";
+import { FaSearch, FaTimes } from "react-icons/fa";
 
 const formatToIST = (utcDateString) => {
   try {
@@ -39,6 +42,7 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("ALL");
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
   ring2.register();
 
@@ -118,10 +122,23 @@ const Orders = () => {
     setExpandedOrder(expandedOrder === orderId ? null : orderId);
   };
 
-  const filteredOrders =
-    filter === "ALL"
-      ? orders
-      : orders.filter((order) => order.order_status === filter);
+  const getFilteredOrders = () => {
+    let filtered = orders;
+
+    // First filter by status
+    if (filter !== "ALL") {
+      filtered = filtered.filter((order) => order.order_status === filter);
+    }
+
+    // Then filter by search query
+    if (searchQuery.trim()) {
+      filtered = filtered.filter((order) =>
+        order.order_id.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+    }
+
+    return filtered;
+  };
 
   const calculateTotalAmount = (orderItems) => {
     return orderItems.reduce((total, item) => {
@@ -143,7 +160,7 @@ const Orders = () => {
   }
 
   return (
-    <div className="w-full h-full p-2 sm:p-4 md:p-6 rounded-lg bg-gray-100 font-dm-sans">
+    <div className="w-full h-full p-2 sm:p-4 md:p-6 rounded-lg bg-gray-100 font-signika">
       <Typography
         variant="h4"
         className="font-bold text-bg-green text-2xl sm:text-3xl mb-4"
@@ -151,17 +168,27 @@ const Orders = () => {
         Orders
       </Typography>
 
-      <div className="my-4 flex flex-col sm:flex-row justify-between items-start sm:items-center">
-        <FormControl
-          variant="outlined"
-          className="w-full sm:w-1/4 mb-4 sm:mb-0"
-        >
-          <InputLabel style={{ color: "green" }}>Filter by Status</InputLabel>
+      <div className="my-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <FormControl variant="outlined" className="w-full sm:w-1/4">
+          <InputLabel style={{ color: "rgb(6,68,59)" }}>
+            Filter by Status
+          </InputLabel>
           <Select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
             label="Filter by Status"
-            style={{ color: "green", borderColor: "green" }}
+            sx={{
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgb(6,68,59)",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgb(6,68,59)",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgb(6,68,59)",
+              },
+              color: "rgb(6,68,59)",
+            }}
           >
             <MenuItem value="ALL">All Orders</MenuItem>
             <MenuItem value="PENDING">Pending</MenuItem>
@@ -170,10 +197,80 @@ const Orders = () => {
             <MenuItem value="CANCELLED">Cancelled</MenuItem>
           </Select>
         </FormControl>
+
+        <TextField
+          placeholder="Search by Order ID"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full sm:w-1/3"
+          variant="outlined"
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                <FaSearch className="text-bg-green" />
+              </InputAdornment>
+            ),
+            endAdornment: searchQuery && (
+              <InputAdornment position="end">
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="text-bg-green hover:text-green-700 p-1 rounded-full hover:bg-green-50 transition-colors"
+                >
+                  <FaTimes size={16} />
+                </button>
+              </InputAdornment>
+            ),
+            sx: {
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgb(6,68,59)",
+                borderWidth: "1.5px",
+              },
+              "&:hover .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgb(6,68,59)",
+                borderWidth: "2px",
+              },
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "rgb(6,68,59)",
+                borderWidth: "2px",
+              },
+              color: "rgb(6,68,59)",
+              fontFamily: "DM Sans, sans-serif",
+              "& input::placeholder": {
+                color: "rgb(6,68,59, 0.7)",
+                opacity: 0.7,
+              },
+            },
+          }}
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: "8px",
+            },
+          }}
+        />
       </div>
 
+      {/* No results message with improved styling */}
+      {getFilteredOrders().length === 0 && (
+        <div className="flex flex-col items-center justify-center bg-white rounded-lg p-8 mt-4 border border-gray-200">
+          <FaSearch className="text-bg-green mb-3" size={24} />
+          <Typography variant="h6" className="text-bg-green text-center">
+            {searchQuery
+              ? "No orders found matching your search"
+              : "No orders found"}
+          </Typography>
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="mt-3 text-sm text-bg-green hover:text-green-700 underline"
+            >
+              Clear search
+            </button>
+          )}
+        </div>
+      )}
+
       <div className="overflow-x-auto">
-        {filteredOrders.length > 0 ? (
+        {getFilteredOrders().length > 0 ? (
           <table className="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden">
             <thead className="bg-bg-green text-white">
               <tr>
@@ -198,7 +295,7 @@ const Orders = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200">
-              {filteredOrders.map((order, index) => (
+              {getFilteredOrders().map((order, index) => (
                 <>
                   <tr key={order.order_id}>
                     <td className="px-4 py-4 whitespace-nowrap">
@@ -372,7 +469,9 @@ const Orders = () => {
         ) : (
           <div className="flex justify-center items-center bg-white rounded-lg p-4">
             <Typography variant="h6" className="text-bg-green">
-              No orders found
+              {searchQuery
+                ? "No orders found matching your search"
+                : "No orders found"}
             </Typography>
           </div>
         )}

@@ -270,7 +270,7 @@ const SetItems = () => {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8 font-dm-sans">
+    <div className="container mx-auto px-4 py-8 font-signika">
       {renderSection(
         "Slider-1 Items (1610x810)",
         imagesSlider1,
@@ -300,34 +300,36 @@ const SetItems = () => {
         () => addContentItem(slider1, "ImageSlider-1", 1)
       )}
 
-      {renderSection(
-        "Advertisement Item (1600x800)",
-        advertisement,
-        "Advertisement",
-        <div className="flex flex-col items-center">
-          {advertiseImages.map((img, index) => (
-            <div key={index} className="w-full mb-4">
-              {img.preview && (
-                <img
-                  src={img.preview}
-                  alt={img.angle || "Advertisement Img"}
-                  className="w-full h-52 object-cover rounded-md mb-2"
+      <div className="hidden">
+        {renderSection(
+          "Advertisement Item (1600x800)",
+          advertisement,
+          "Advertisement",
+          <div className="flex flex-col items-center">
+            {advertiseImages.map((img, index) => (
+              <div key={index} className="w-full mb-4">
+                {img.preview && (
+                  <img
+                    src={img.preview}
+                    alt={img.angle || "Advertisement Img"}
+                    className="w-full h-52 object-cover rounded-md mb-2"
+                  />
+                )}
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => productImageHandler(img.angle, e, 1600, 800)}
+                  className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                 />
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => productImageHandler(img.angle, e, 1600, 800)}
-                className="w-full px-3 py-2 text-sm rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-              {img.error && (
-                <p className="text-red-500 text-sm mt-1">{img.error}</p>
-              )}
-            </div>
-          ))}
-        </div>,
-        () => addContentItem(advertiseImages, "Advertisement", 3)
-      )}
+                {img.error && (
+                  <p className="text-red-500 text-sm mt-1">{img.error}</p>
+                )}
+              </div>
+            ))}
+          </div>,
+          () => addContentItem(advertiseImages, "Advertisement", 3)
+        )}
+      </div>
 
       {renderSection(
         "Slider-2 Items (1600x534)",

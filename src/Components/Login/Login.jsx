@@ -37,7 +37,13 @@ const Login = () => {
             return `${response.data.message}`;
           },
           error: (error) => {
-            return `${error.message}`;
+            console.log(error);
+            // Check if it's a 401 error or if the error response contains specific status
+            if (error?.response?.status === 401 || error.status === 401) {
+              return "Invalid email or password";
+            }
+            // For other errors, show a generic message or the error from the server
+            return "Something went wrong. Please try again.";
           },
         },
         {
@@ -48,8 +54,7 @@ const Login = () => {
             fontWeight: "400",
             lineHeight: "1.5",
           },
-        },
-        { position: "bottom-right" }
+        }
       );
     } catch (error) {
       console.error("Login failed:", error);

@@ -5,6 +5,7 @@ import { TextField } from "@mui/material";
 import { UpdateBilling, UpdateShipping } from "../../Services/Operations/Auth";
 import toast from "react-hot-toast";
 import { AppContext } from "../../App";
+import { FaTimes } from "react-icons/fa";
 
 const AddressModal = ({
   open,
@@ -104,85 +105,106 @@ const AddressModal = ({
       <ModalDialog
         sx={{
           maxWidth: 500,
+          width: "90%",
           borderRadius: "md",
-          boxShadow: "lg",
           p: 0,
+          maxHeight: "90vh",
+          display: "flex",
+          flexDirection: "column",
         }}
       >
+        {/* Header */}
         <div className="bg-bg-green text-white p-4 rounded-t-lg">
           <h2 className="text-xl font-semibold">
             {address ? "Edit" : "Add"}{" "}
             {addressType === "billing" ? "Billing" : "Shipping"} Address
           </h2>
         </div>
-        <form onSubmit={handleSubmit} className="p-4">
-          <TextField
-            label="Contact"
-            value={contact}
-            onChange={(e) => setContact(e.target.value)}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <TextField
-            label="Street Address"
-            value={streetAddress}
-            onChange={(e) => setStreetAddress(e.target.value)}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <TextField
-            label="City"
-            value={city}
-            onChange={(e) => setCity(e.target.value)}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <TextField
-            label="State"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            fullWidth
-            margin="normal"
-            required
-          />
-          <TextField
-            label="Postcode"
-            value={postcode}
-            onChange={(e) => setPostcode(e.target.value)}
-            fullWidth
-            margin="normal"
-            required
-          />
-          {addressType === "shipping" && (
+
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          className="absolute top-2 right-2 text-white opacity-80 hover:opacity-100"
+        >
+          <FaTimes size={24} />
+        </button>
+
+        {/* Scrollable form content */}
+        <div className="overflow-y-auto flex-1 p-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <TextField
-              label="Order Notes"
-              value={orderNotes}
-              onChange={(e) => setOrderNotes(e.target.value)}
+              label="Contact"
+              value={contact}
+              onChange={(e) => setContact(e.target.value)}
               fullWidth
               margin="normal"
-              multiline
-              rows={3}
+              required
             />
-          )}
-          <div className="flex justify-end mt-4">
+            <TextField
+              label="Street Address"
+              value={streetAddress}
+              onChange={(e) => setStreetAddress(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+            />
+            <TextField
+              label="City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+            />
+            <TextField
+              label="State"
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+            />
+            <TextField
+              label="Postcode"
+              value={postcode}
+              onChange={(e) => setPostcode(e.target.value)}
+              fullWidth
+              margin="normal"
+              required
+            />
+            {addressType === "shipping" && (
+              <TextField
+                label="Order Notes"
+                value={orderNotes}
+                onChange={(e) => setOrderNotes(e.target.value)}
+                fullWidth
+                margin="normal"
+                multiline
+                rows={3}
+              />
+            )}
+          </form>
+        </div>
+
+        {/* Fixed button container */}
+        <div className="p-4 bg-gray-50 border-t mt-auto">
+          <div className="flex flex-col sm:flex-row gap-3 justify-end">
             <button
               type="button"
               onClick={onClose}
-              className="mr-2 px-4 py-2 text-bg-green bg-gray-200 rounded-md hover:bg-gray-300"
+              className="w-full sm:w-auto px-6 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-bg-green text-white rounded-md hover:bg-green-700"
+              form="addressForm"
+              className="w-full sm:w-auto px-6 py-2 bg-bg-green text-white rounded-lg hover:bg-green-700 transition-colors"
             >
-              {address ? "Update" : "Save"}
+              {address ? "Update" : "Add"} Address
             </button>
           </div>
-        </form>
+        </div>
       </ModalDialog>
     </Modal>
   );

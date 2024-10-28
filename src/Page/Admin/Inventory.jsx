@@ -279,7 +279,7 @@ const Inventory = () => {
   }
 
   return (
-    <Box className="p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">
+    <Box className="p-2 sm:p-4 md:p-6 bg-gray-100 font-signika">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-4 sm:gap-0">
         <Typography
           variant="h4"

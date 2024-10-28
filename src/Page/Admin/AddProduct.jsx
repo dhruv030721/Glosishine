@@ -247,7 +247,7 @@ const AddProduct = ({ product }) => {
   };
 
   return (
-    <Box className="w-full h-[93vh] flex flex-col font-dm-sans">
+    <Box className="w-full h-[93vh] flex flex-col font-signika">
       <Box className="sticky top-0 z-30 bg-white mb-4 sm:mb-10 p-2 sm:p-4">
         <Stepper
           alternativeLabel
@@ -265,7 +265,7 @@ const AddProduct = ({ product }) => {
       </Box>
 
       {/* Scrollable content in the middle */}
-      <Box className="grow overflow-y-auto p-2 sm:p-4 font-dm-sans">
+      <Box className="grow overflow-y-auto p-2 sm:p-4 font-signika">
         <Grid container spacing={2}>
           {activeStep === 0 && (
             <BasicInformation

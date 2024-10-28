@@ -399,7 +399,7 @@ export const CartPage = () => {
     toast.promise(
       (async () => {
         const response = await AddOrder(orderData);
-        if (!response.data.success) {
+        if (!response.success) {
           throw new Error("Failed to place order");
         }
         await clearAllCart(user?.[0]?.email);
@@ -527,7 +527,7 @@ export const CartPage = () => {
   }
 
   return (
-    <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">
+    <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-signika">
       <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
         Shopping Bag
       </h1>

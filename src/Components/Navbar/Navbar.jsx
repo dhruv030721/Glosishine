@@ -503,7 +503,7 @@ const Navbar = () => {
             <div className="flex items-center justify-between h-14 border-b border-white px-4">
               <div className="flex items-center gap-3">
                 <img src={logo} alt="logo" className="aspect-video w-16" />
-                <span className="text-xl font-dm-sans font-bold text-white">
+                <span className="text-xl font-signika font-bold text-white">
                   Glosishine
                 </span>
               </div>
@@ -511,7 +511,7 @@ const Navbar = () => {
                 <IoMdClose size={24} />
               </button>
             </div>
-            <div className="flex flex-col font-dm-sans flex-1 overflow-y-auto mt-2 gap-y-3 p-4">
+            <div className="flex flex-col font-signika flex-1 overflow-y-auto mt-2 gap-y-3 p-4">
               {items.map((item, index) => (
                 <Link
                   to={item.link}

@@ -4,13 +4,14 @@ import ProductList from "../../Components/ProductList/ProductList";
 import { ring2 } from "ldrs";
 import yellowLine from "../../assets/Yellow-Line.svg";
 import { AppContext } from "../../App";
+import { getFavProduct } from "../../Services/Operations/ProductServices";
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
   const [products, setProducts] = useState({});
   const [loading, setLoading] = useState(true);
   const [watchlistItems, setWatchlistItems] = useState([]);
-  const { getdata: AllProducts } = useContext(AppContext);
+  const { getdata: AllProducts, user } = useContext(AppContext);
   const [currentIndexes, setCurrentIndexes] = useState({});
 
   ring2.register();
@@ -52,6 +53,25 @@ const CategoryPage = () => {
     });
     setCurrentIndexes(newIndexes);
   }, [products]);
+
+  useEffect(() => {
+    const fetchWatchlistItems = async () => {
+      const email = user?.[0]?.email;
+      if (email) {
+        try {
+          const favProducts = await getFavProduct(email);
+          if (favProducts?.data?.data) {
+            setWatchlistItems(favProducts.data.data);
+          }
+        } catch (error) {
+          console.log("No favorite products found:", error);
+          setWatchlistItems([]);
+        }
+      }
+    };
+
+    fetchWatchlistItems();
+  }, [user]);
 
   const fetchCategoryProducts = () => {
     setLoading(true);
@@ -115,7 +135,7 @@ const CategoryPage = () => {
   }
 
   return (
-    <div className="container p-6 bg-gray-100 font-montserrat !min-w-full font-signika">
+    <div className="container p-6 bg-gray-100 !min-w-full font-signika">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-bg-green mb-2 font-signika">
           {categoryName.toUpperCase()}

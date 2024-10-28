@@ -200,7 +200,7 @@ const ProductList = ({
       <div className="relative flex flex-col overflow-hidden object-cover h-full font-signika">
         <a
           className="relative flex h-[100%] sm:h-[90%] md:h-[80%] lg:h-80 xl:h-96 2xl:h-[28rem] 4xl:h-[40rem] overflow-hidden"
-          href={`/${product.product_id}`}
+          href={`/product/${product.product_id}`}
         >
           <img
             className="peer absolute top-0 right-0 h-full w-full object-cover"
@@ -250,7 +250,7 @@ const ProductList = ({
         </button>
 
         <div className="mt-4 z-10 flex flex-col text-center px-4">
-          <a href={`/${product.product_id}`} className="w-full">
+          <a href={`/product/${product.product_id}`} className="w-full">
             <h5 className="text-sm  md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-semibold text-black mb-2">
               {product.product_name}
             </h5>
