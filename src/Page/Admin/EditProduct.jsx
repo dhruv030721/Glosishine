@@ -218,6 +218,11 @@ const EditProduct = ({ id }) => {
           },
         },
         {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
           position: "bottom-right",
         }
       );

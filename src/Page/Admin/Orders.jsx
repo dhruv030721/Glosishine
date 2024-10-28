@@ -58,12 +58,22 @@ const Orders = () => {
         setOrders(response.data);
       } else {
         toast.error("Failed to fetch orders", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
           position: "bottom-right",
         });
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error("An error occurred while fetching orders", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
     } finally {

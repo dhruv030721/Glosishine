@@ -47,13 +47,15 @@ const Login = () => {
           },
         },
         {
-          position: "bottom-right",
           style: {
-            fontFamily: "'Poppins', sans-serif",
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
           },
+          position: "bottom-right",
         }
       );
     } catch (error) {

@@ -65,11 +65,12 @@ const Register = () => {
         },
         {
           style: {
-            fontFamily: "'Poppins', sans-serif",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
-            color: "#333333",
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
           },
         }
       );
@@ -97,11 +98,12 @@ const Register = () => {
         },
         {
           style: {
-            fontFamily: "'Poppins', sans-serif",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
-            color: "#333333",
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
           },
         }
       );
@@ -124,17 +126,23 @@ const Register = () => {
         },
         {
           style: {
-            fontFamily: "'Poppins', sans-serif",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
-            color: "#333333",
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
           },
         }
       );
     } catch (error) {
       console.error("OTP verification or registration failed:", error);
       toast.error("OTP verification or registration failed.", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
     }

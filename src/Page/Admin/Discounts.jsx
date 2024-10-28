@@ -158,6 +158,11 @@ const Discounts = () => {
         },
       },
       {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       }
     );
@@ -175,6 +180,11 @@ const Discounts = () => {
         error: "Failed to delete discount",
       },
       {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       }
     );
@@ -192,6 +202,11 @@ const Discounts = () => {
         error: "Failed to update discount status",
       },
       {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       }
     );

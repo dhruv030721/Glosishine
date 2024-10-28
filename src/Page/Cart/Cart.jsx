@@ -145,7 +145,9 @@ const Cart = () => {
         },
         {
           style: {
-            fontFamily: "'monefont-montserrat', sans-serif",
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
@@ -237,6 +239,11 @@ const Cart = () => {
   const handleAddToCart = async (item, quantity) => {
     if (!selectedSize) {
       toast.error("Please select a size before adding to cart", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return false;
@@ -254,14 +261,35 @@ const Cart = () => {
       // Fetch updated cart items after adding
       await dispatch(fetchCartItemsAsync(userContext.user[0].email));
       toast.success("Item added to cart", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return true;
     } catch (error) {
       console.error("Failed to add item to cart:", error);
-      toast.error("Failed to add item to cart", {
-        position: "bottom-right",
-      });
+      if (error?.message.includes("Insufficient")) {
+        toast.error("Insufficient Product Stock! Try again later", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+      } else {
+        toast.error("Failed to add item to cart! Try again later", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+      }
       return false;
     }
   };
@@ -318,6 +346,11 @@ const Cart = () => {
   const handleClick = async () => {
     if (!userContext?.user?.[0]?.email) {
       toast.error("Please log in to manage your watchlist", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -333,6 +366,11 @@ const Cart = () => {
             error: "Failed to remove product from watchlist.",
           },
           {
+            style: {
+              backgroundColor: "#064C3A",
+              color: "#FFFFFF",
+              fontFamily: "signika",
+            },
             position: "bottom-right",
           }
         );
@@ -349,13 +387,16 @@ const Cart = () => {
         );
 
         // The response data is nested inside response.data
-        if (response?.data?.success) {
-          toast.success(
-            response?.data?.message || "Product added to watchlist!",
-            {
-              position: "bottom-right",
-            }
-          );
+        console.log(response, "response received");
+        if (response?.success) {
+          toast.success(response?.message || "Product added to watchlist!", {
+            style: {
+              backgroundColor: "#064C3A",
+              color: "#FFFFFF",
+              fontFamily: "signika",
+            },
+            position: "bottom-right",
+          });
 
           dispatch(addProduct(filterdata[0]));
           setIsInWatchlist(true);
@@ -367,6 +408,11 @@ const Cart = () => {
       } catch (error) {
         console.error("Error:", error);
         toast.error(error.message || "Failed to add product to watchlist", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
           position: "bottom-right",
         });
       }

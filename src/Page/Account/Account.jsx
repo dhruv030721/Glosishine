@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 /* eslint-disable no-unused-vars */
 import React, { useContext, useEffect, useState, useCallback } from "react";
 import AddressModal from "../../Components/Address/AddressModal";
@@ -144,34 +145,16 @@ const Account = () => {
     };
 
     // Array of gradient combinations that complement your UI
-    const gradients = [
-      "from-green-900 to-teal-900",
-      "from-emerald-900 to-cyan-900",
-      "from-teal-900 to-emerald-900",
-      "from-green-900 to-emerald-900",
-      "from-teal-900 to-green-900",
-    ];
-
-    // Use a consistent gradient based on user's name
-    const gradientIndex = userData.name.length % gradients.length;
-    const gradient = gradients[gradientIndex];
+    const gradient = "from-green-900 to-teal-900";
 
     return (
       <div className="flex items-center gap-4">
         <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center overflow-hidden">
-          {userData.profile_img ? (
-            <img
-              src={userData.profile_img}
-              alt={userData.name}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div
-              className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl sm:text-2xl md:text-3xl`}
-            >
-              {getInitials(userData.name)}
-            </div>
-          )}
+          <div
+            className={`w-full h-full bg-gradient-to-br ${gradient} flex items-center justify-center text-white font-bold text-xl sm:text-2xl md:text-3xl`}
+          >
+            {getInitials(userData.name)}
+          </div>
         </div>
         <div>
           <h2 className="text-xl sm:text-2xl font-poppins font-bold">
@@ -284,14 +267,14 @@ const Account = () => {
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
           <span
-            className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full`}
+            className={`px-2 inline-flex bg-bg-green hover:bg-green-700 hover:cursor-default text-white text-xs leading-5 font-semibold rounded-full`}
           >
             {order.order_status}
           </span>
         </td>
         <td className="px-4 py-4 whitespace-nowrap text-sm font-medium">
           <button
-            className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition-colors duration-200"
+            className="bg-bg-green hover:bg-green-700 text-white px-3 py-1 rounded transition-colors duration-200"
             onClick={() => toggleOrderDetails(order.order_id)}
           >
             {expandedOrder === order.order_id ? "Hide details" : "See details"}
@@ -398,49 +381,67 @@ const Account = () => {
         Order History
       </h2>
       <div className="overflow-x-auto">
-        <CommonTable
-          data={orders}
-          renderHeader={renderHeader}
-          renderRow={renderRow}
-        />
+        {orders && orders.length > 0 ? (
+          <CommonTable
+            data={orders}
+            renderHeader={renderHeader}
+            renderRow={renderRow}
+          />
+        ) : (
+          <div className="flex flex-col items-center justify-center py-8 px-4 bg-white rounded-lg">
+            <h3 className="text-xl font-semibold text-bg-green mb-2">
+              No Orders Yet
+            </h3>
+            <p className="text-gray-500 text-center mb-6">
+              You haven't placed any orders yet. Start shopping to see your
+              orders here!
+            </p>
+            <button
+              onClick={() => navigate("/newdrops")}
+              className="px-6 py-2 bg-bg-green text-white rounded-lg hover:bg-green-700 transition-colors duration-300 font-medium"
+            >
+              Start Shopping
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
 
-  const SettingsModal = ({ open, onClose, onLogout }) => (
-    <Modal keepMounted open={open} onClose={onClose}>
-      <ModalDialog
-        sx={{
-          width: "30%",
-          height: "auto",
-          "@media (max-width:440px)": {
-            width: "65%",
-          },
-          "@media (max-width:380px)": {
-            width: "70%",
-          },
-        }}
-      >
-        <div className="p-4">
-          <h2 className="text-xl font-bold mb-4 font-outfit text-bg-green">
-            Settings
-          </h2>
-          <button
-            onClick={onLogout}
-            className="w-full text-white bg-red-600 hover:bg-red-700 text-lg font-poppins items-center flex justify-center p-2 rounded-lg font-semibold mb-2"
-          >
-            Logout
-          </button>
-          <button
-            onClick={onClose}
-            className="w-full text-bg-green bg-gray-200 hover:bg-gray-300 text-lg font-poppins items-center flex justify-center p-2 rounded-lg font-semibold"
-          >
-            Close
-          </button>
-        </div>
-      </ModalDialog>
-    </Modal>
-  );
+  // const SettingsModal = ({ open, onClose, onLogout }) => (
+  //   <Modal keepMounted open={open} onClose={onClose}>
+  //     <ModalDialog
+  //       sx={{
+  //         width: "30%",
+  //         height: "auto",
+  //         "@media (max-width:440px)": {
+  //           width: "65%",
+  //         },
+  //         "@media (max-width:380px)": {
+  //           width: "70%",
+  //         },
+  //       }}
+  //     >
+  //       <div className="p-4">
+  //         <h2 className="text-xl font-bold mb-4 font-outfit text-bg-green">
+  //           Settings
+  //         </h2>
+  //         <button
+  //           onClick={onLogout}
+  //           className="w-full text-white bg-red-600 hover:bg-red-700 text-lg font-poppins items-center flex justify-center p-2 rounded-lg font-semibold mb-2"
+  //         >
+  //           Logout
+  //         </button>
+  //         <button
+  //           onClick={onClose}
+  //           className="w-full text-bg-green bg-gray-200 hover:bg-gray-300 text-lg font-poppins items-center flex justify-center p-2 rounded-lg font-semibold"
+  //         >
+  //           Close
+  //         </button>
+  //       </div>
+  //     </ModalDialog>
+  //   </Modal>
+  // );
 
   const formatToIST = (utcDateString) => {
     try {
@@ -462,41 +463,6 @@ const Account = () => {
     } catch (error) {
       console.error("Error formatting date:", error);
       return utcDateString; // Return original string if formatting fails
-    }
-  };
-
-  // Alternative approach if the above doesn't work:
-  const formatToIST_alternative = (utcDateString) => {
-    try {
-      const date = new Date(utcDateString);
-
-      // Manually format the date
-      const options = {
-        timeZone: "Asia/Kolkata",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      };
-
-      const dateStr = date.toLocaleDateString("en-IN", options);
-
-      // Get hours and minutes in IST
-      const istHours = (date.getUTCHours() + 5) % 24;
-      const istMinutes = (date.getUTCMinutes() + 30) % 60;
-
-      // Convert to 12-hour format
-      const hours12 = istHours > 12 ? istHours - 12 : istHours;
-      const ampm = istHours >= 12 ? "PM" : "AM";
-
-      // Format time with leading zeros
-      const timeStr = `${hours12.toString().padStart(2, "0")}:${istMinutes
-        .toString()
-        .padStart(2, "0")} ${ampm}`;
-
-      return `${dateStr}, ${timeStr}`;
-    } catch (error) {
-      console.error("Error formatting date:", error);
-      return utcDateString;
     }
   };
 

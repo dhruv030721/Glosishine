@@ -27,6 +27,7 @@ import {
 } from "../../Services/Operations/Auth";
 import CartTable from "./CartTable";
 import CartCheckout from "./CartCheckout";
+import yellowLine from "../../assets/Yellow-Line.svg";
 
 const MAX_QUANTITY = 10; // Set the maximum quantity limit
 
@@ -61,6 +62,11 @@ export const CartPage = () => {
           console.error("Failed to fetch cart items:", error);
           if (error.response && error.response.status !== 404) {
             toast.error(`Failed to load cart: ${error}`, {
+              style: {
+                backgroundColor: "#064C3A",
+                color: "#FFFFFF",
+                fontFamily: "signika",
+              },
               position: "bottom-right",
             });
           }
@@ -120,6 +126,11 @@ export const CartPage = () => {
   const handleQuantityChange = (itemId, delta) => {
     if (!user?.[0]?.email) {
       toast.error("Please log in to update your cart", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -132,6 +143,11 @@ export const CartPage = () => {
 
     if (newQuantity < 1 && delta < 0) {
       toast.error("Quantity cannot be less than 1", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -139,6 +155,11 @@ export const CartPage = () => {
 
     if (newQuantity > MAX_QUANTITY && delta > 0) {
       toast.error(`Maximum quantity limit is ${MAX_QUANTITY}`, {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -156,6 +177,11 @@ export const CartPage = () => {
           error: "Failed to update quantity",
         },
         {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
           position: "bottom-right",
         }
       )
@@ -165,6 +191,11 @@ export const CartPage = () => {
           fetchCartItems();
         },
         {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
           position: "bottom-right",
         }
       );
@@ -173,6 +204,11 @@ export const CartPage = () => {
   const handleDeleteItem = (itemId, size) => {
     if (!user?.[0]?.email) {
       toast.error("Please log in to update your cart", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -193,6 +229,11 @@ export const CartPage = () => {
           error: "Failed to remove item from cart",
         },
         {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
           position: "bottom-right",
         }
       )
@@ -205,6 +246,11 @@ export const CartPage = () => {
   const handleApplyCoupon = async () => {
     if (!couponCode) {
       toast.error("Please enter a coupon code", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -238,9 +284,15 @@ export const CartPage = () => {
             throw new Error("Invalid coupon code");
           }
         },
-        error: (err) => `Failed to apply coupon: This coupon is not valid or has expired `,
+        error: (err) =>
+          `Failed to apply coupon: This coupon is not valid or has expired `,
       },
       {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       }
     );
@@ -289,6 +341,11 @@ export const CartPage = () => {
       if (!isRazorpayLoaded) {
         toast.error("Razorpay SDK failed to load. Please try again later.", {
           position: "bottom-right",
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
         });
         return;
       }
@@ -332,6 +389,11 @@ export const CartPage = () => {
                 navigate("/ordersuccess");
                 toast.success("Payment successful & Order placed!", {
                   position: "bottom-right",
+                  style: {
+                    backgroundColor: "#064C3A",
+                    color: "#FFFFFF",
+                    fontFamily: "signika",
+                  },
                 });
               } else if (
                 addOrderResponse.message ===
@@ -341,6 +403,11 @@ export const CartPage = () => {
                   "We're sorry, but one or more products in your cart are out of stock",
                   {
                     position: "bottom-right",
+                    style: {
+                      backgroundColor: "#064C3A",
+                      color: "#FFFFFF",
+                      fontFamily: "signika",
+                    },
                   }
                 );
               } else {
@@ -353,6 +420,11 @@ export const CartPage = () => {
             console.error("Error processing payment:", error);
             toast.error("Payment failed. Please try again.", {
               position: "bottom-right",
+              style: {
+                backgroundColor: "#064C3A",
+                color: "#FFFFFF",
+                fontFamily: "signika",
+              },
             });
           }
         },
@@ -370,6 +442,11 @@ export const CartPage = () => {
     } catch (error) {
       console.error("Error creating Razorpay order:", error);
       toast.error("An error occurred while initiating the payment.", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
     }
@@ -412,6 +489,11 @@ export const CartPage = () => {
         error: (err) => `${err.message}`,
       },
       {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       }
     );
@@ -420,6 +502,11 @@ export const CartPage = () => {
   const handleProceedToPayment = () => {
     if (!selectedBillingId || !selectedShippingId) {
       toast.error("Please select both billing and shipping addresses", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -528,56 +615,72 @@ export const CartPage = () => {
 
   return (
     <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-signika">
-      <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
-        Shopping Bag
-      </h1>
-      <h2 className="text-base sm:text-lg mb-4 sm:mb-6">
-        {cartItems.length} {cartItems.length === 1 ? "item" : "items"} in your
-        bag.
-      </h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-        <div className="md:col-span-2">
-          <CartTable
-            cartItems={cartItems}
-            loadingItems={loadingItems}
-            setLoadingItems={setLoadingItems}
-            handleQuantityChange={handleQuantityChange}
-            handleDeleteItem={handleDeleteItem}
-            MAX_QUANTITY={MAX_QUANTITY}
+      <div className="mb-4">
+        <h1 className="text-3xl font-bold text-bg-green mb-2 font-signika">
+          Shopping Bag
+        </h1>
+        <img
+          src={yellowLine}
+          alt="scribble"
+          className="w-24 sm:w-20 md:w-24 lg:w-24 xl:w-24"
+        />
+      </div>
+      <div>
+        <div className="ml-2 mb-2">
+          <h2 className="text-2xl font-semibold text-bg-green mb-2 py-0">
+            {cartItems.length} {cartItems.length === 1 ? "item" : "items"} in
+            your bag
+          </h2>
+          <img
+            src={yellowLine}
+            alt="scribble"
+            className="w-24 sm:w-20 md:w-24 lg:w-24 xl:w-24"
           />
         </div>
 
-        <div className="md:col-span-1">
-          <CartCheckout
-            cartItems={cartItems}
-            billingAddresses={billingAddresses}
-            selectedBillingId={selectedBillingId}
-            setSelectedBillingId={setSelectedBillingId}
-            shippingAddresses={shippingAddresses}
-            selectedShippingId={selectedShippingId}
-            setSelectedShippingId={setSelectedShippingId}
-            handleEditAddress={handleEditAddress}
-            setEditingAddress={setEditingAddress}
-            setAddressType={setAddressType}
-            setAddressModalOpen={setAddressModalOpen}
-            handleApplyCoupon={handleApplyCoupon}
-            couponCode={couponCode}
-            setCouponCode={setCouponCode}
-            cartTotal={cartTotal}
-            totalDiscount={totalDiscount}
-            finalTotal={finalTotal}
-            appliedDiscount={appliedDiscount}
-            handleProceedToPayment={handleProceedToPayment}
-            isPaymentModalOpen={isPaymentModalOpen}
-            setIsPaymentModalOpen={setIsPaymentModalOpen}
-            handlePaymentMethodSelect={handlePaymentMethodSelect}
-            addressModalOpen={addressModalOpen}
-            editingAddress={editingAddress}
-            handleAddressUpdate={handleAddressUpdate}
-            addressType={addressType}
-            couponDiscountAmount={couponDiscountAmount}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
+          <div className="md:col-span-2">
+            <CartTable
+              cartItems={cartItems}
+              loadingItems={loadingItems}
+              setLoadingItems={setLoadingItems}
+              handleQuantityChange={handleQuantityChange}
+              handleDeleteItem={handleDeleteItem}
+              MAX_QUANTITY={MAX_QUANTITY}
+            />
+          </div>
+
+          <div className="md:col-span-1">
+            <CartCheckout
+              cartItems={cartItems}
+              billingAddresses={billingAddresses}
+              selectedBillingId={selectedBillingId}
+              setSelectedBillingId={setSelectedBillingId}
+              shippingAddresses={shippingAddresses}
+              selectedShippingId={selectedShippingId}
+              setSelectedShippingId={setSelectedShippingId}
+              handleEditAddress={handleEditAddress}
+              setEditingAddress={setEditingAddress}
+              setAddressType={setAddressType}
+              setAddressModalOpen={setAddressModalOpen}
+              handleApplyCoupon={handleApplyCoupon}
+              couponCode={couponCode}
+              setCouponCode={setCouponCode}
+              cartTotal={cartTotal}
+              totalDiscount={totalDiscount}
+              finalTotal={finalTotal}
+              appliedDiscount={appliedDiscount}
+              handleProceedToPayment={handleProceedToPayment}
+              isPaymentModalOpen={isPaymentModalOpen}
+              setIsPaymentModalOpen={setIsPaymentModalOpen}
+              handlePaymentMethodSelect={handlePaymentMethodSelect}
+              addressModalOpen={addressModalOpen}
+              editingAddress={editingAddress}
+              handleAddressUpdate={handleAddressUpdate}
+              addressType={addressType}
+              couponDiscountAmount={couponDiscountAmount}
+            />
+          </div>
         </div>
       </div>
     </div>

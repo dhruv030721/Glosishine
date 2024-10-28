@@ -201,6 +201,11 @@ const SetItems = () => {
         },
       },
       {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right", // Set toast position here
       }
     );
@@ -228,6 +233,11 @@ const SetItems = () => {
         console.log(error);
         toast.error("Failed to load content items", {
           position: "bottom-right",
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
         });
       } finally {
         setLoading(false); // Set loading to false when done, regardless of success or failure
@@ -265,6 +275,11 @@ const SetItems = () => {
       },
       {
         position: "bottom-right", // Set toast position here
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
       }
     );
   };

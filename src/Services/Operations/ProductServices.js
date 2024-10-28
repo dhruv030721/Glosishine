@@ -206,7 +206,9 @@ export const addFavProduct = async (email, product_id) => {
     );
 
     // Check for error responses that might come in different formats
+    console.log(response, "fetching");
     if (response?.data?.success) {
+      console.log(response.data, "success");
       return response.data;
     } else if (
       response?.data?.error ||

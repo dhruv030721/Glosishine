@@ -70,6 +70,11 @@ const ForgotPassword = () => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;

@@ -48,6 +48,11 @@ const AddressModal = ({
     const email = user?.[0]?.email;
     if (!email) {
       toast.error("User email not found", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -87,6 +92,11 @@ const AddressModal = ({
     } catch (error) {
       console.error(`Failed to update ${addressType} address:`, error);
       toast.error(`Failed to update ${addressType} address`, {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
     }
@@ -199,6 +209,7 @@ const AddressModal = ({
             <button
               type="submit"
               form="addressForm"
+              onClick={handleSubmit}
               className="w-full sm:w-auto px-6 py-2 bg-bg-green text-white rounded-lg hover:bg-green-700 transition-colors"
             >
               {address ? "Update" : "Add"} Address

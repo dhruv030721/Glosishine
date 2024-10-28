@@ -23,6 +23,11 @@ const Admin = () => {
     e.preventDefault();
     if (!adminuser.email || !adminuser.password) {
       toast.error("Please fill all the fields", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -47,7 +52,9 @@ const Admin = () => {
         {
           position: "bottom-right",
           style: {
-            fontFamily: "'Poppins', sans-serif",
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",

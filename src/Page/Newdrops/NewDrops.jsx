@@ -24,11 +24,21 @@ const NewDrops = () => {
       } else {
         toast.error("Failed to fetch new drop products", {
           position: "bottom-right",
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
         });
       }
     } catch (error) {
       console.error("Error fetching new drop products:", error);
       toast.error("An error occurred while fetching products", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
     } finally {

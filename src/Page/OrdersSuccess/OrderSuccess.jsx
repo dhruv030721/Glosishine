@@ -1,7 +1,30 @@
 import { Link } from "react-router-dom";
 import { FaCheckCircle } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 const OrderSuccess = () => {
+  const [deliveryDates, setDeliveryDates] = useState({ start: "", end: "" });
+
+  useEffect(() => {
+    const calculateDeliveryDates = () => {
+      const today = new Date();
+      const startDate = new Date(today.setDate(today.getDate() + 3));
+      const endDate = new Date(today.setDate(today.getDate() + 4)); // This will be 7 days from the original date
+
+      const formatDate = (date) => {
+        const options = { weekday: "long", month: "long", day: "numeric" };
+        return date.toLocaleDateString("en-US", options);
+      };
+
+      setDeliveryDates({
+        start: formatDate(startDate),
+        end: formatDate(endDate),
+      });
+    };
+
+    calculateDeliveryDates();
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 flex font-montserrat flex-col justify-center items-center px-4 py-12">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8 text-center">
@@ -17,7 +40,7 @@ const OrderSuccess = () => {
           <p className="text-sm font-semibold text-gray-800">
             Your order will be delivered between{" "}
             <span className="text-green-600">
-              Thursday June 13th - Monday June 17th
+              {deliveryDates.start} - {deliveryDates.end}
             </span>
           </p>
         </div>

@@ -61,11 +61,21 @@ const Product = () => {
       await updateNewDropStatus(productId, newStatus.toString());
       setNewDropProducts((prev) => ({ ...prev, [productId]: newStatus }));
       toast.success(`New Drop status updated for product ${productId}`, {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
     } catch (error) {
       console.error("Error updating new drop status:", error);
       toast.error("Failed to update New Drop status", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
     }
@@ -87,6 +97,11 @@ const Product = () => {
         },
       },
       {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       }
     );

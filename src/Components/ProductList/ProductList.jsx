@@ -54,6 +54,11 @@ const ProductList = ({
 
     if (!email) {
       toast.error("Please log in to add items to your watchlist", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -69,6 +74,11 @@ const ProductList = ({
             error: "Failed to remove product from watchlist.",
           },
           {
+            style: {
+              backgroundColor: "#064C3A",
+              color: "#FFFFFF",
+              fontFamily: "signika",
+            },
             position: "bottom-right",
           }
         );
@@ -91,6 +101,11 @@ const ProductList = ({
 
         if (response.success) {
           toast.success(response.message || "Product added to watchlist!", {
+            style: {
+              backgroundColor: "#064C3A",
+              color: "#FFFFFF",
+              fontFamily: "signika",
+            },
             position: "bottom-right",
           });
 
@@ -114,6 +129,11 @@ const ProductList = ({
           errorMessage = "Product already exists in your watchlist!";
         }
         toast.error(errorMessage, {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
           position: "bottom-right",
         });
       }
@@ -127,6 +147,11 @@ const ProductList = ({
     const email = userContext?.user?.[0]?.email;
     if (!email) {
       toast.error("Please log in to add items to your bag", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -134,6 +159,11 @@ const ProductList = ({
 
     if (isInCart) {
       toast.error("This product is already in your bag", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -147,6 +177,11 @@ const ProductList = ({
 
     if (!defaultSize) {
       toast.error("No size available for this product", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
+        },
         position: "bottom-right",
       });
       return;
@@ -172,13 +207,15 @@ const ProductList = ({
           },
         },
         {
-          position: "bottom-right",
           style: {
-            fontFamily: "'Poppins', sans-serif",
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
             fontSize: "14px",
             fontWeight: "400",
             lineHeight: "1.5",
           },
+          position: "bottom-right",
         }
       );
       await dispatch(fetchCartItemsAsync(userContext.user[0].email));

@@ -196,6 +196,11 @@ const AddProduct = ({ product }) => {
             error: (error) => `${error.message}`,
           },
           {
+            style: {
+              backgroundColor: "#064C3A",
+              color: "#FFFFFF",
+              fontFamily: "signika",
+            },
             position: "bottom-right",
           }
         );
@@ -209,6 +214,11 @@ const AddProduct = ({ product }) => {
             error: (error) => `${error.message}`,
           },
           {
+            style: {
+              backgroundColor: "#064C3A",
+              color: "#FFFFFF",
+              fontFamily: "signika",
+            },
             position: "bottom-right",
           }
         );
