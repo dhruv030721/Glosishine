@@ -12,7 +12,7 @@ import {
 } from "../../Services/Operations/ProductServices";
 import toast from "react-hot-toast";
 import { useContext, useEffect, useState } from "react";
-import { addItemAsync } from "../../Slice/CartSlice";
+import { addItemAsync, fetchCartItemsAsync } from "../../Slice/CartSlice";
 
 const ProductList = ({
   product,
@@ -181,6 +181,7 @@ const ProductList = ({
           },
         }
       );
+      await dispatch(fetchCartItemsAsync(userContext.user[0].email));
 
       setIsInCart(true);
     } catch (error) {

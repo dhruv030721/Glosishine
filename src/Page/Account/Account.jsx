@@ -16,6 +16,8 @@ import CommonTable from "../../Components/CommonTable/CommonTable";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import { Toaster } from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../Slice/CartSlice";
 
 const cookies = new Cookies();
 
@@ -39,6 +41,7 @@ const Account = () => {
   const [selectedShippingId, setSelectedShippingId] = useState(null);
   const [editingAddress, setEditingAddress] = useState(null);
   const [expandedOrder, setExpandedOrder] = useState(null);
+  const dispatch = useDispatch();
 
   const [orders, setOrders] = useState([]);
   const navigate = useNavigate();
@@ -96,6 +99,7 @@ const Account = () => {
     cookies.remove("Access-Token");
     setUser(null);
     setUserData(null);
+    dispatch(clearCart());
     navigate("/");
   };
 

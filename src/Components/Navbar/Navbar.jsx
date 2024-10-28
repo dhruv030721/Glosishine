@@ -17,6 +17,8 @@ import "./Navbar.css";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import { getAllDiscounts } from "../../Services/Operations/ProductServices";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCartItemsAsync } from "../../Slice/CartSlice";
 
 const Navbar = () => {
   const context = useContext(AppContext);
@@ -27,6 +29,7 @@ const Navbar = () => {
   const [mobileOffersOpen, setMobileOffersOpen] = useState(false);
   const [mobileMenOpen, setMobileMenOpen] = useState(false);
   const [mobileWomenOpen, setMobileWomenOpen] = useState(false);
+  const [cartItemsCount, setCartItemsCount] = useState(0);
   const location = useLocation();
   const items = [
     { name: "Mens Wear", link: "/category/mens" },
@@ -76,6 +79,50 @@ const Navbar = () => {
     ],
   };
   const [activeDiscounts, setActiveDiscounts] = useState([]);
+  const dispatch = useDispatch();
+
+  // Get cart items from Redux store
+  const { items: cartItems, status } = useSelector((state) => state.cart);
+
+  // Fetch cart items when user changes or location changes
+  useEffect(() => {
+    const fetchCartData = async () => {
+      if (context?.user?.[0]?.email) {
+        try {
+          await dispatch(fetchCartItemsAsync(context.user[0].email));
+        } catch (error) {
+          console.error("Error fetching cart items:", error);
+        }
+      }
+    };
+
+    fetchCartData();
+  }, [dispatch, context.user, location]);
+
+  // Update cart count when cart items change
+  useEffect(() => {
+    const count = cartItems.reduce(
+      (total, item) => total + (item?.quantity || 0),
+      0
+    );
+    setCartItemsCount(count);
+  }, [cartItems]);
+
+  // Clear cart count on logout
+  useEffect(() => {
+    if (!context?.token || !context?.user) {
+      setCartItemsCount(0);
+    }
+  }, [context.token, context.user]);
+
+  // Add this calculation for cart items count
+  useEffect(() => {
+    const cartItemsCount = context.CartProducts.reduce(
+      (total, item) => total + item.quantity,
+      0
+    );
+    setCartItemsCount(cartItemsCount);
+  }, [context.CartProducts]);
 
   // const addItemToCart = (item) => {
   //     setCartItems((prevItems) => {
@@ -191,6 +238,23 @@ const Navbar = () => {
   const toggleMobileWomen = () => {
     setMobileWomenOpen(!mobileWomenOpen);
   };
+  const renderCartCount = () => {
+    if (status === "loading") {
+      return null; // Or return a loading spinner
+    }
+
+    return cartItemsCount > 0 ? (
+      <span
+        className={`absolute ${
+          isSidebarOpen
+            ? "bg-white text-bg-green top-[26%] left-[30%]"
+            : "bg-bg-green text-white -top-2 -right-2"
+        }  text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center`}
+      >
+        {cartItemsCount}
+      </span>
+    ) : null;
+  };
 
   return (
     <>
@@ -251,8 +315,9 @@ const Navbar = () => {
             <Link to="/watchlist">
               <IoMdHeartEmpty size={25} />
             </Link>
-            <Link to="/cart">
+            <Link to="/cart" className="relative">
               <IoCartSharp size={25} />
+              {renderCartCount()}
             </Link>
           </div>
 
@@ -490,11 +555,12 @@ const Navbar = () => {
               </Link>
               <Link
                 to="/cart"
-                className="flex items-center px-6 py-2 rounded-md text-lg text-white hover:bg-white hover:bg-opacity-20"
+                className="relative flex items-center px-6 py-2 rounded-md text-lg text-white hover:bg-white hover:bg-opacity-20"
                 onClick={() => setIsSidebarOpen(false)}
               >
                 <IoCartSharp size={25} className="mr-2" />
                 Cart
+                {renderCartCount()}
               </Link>
             </div>
           </div>

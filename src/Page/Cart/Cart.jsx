@@ -45,6 +45,7 @@ import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { ring2 } from "ldrs";
 import { Carousel } from "@material-tailwind/react";
 import ProductList from "../../Components/ProductList/ProductList";
+import { fetchCartItemsAsync } from "../../Slice/CartSlice";
 
 const Cart = () => {
   const { id } = useParams();
@@ -238,7 +239,7 @@ const Cart = () => {
       toast.error("Please select a size before adding to cart", {
         position: "bottom-right",
       });
-      return false; // Return false to indicate failure
+      return false;
     }
 
     const itemToAdd = {
@@ -250,16 +251,18 @@ const Cart = () => {
 
     try {
       await dispatch(addItemAsync(itemToAdd)).unwrap();
+      // Fetch updated cart items after adding
+      await dispatch(fetchCartItemsAsync(userContext.user[0].email));
       toast.success("Item added to cart", {
         position: "bottom-right",
       });
-      return true; // Return true to indicate success
+      return true;
     } catch (error) {
       console.error("Failed to add item to cart:", error);
       toast.error("Failed to add item to cart", {
         position: "bottom-right",
       });
-      return false; // Return false to indicate failure
+      return false;
     }
   };
 
