@@ -238,7 +238,7 @@ export const CartPage = () => {
             throw new Error("Invalid coupon code");
           }
         },
-        error: (err) => `Failed to apply coupon: ${err.message}`,
+        error: (err) => `Failed to apply coupon: This coupon is not valid or has expired `,
       },
       {
         position: "bottom-right",
