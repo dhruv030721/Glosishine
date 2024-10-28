@@ -60,9 +60,9 @@ export const addItemAsync = createAsyncThunk(
 
 export const removeItemAsync = createAsyncThunk(
   "cart/removeItem",
-  async ({ email, product_id }, thunkAPI) => {
+  async ({ email, product_id, size }, thunkAPI) => {
     try {
-      const response = await removeFromCart(email, product_id);
+      const response = await removeFromCart(email, product_id, size);
       return { product_id }; // Return the product_id for the reducer to use
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response.data);

@@ -313,56 +313,59 @@ const Cart = () => {
   }, []);
 
   const handleClick = async () => {
+    if (!userContext?.user?.[0]?.email) {
+      toast.error("Please log in to manage your watchlist", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
     if (isInWatchlist) {
-      // If the product is already in the watchlist, remove it
       try {
         await toast.promise(
-          deleteFavProduct(favProductId), // Call the delete API with the 'id' from favProductId
+          deleteFavProduct(filterdata[0].product_id, userContext.user[0].email),
           {
             loading: "Removing product from watchlist...",
             success: "Product removed from watchlist!",
             error: "Failed to remove product from watchlist.",
           },
           {
-            position: "bottom-right", // Set toast position here
+            position: "bottom-right",
           }
         );
-        dispatch(removeFromWatchlist(filterdata[0].product_id)); // Remove from watchlist in Redux state
+        dispatch(removeFromWatchlist(filterdata[0].product_id));
         setIsInWatchlist(false);
       } catch (error) {
         console.error("Error:", error);
       }
     } else {
-      // If the product is not in the watchlist, add it
       try {
-        await toast.promise(
-          addFavProduct({
-            id: userContext.user[0].id
-              ? userContext.user[0].id
-              : filterdata[0].product_id,
-            email: userContext.user[0].email,
-            product_id: location.pathname.split("/").pop(),
-          }),
-          {
-            loading: "Adding product to watchlist...",
-            success: "Product added to watchlist!",
-            error: (err) =>
-              err.response?.status === 409
-                ? "Product already exists in your watchlist!"
-                : "Failed to add product to watchlist.",
-          },
-          {
-            position: "bottom-right", // Set toast position here
-          }
+        const response = await addFavProduct(
+          userContext.user[0].email,
+          filterdata[0].product_id
         );
 
-        dispatch(addProduct(filterdata[0])); // Add to watchlist in Redux state
-        setIsInWatchlist(true);
+        // The response data is nested inside response.data
+        if (response?.data?.success) {
+          toast.success(
+            response?.data?.message || "Product added to watchlist!",
+            {
+              position: "bottom-right",
+            }
+          );
+
+          dispatch(addProduct(filterdata[0]));
+          setIsInWatchlist(true);
+        } else {
+          throw new Error(
+            response?.data?.message || "Failed to add product to watchlist"
+          );
+        }
       } catch (error) {
-        toast.error("Are you sure you're logged in?", {
+        console.error("Error:", error);
+        toast.error(error.message || "Failed to add product to watchlist", {
           position: "bottom-right",
         });
-        console.error("Error:", error);
       }
     }
   };
@@ -1037,7 +1040,7 @@ const Cart = () => {
                       <ProductList
                         key={product.product_id}
                         product={product}
-                        className="min-h-[400px] md:min-h-[500px]"
+                        className="min-h-[350px] md:min-h-[500px]"
                       />
                     ))}
                   </div>

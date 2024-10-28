@@ -61,7 +61,7 @@ const SubCategoryPage = () => {
               product={product}
               watchlistItems={watchlistItems}
               setWatchlistItems={setWatchlistItems}
-              className="min-h-[500px]"
+              className="min-h-[400px] sm:min-h-[400px] md:min-h-[500px]"
             />
           ))}
         </div>

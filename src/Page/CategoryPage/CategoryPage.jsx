@@ -161,7 +161,7 @@ const CategoryPage = () => {
                       index={index}
                       watchlistItems={watchlistItems}
                       setWatchlistItems={setWatchlistItems}
-                      className="min-h-[400px] sm:min-h-[350px] md:min-h-[500px]"
+                      className="min-h-[350px] sm:min-h-[350px] md:min-h-[500px]"
                     />
                   </div>
                 ))}

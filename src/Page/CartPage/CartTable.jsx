@@ -161,7 +161,9 @@ const CartTable = ({
                   </div>
                   <div className="hidden sm:block">
                     <button
-                      onClick={() => handleDeleteItem(item?.product_id)}
+                      onClick={() =>
+                        handleDeleteItem(item?.product_id, item?.size)
+                      }
                       className="border-2 border-red-500 border-dashed rounded-lg p-2"
                       disabled={loadingItems[item?.product_id]}
                     >

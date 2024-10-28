@@ -141,7 +141,7 @@ export async function GetShipping(email) {
 
 export async function AddOrder(orderData) {
   const response = await apiConnector("POST", ADDORDER_API, orderData);
-  return response;
+  return response.data;
 }
 
 export async function GetOrders() {

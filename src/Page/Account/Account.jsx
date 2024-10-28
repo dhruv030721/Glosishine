@@ -151,7 +151,7 @@ const Account = () => {
 
   const LogoutButton = ({ onLogout }) => (
     <button
-      className="sm:px-6 p-2 bg-red-600 text-white font-poppins rounded-md hover:bg-red-700 transition-colors absolute top-4 right-4 sm:static"
+      className="sm:px-6 p-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors absolute top-4 right-4 sm:static"
       onClick={onLogout}
     >
       <span className="hidden sm:inline text-sm sm:text-base">Logout</span>
@@ -214,8 +214,7 @@ const Account = () => {
             {order.order_id}
           </div>
           <div className="text-sm text-gray-500">
-            {new Date(order.created_at).toLocaleDateString()} -{" "}
-            {new Date(order.created_at).toLocaleTimeString()}
+            {formatToIST(order.created_at)}
           </div>
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
@@ -245,6 +244,7 @@ const Account = () => {
               0
             )
             .toFixed(2)}
+          {` (${order.payment_type})`}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
           <span
@@ -406,6 +406,64 @@ const Account = () => {
     </Modal>
   );
 
+  const formatToIST = (utcDateString) => {
+    try {
+      // Create a date object from the UTC string
+      const date = new Date(utcDateString);
+
+      // Add 5 hours and 30 minutes for IST conversion
+      const istDate = new Date(date.getTime() + 5.5 * 60 * 60 * 1000);
+
+      return istDate.toLocaleString("en-IN", {
+        timeZone: "Asia/Kolkata",
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: true,
+      });
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return utcDateString; // Return original string if formatting fails
+    }
+  };
+
+  // Alternative approach if the above doesn't work:
+  const formatToIST_alternative = (utcDateString) => {
+    try {
+      const date = new Date(utcDateString);
+
+      // Manually format the date
+      const options = {
+        timeZone: "Asia/Kolkata",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      };
+
+      const dateStr = date.toLocaleDateString("en-IN", options);
+
+      // Get hours and minutes in IST
+      const istHours = (date.getUTCHours() + 5) % 24;
+      const istMinutes = (date.getUTCMinutes() + 30) % 60;
+
+      // Convert to 12-hour format
+      const hours12 = istHours > 12 ? istHours - 12 : istHours;
+      const ampm = istHours >= 12 ? "PM" : "AM";
+
+      // Format time with leading zeros
+      const timeStr = `${hours12.toString().padStart(2, "0")}:${istMinutes
+        .toString()
+        .padStart(2, "0")} ${ampm}`;
+
+      return `${dateStr}, ${timeStr}`;
+    } catch (error) {
+      console.error("Error formatting date:", error);
+      return utcDateString;
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
@@ -425,7 +483,7 @@ const Account = () => {
   }
 
   return (
-    <div className="bg-gray-100 min-h-screen">
+    <div className="bg-gray-100 min-h-screen font-signika">
       <div className="container mx-auto py-4 sm:py-6 md:py-8 px-4 sm:px-6 lg:px-8">
         <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 md:p-8 relative">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0">

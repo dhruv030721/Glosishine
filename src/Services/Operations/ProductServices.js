@@ -147,11 +147,17 @@ export async function getReview(id) {
 }
 
 export async function getNewDropProduct() {
-  const response = await apiConnector(
-    "GET",
-    productendpoints.GETNEWDROPPRODUCT_API
-  );
-  return response;
+  try {
+    const response = await apiConnector(
+      "GET",
+      productendpoints.GETNEWDROPPRODUCT_API
+    );
+    return response;
+  } catch (error) {
+    console.error("Error fetching new drop products:", error);
+    // Return empty data instead of throwing error
+    return { data: { data: [] } };
+  }
 }
 
 export async function updateNewDropStatus(id, status) {
@@ -164,49 +170,70 @@ export async function updateNewDropStatus(id, status) {
 }
 
 // fav product
-export async function getFavProduct(email) {
-  const headers = {
-    "Content-Type": "application/json",
-  };
-  const body = { email };
-  const response = await apiConnector(
-    "POST",
-    favproductendpoints.GETFAVPRODUCT_API,
-    body,
-    headers
-  );
-  return response;
-}
-
-export async function addFavProduct({ id, email, product_id }) {
-  const requestBody = {
-    id,
-    email,
-    product_id,
-  };
-
-  const response = await apiConnector(
-    "POST",
-    favproductendpoints.ADDFAVPRODUCTS_API,
-    JSON.stringify(requestBody),
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
+export const getFavProduct = async (email) => {
+  try {
+    const response = await apiConnector(
+      "POST",
+      favproductendpoints.GETFAVPRODUCT_API,
+      { email }
+    );
+    return response;
+  } catch (error) {
+    if (error.response?.status === 404) {
+      // Return empty data instead of throwing error for 404
+      return { data: { data: [] } };
     }
-  );
+    throw error;
+  }
+};
 
-  return { status: response.status, data: response.data };
-}
+export const addFavProduct = async (email, product_id) => {
+  try {
+    const requestBody = {
+      email,
+      product_id,
+    };
 
-export async function deleteFavProduct(product_id) {
+    const response = await apiConnector(
+      "POST",
+      favproductendpoints.ADDFAVPRODUCTS_API,
+      JSON.stringify(requestBody),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    // Check for error responses that might come in different formats
+    if (response?.data?.success) {
+      return response.data;
+    } else if (
+      response?.data?.error ||
+      response?.data?.includes("Fatal error") ||
+      response?.data?.includes("Out of range value")
+    ) {
+      throw new Error("Failed to add product to watchlist");
+    }
+  } catch (error) {
+    console.error("AddFavProduct Error:", error);
+    // Properly format and throw the error
+    throw new Error(
+      error.response?.data?.message ||
+        error.message ||
+        "Failed to add product to watchlist"
+    );
+  }
+};
+
+export async function deleteFavProduct(product_id, email) {
   const response = await apiConnector(
-    "GET",
-    `${favproductendpoints.DELETEFAVPRODUCT_API}?id=${product_id}`
+    "DELETE",
+    favproductendpoints.DELETEFAVPRODUCT_API,
+    { email, product_id }
   );
   return response;
 }
-
 //Cart Products
 export const getCartProduct = async (email) => {
   try {
@@ -224,8 +251,6 @@ export const getCartProduct = async (email) => {
         },
       }
     );
-
-    console.log("Full response:", response);
 
     if (response.headers["content-type"].includes("application/json")) {
       return response.data;
@@ -257,12 +282,12 @@ export const addToCart = async (productData) => {
   }
 };
 
-export const removeFromCart = async (email, productId) => {
+export const removeFromCart = async (email, productId, size) => {
   try {
     const response = await apiConnector(
       "DELETE",
       cartendpoints.DELETECARTPRODUCT_API,
-      { email, product_id: productId },
+      { email, product_id: productId, size: size },
       {
         headers: {
           "Content-Type": "application/json",

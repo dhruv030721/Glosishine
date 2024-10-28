@@ -16,6 +16,7 @@ import { AppContext } from "../../App";
 import "./Navbar.css";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
+import { getAllDiscounts } from "../../Services/Operations/ProductServices";
 
 const Navbar = () => {
   const context = useContext(AppContext);
@@ -74,6 +75,7 @@ const Navbar = () => {
       },
     ],
   };
+  const [activeDiscounts, setActiveDiscounts] = useState([]);
 
   // const addItemToCart = (item) => {
   //     setCartItems((prevItems) => {
@@ -92,6 +94,38 @@ const Navbar = () => {
     dropdownVisible ? setDropdownVisible(!dropdownVisible) : "";
     isSearchOpen ? setIsSearchOpen(!isSearchOpen) : "";
   }, [location]);
+
+  useEffect(() => {
+    const fetchDiscounts = async () => {
+      try {
+        const response = await getAllDiscounts(); // Empty string to get all discounts
+        if (response.success && response.data.length > 0) {
+          const currentDate = new Date();
+          currentDate.setHours(0, 0, 0, 0);
+
+          // Filter active and valid discounts
+          const validDiscounts = response.data.filter((discount) => {
+            const startDate = new Date(discount.start_date);
+            startDate.setHours(0, 0, 0, 0);
+            const endDate = new Date(discount.end_date);
+            endDate.setHours(23, 59, 59, 999);
+
+            return (
+              currentDate >= startDate &&
+              currentDate <= endDate &&
+              discount.active
+            );
+          });
+
+          setActiveDiscounts(validDiscounts);
+        }
+      } catch (error) {
+        console.error("Error fetching discounts:", error);
+      }
+    };
+
+    fetchDiscounts();
+  }, []);
 
   const removeItemFromCart = (id) => {
     context.setCartProducts((prevItems) =>
@@ -161,20 +195,22 @@ const Navbar = () => {
   return (
     <>
       <div className="w-full h-full">
-        <marquee className="w-full bg-emerald-900  h-11 text-white text-sm flex items-center justify-center font-poppins">
-          <span className="mx-16">
-            Get Flat 10% Off on all Products Use Code "GET10" on Minimum
-            Purchase of Rs. 999/-
-          </span>
-          <span className="mx-16">
-            Get Flat 20% Off on all Products Use Code "GET20" on Minimum
-            Purchase of Rs. 1999/-
-          </span>
-          <span className="mx-16">
-            Get Flat 25% Off on all Products Use Code "GET25" on Minimum
-            Purchase of Rs. 2499/-
-          </span>
-        </marquee>
+        {activeDiscounts.length > 0 ? (
+          <marquee className="w-full bg-emerald-900 h-11 text-white text-sm flex items-center justify-center font-poppins">
+            {activeDiscounts.map((discount, index) => (
+              <span key={index} className="mx-16">
+                Get Flat {discount.discount}% Off on all Products Use Code "
+                {discount.coupon_code}"
+                {discount.min_purchase > 0 &&
+                  ` on Minimum Purchase of Rs. ${discount.min_purchase}/-`}
+              </span>
+            ))}
+          </marquee>
+        ) : (
+          <div className="w-full bg-emerald-900 h-11 text-white text-sm flex items-center justify-center font-poppins">
+            Welcome to Glosishine
+          </div>
+        )}
 
         <div className="w-full h-[81px] flex bg-white  items-center justify-between md:justify-around border-b-2 px-4 md:px-0">
           <Link to="/">

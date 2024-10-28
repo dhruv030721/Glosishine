@@ -170,7 +170,7 @@ export const CartPage = () => {
       );
   };
 
-  const handleDeleteItem = (itemId) => {
+  const handleDeleteItem = (itemId, size) => {
     if (!user?.[0]?.email) {
       toast.error("Please log in to update your cart", {
         position: "bottom-right",
@@ -181,7 +181,11 @@ export const CartPage = () => {
     toast
       .promise(
         dispatch(
-          removeItemAsync({ email: user?.[0]?.email, product_id: itemId })
+          removeItemAsync({
+            email: user?.[0]?.email,
+            product_id: itemId,
+            size: size,
+          })
         ).unwrap(),
         {
           loading: "Removing item...",
@@ -329,6 +333,16 @@ export const CartPage = () => {
                 toast.success("Payment successful & Order placed!", {
                   position: "bottom-right",
                 });
+              } else if (
+                addOrderResponse.message ===
+                "Transaction failed: BIGINT UNSIGNED value is out of range in '`u555091804_glosishine`.`product_stocks`.`S` - 1'"
+              ) {
+                toast.error(
+                  "We're sorry, but one or more products in your cart are out of stock",
+                  {
+                    position: "bottom-right",
+                  }
+                );
               } else {
                 throw new Error("Failed to place order");
               }
@@ -463,19 +477,19 @@ export const CartPage = () => {
         const billingResponse = await GetBilling(user?.[0]?.email);
         const shippingResponse = await GetShipping(user?.[0]?.email);
 
-        setBillingAddresses(billingResponse.data.data || []);
-        setShippingAddresses(shippingResponse.data.data || []);
+        setBillingAddresses(billingResponse?.data?.data || []);
+        setShippingAddresses(shippingResponse?.data?.data || []);
 
         // Set the first address as selected if available
-        if (billingResponse.data.data?.length > 0) {
-          setSelectedBillingId(billingResponse.data.data[0].id);
+        if (billingResponse?.data?.data?.length > 0) {
+          setSelectedBillingId(billingResponse?.data?.data[0].id);
         }
-        if (shippingResponse.data.data?.length > 0) {
-          setSelectedShippingId(shippingResponse.data.data[0].id);
+        if (shippingResponse?.data?.data?.length > 0) {
+          setSelectedShippingId(shippingResponse?.data?.data[0].id);
         }
       } catch (error) {
         console.error("Error fetching addresses:", error);
-        toast.error("Failed to load addresses");
+        toast.error("Failed to load addresses", { position: "bottom-right" });
       }
     };
 

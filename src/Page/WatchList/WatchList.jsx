@@ -89,7 +89,7 @@ export const WatchList = () => {
               onRemove={handleRemove}
               watchlistItems={watchlistItems}
               setWatchlistItems={setWatchlistItems}
-              className="min-h-[500px] sm:min-h-[350px] md:min-h-[500px]"
+              className="min-h-[400px] sm:min-h-[400px] md:min-h-[500px]"
             />
           ))
         ) : (

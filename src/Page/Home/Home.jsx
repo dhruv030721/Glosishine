@@ -41,7 +41,7 @@ import {
 import { removeFromWatchlist } from "../../Slice/watchlistSlice";
 import yellowLine from "../../assets/Yellow-Line.svg";
 import styled from "@emotion/styled";
-
+("");
 const Home = () => {
   const Appcontext = useContext(AppContext);
   const [imageSlider1, setImageSlider1] = useState([]);
@@ -106,8 +106,9 @@ const Home = () => {
   }, [currentItemsPerPage, newDropProducts.length]);
 
   useEffect(() => {
-    (async () => {
+    const fetchData = async () => {
       try {
+        // Fetch content items
         const data = await getContentItem();
         console.log(data, "data");
 
@@ -136,29 +137,52 @@ const Home = () => {
         // Fetch watchlist items
         const email = Appcontext?.user?.[0]?.email;
         if (email) {
-          const favProducts = await getFavProduct(email);
-          if (Array.isArray(favProducts.data.data)) {
-            setWatchlistItems(favProducts.data.data);
-          } else {
-            console.error("Expected an array for favorite products data.");
+          try {
+            const favProducts = await getFavProduct(email);
+            if (favProducts?.data?.data) {
+              setWatchlistItems(favProducts.data.data);
+            }
+          } catch (error) {
+            // Handle 404 or other errors for getFavProduct silently
+            console.log("No favorite products found:", error);
+            setWatchlistItems([]);
           }
         }
 
-        // Fetch new drop products
-        const newDropData = await getNewDropProduct();
-        if (Array.isArray(newDropData.data.data)) {
-          setNewDropProducts(newDropData.data.data);
-        } else {
-          console.error("Expected an array for new drop products data.");
+        // Fetch new drop products independently
+        try {
+          const newDropData = await getNewDropProduct();
+          if (newDropData?.data?.data) {
+            setNewDropProducts(newDropData.data.data);
+          } else {
+            console.error("Invalid new drop products data format");
+            setNewDropProducts([]);
+          }
+        } catch (error) {
+          console.error("Error fetching new drop products:", error);
+          setNewDropProducts([]);
         }
 
         setLoading(false);
       } catch (error) {
-        console.log(error);
+        console.error("Error in main data fetch:", error);
         setLoading(false);
       }
-    })();
-  }, []);
+    };
+
+    fetchData();
+
+    // Cleanup function
+    return () => {
+      setImageSlider1([]);
+      setImageSlider2([]);
+      setSeasonalVideos([]);
+      setFeed([]);
+      setAdvertisement([]);
+      setWatchlistItems([]);
+      setNewDropProducts([]);
+    };
+  }, [Appcontext?.user]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -325,7 +349,7 @@ const Home = () => {
                     onRemove={handleRemove}
                     watchlistItems={watchlistItems}
                     setWatchlistItems={setWatchlistItems}
-                    className="min-h-[400px] sm:min-h-[350px] md:min-h-[500px]"
+                    className="min-h-[350px] sm:min-h-[350px] md:min-h-[500px]"
                   />
                 </div>
               ))}
@@ -410,11 +434,11 @@ const Home = () => {
         />
       </section>
 
-      <section data-aos="fade-up" className="my-8 sm:my-12 md:my-16">
-        <div className="w-full px-4 sm:px-8 md:px-16 py-5 flex flex-col sm:flex-row justify-center items-center gap-8 sm:gap-x-10">
+      <section data-aos="fade-up" className="my-4 sm:my-8 md:my-12 lg:my-16">
+        <div className="w-full px-2 sm:px-4 md:px-8 lg:px-16 py-3 sm:py-5 flex flex-row sm:flex-row justify-center items-center gap-4 sm:gap-6 md:gap-8 lg:gap-10">
           {[mansshirt, womensshirts].map((image, index) => (
             <a
-              href={index === 0 ? "/menswear" : "/womenswear"}
+              href={index === 0 ? "/category/mens" : "/category/womens"}
               key={index}
               className="w-full sm:w-auto"
             >
@@ -423,7 +447,7 @@ const Home = () => {
                 data-aos-duration="1000"
                 src={image}
                 alt=""
-                className="w-full max-w-[450px] h-auto"
+                className="w-full h-auto max-h-[200px] xs:max-h-[180px] sm:max-h-[250px] md:max-h-[350px] lg:max-h-[450px] object-contain"
               />
             </a>
           ))}

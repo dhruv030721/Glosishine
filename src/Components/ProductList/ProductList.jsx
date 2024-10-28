@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import default_product_img from "../../assets/fation1.webp";
 import default_product_img_1 from "../../assets/howtostyle.webp";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,6 +28,7 @@ const ProductList = ({
   const userContext = useContext(AppContext);
   const cartItems = useSelector((state) => state.cart.items);
   const [isInCart, setIsInCart] = useState(false);
+  const email = userContext?.user?.[0]?.email;
 
   useEffect(() => {
     const favProduct = watchlistItems?.find(
@@ -50,10 +52,17 @@ const ProductList = ({
     e.preventDefault();
     e.stopPropagation();
 
+    if (!email) {
+      toast.error("Please log in to add items to your watchlist", {
+        position: "bottom-right",
+      });
+      return;
+    }
+
     if (isInWatchlist) {
       try {
         await toast.promise(
-          deleteFavProduct(favProductId),
+          deleteFavProduct(product.product_id, email),
           {
             loading: "Removing product from watchlist...",
             success: "Product removed from watchlist!",
@@ -78,37 +87,35 @@ const ProductList = ({
       }
     } else {
       try {
-        await toast.promise(
-          addFavProduct({
-            id: userContext.user[0].id
-              ? userContext.user[0].id
-              : product.product_id,
-            email: userContext.user[0].email,
-            product_id: product.product_id,
-          }),
-          {
-            loading: "Adding product to watchlist...",
-            success: "Product added to watchlist!",
-            error: (err) =>
-              err.response?.status === 409
-                ? "Product already exists in your watchlist!"
-                : "Failed to add product to watchlist.",
-          },
-          {
+        const response = await addFavProduct(email, product.product_id);
+
+        if (response.success) {
+          toast.success(response.message || "Product added to watchlist!", {
             position: "bottom-right",
-          }
-        );
-        dispatch(addProduct(product));
-        setIsInWatchlist(true);
-        setWatchlistItems([
-          ...watchlistItems,
-          { product_id: product.product_id },
-        ]);
+          });
+
+          dispatch(addProduct(product));
+          setIsInWatchlist(true);
+          setWatchlistItems([
+            ...watchlistItems,
+            { product_id: product.product_id },
+          ]);
+        } else {
+          throw new Error(
+            response.message || "Failed to add product to watchlist"
+          );
+        }
       } catch (error) {
-        toast.error("Are you sure you're logged in?", {
+        console.error("Error:", error);
+        let errorMessage = "Failed to add product to watchlist.";
+        if (error.message.includes("Out of range value")) {
+          errorMessage = "Invalid product data. Please try again.";
+        } else if (error.response?.status === 409) {
+          errorMessage = "Product already exists in your watchlist!";
+        }
+        toast.error(errorMessage, {
           position: "bottom-right",
         });
-        console.error("Error:", error);
       }
     }
   };
