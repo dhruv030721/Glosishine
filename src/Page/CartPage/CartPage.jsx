@@ -502,9 +502,9 @@ export const CartPage = () => {
     return (
       <div className="flex flex-col justify-center items-center h-screen relative overflow-hidden">
         <l-ring-2
-          size="60"
+          size="40"
           bg-opacity="0.2"
-          speed="2"
+          speed="0.5"
           color="rgb(6,68,59)"
           className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
         ></l-ring-2>
@@ -527,7 +527,7 @@ export const CartPage = () => {
   }
 
   return (
-    <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100">
+    <div className="w-full h-full p-2 sm:p-4 md:p-6 bg-gray-100 font-dm-sans">
       <h1 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-4">
         Shopping Bag
       </h1>

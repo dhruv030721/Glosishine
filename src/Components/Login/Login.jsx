@@ -63,9 +63,9 @@ const Login = () => {
       {isLoading && (
         <div className="absolute inset-0 flex flex-col justify-center items-center bg-white bg-opacity-80 z-50">
           <l-ring-2
-            size="60"
+            size="40"
             bg-opacity="0.2"
-            speed="2"
+            speed="0.5"
             color="rgb(6,68,59)"
             className="w-1/6 sm:w-1/12 md:w-1/10 lg:w-1/10 xl:w-1/20 2xl:w-1/24"
           ></l-ring-2>

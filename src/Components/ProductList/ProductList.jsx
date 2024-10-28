@@ -257,7 +257,7 @@ const ProductList = ({
 
           <div className="w-full flex items-center justify-between mb-2">
             <div className="flex flex-col items-start space-x-2 md:space-x-1">
-              <span className="text-md  md:text-[20px] lg:text-md xl:text-xxs 2xl:text-xs 4xl:text-sm text-black font-bold">
+              <span className="text-md  md:text-[20px] lg:text-md xl:text-xxs 2xl:text-lg 4xl:text-sm text-black font-bold">
                 ₹{product.sale_price}
               </span>
               <div className="flex flex-row items-center space-x-2 md:space-x-3">
