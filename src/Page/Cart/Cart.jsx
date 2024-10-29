@@ -46,6 +46,7 @@ import { ring2 } from "ldrs";
 import { Carousel } from "@material-tailwind/react";
 import ProductList from "../../Components/ProductList/ProductList";
 import { fetchCartItemsAsync } from "../../Slice/CartSlice";
+import { FaTrash } from "react-icons/fa";
 
 const Cart = () => {
   const { id } = useParams();
@@ -780,8 +781,8 @@ const Cart = () => {
               </div>
             </div>
 
-            <div className="mt-7 border-black w-full flex flex-col md:flex-row pl-4 pr-4 lg:pl-10 lg:pr-10 bg-yellow-100 border-b-2 border-t-2">
-              <div className="w-full md:w-[50%] p-4 lg:p-10 hidden">
+            <div className="mt-7 border-black w-full hidden flex flex-col md:flex-row pl-4 pr-4 lg:pl-10 lg:pr-10 bg-yellow-100 border-b-2 border-t-2">
+              <div className="w-full md:w-[50%] p-4 lg:p-10 ">
                 <p className="text-black text-3xl md:text-4xl lg:text-5xl font-mono font-semibold">
                   <span className="text-yellow-600 mr-3">5000+</span>PEOPLE
                   <br /> LOVES US
@@ -863,7 +864,7 @@ const Cart = () => {
                 data-aos-duration="1500"
                 className="w-full flex flex-col items-center"
               >
-                <h1 className="text-2xl font-serif">Customer Reviews</h1>
+                <h1 className="text-2xl font-serif mb-4">Customer Reviews</h1>
                 <div className="flex flex-row p-5">
                   <div className="flex flex-col pr-6 pt-2 pb-2 border-r-[1px] border-yellow-400">
                     <div className="flex flex-row gap-x-1">
@@ -879,7 +880,7 @@ const Cart = () => {
                   </div>
                   <div className="pl-7 mt-2">
                     <button
-                      className="cursor-pointer group relative flex gap-1.5 p-2 items-center justify-center w-40 md:w-52 h-10 bg-green-900 bg-opacity-80 text-[#f1f1f1] hover:bg-opacity-70 transition font-semibold shadow-md"
+                      className="cursor-pointer group relative flex gap-1.5 p-2 rounded-lg items-center justify-center w-40 md:w-52 h-10 bg-bg-green bg-opacity-100 text-[#f1f1f1] hover:bg-opacity-70 transition font-semibold shadow-md"
                       onClick={toggleFormVisibility}
                     >
                       <p className={isFormVisible ? "hidden" : "block"}>
@@ -893,109 +894,149 @@ const Cart = () => {
                 </div>
               </div>
               {isFormVisible && (
-                <form action="" onSubmit={submitHandler}>
-                  <div className="p-5 border-t-[1px] border-yellow-400 w-full">
-                    <div className="flex flex-row justify-center items-center lg:w-[100%]">
-                      {/* Left side for input fields */}
-                      <div className="flex flex-col w-full md:w-[70%]">
-                        <h1 className="text-2xl font-serif mt-5">
-                          Write a review
-                        </h1>
-                        <h1 className="mt-3 mb-5 font-serif">Rating</h1>
-                        <div className="flex flex-row gap-x-1">
-                          {[...Array(5)].map((star, index) => {
-                            const ratingValue = index + 1;
-                            return (
-                              <label key={index}>
-                                <input
-                                  type="radio"
-                                  name="rating"
-                                  value={ratingValue}
-                                  onClick={() => setRating(ratingValue)}
-                                  className="hidden"
-                                />
-                                <div
-                                  className={`cursor-pointer ${
-                                    ratingValue <= (hover || rating)
-                                      ? "text-black"
-                                      : "text-gray-400"
-                                  }`}
-                                  onMouseEnter={() => setHover(ratingValue)}
-                                  onMouseLeave={() => setHover(0)}
-                                >
-                                  {ratingValue <= (hover || rating) ? (
-                                    <FaStar size={25} />
-                                  ) : (
-                                    <FaRegStar size={25} />
-                                  )}
-                                </div>
-                              </label>
-                            );
-                          })}
+                <form
+                  onSubmit={submitHandler}
+                  className="fixed inset-0 bg-white z-50 overflow-y-auto"
+                >
+                  <div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
+                    {/* Header */}
+                    <div className="flex justify-between items-center border-b pb-3 mb-4">
+                      <h1 className="text-xl sm:text-2xl font-serif text-bg-green">
+                        Write a review
+                      </h1>
+                      <button
+                        type="button"
+                        onClick={toggleFormVisibility}
+                        className="text-gray-500 hover:text-gray-700"
+                      >
+                        <svg
+                          className="w-5 h-5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M6 18L18 6M6 6l12 12"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-1 text-bg-green lg:grid-cols-2 gap-4 sm:gap-6">
+                      {/* Left Column */}
+                      <div className="space-y-4">
+                        {/* Rating */}
+                        <div>
+                          <h2 className="text-base font-serif mb-2">Rating</h2>
+                          <div className="flex gap-1">
+                            {[...Array(5)].map((_, index) => {
+                              const ratingValue = index + 1;
+                              return (
+                                <label key={index} className="cursor-pointer">
+                                  <input
+                                    type="radio"
+                                    name="rating"
+                                    value={ratingValue}
+                                    onClick={() => setRating(ratingValue)}
+                                    className="hidden"
+                                  />
+                                  <div
+                                    className={`transition-colors duration-200 ${
+                                      ratingValue <= (hover || rating)
+                                        ? "text-bg-green"
+                                        : "text-gray-300"
+                                    }`}
+                                    onMouseEnter={() => setHover(ratingValue)}
+                                    onMouseLeave={() => setHover(0)}
+                                  >
+                                    {ratingValue <= (hover || rating) ? (
+                                      <FaStar size={28} />
+                                    ) : (
+                                      <FaRegStar size={28} />
+                                    )}
+                                  </div>
+                                </label>
+                              );
+                            })}
+                          </div>
                         </div>
-                        <h1 className="font-serif text-md mt-5">
-                          Review Title (100)
-                        </h1>
-                        <input
-                          className="bg-white px-3 py-2 w-[90%] md:w-[80%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
-                          name="title"
-                          placeholder="Give your review title"
-                          value={formdata.title}
-                          onChange={(e) =>
-                            setFormdata({ ...formdata, title: e.target.value })
-                          }
-                          type="text"
-                        />
-                        <h1 className="font-serif text-md mt-5">Review</h1>
-                        <textarea
-                          className="bg-white resize-none px-3 py-2 w-[90%] md:w-[80%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
-                          name="review"
-                          value={formdata.review}
-                          onChange={(e) =>
-                            setFormdata({ ...formdata, review: e.target.value })
-                          }
-                          placeholder="Give your review title"
-                          type="text"
-                        ></textarea>
-                        <h1 className="font-serif text-md mt-5 mb-2">Name</h1>
-                        <input
-                          className="bg-white px-3 py-2 w-[90%] md:w-[80%] outline-none text-black rounded-lg border-2 transition-colors duration-100 border-solid focus:border-black border-black"
-                          name="name"
-                          value={formdata.name}
-                          onChange={(e) =>
-                            setFormdata({ ...formdata, name: e.target.value })
-                          }
-                          placeholder="Enter your name (public)"
-                          type="text"
-                        />
-                        <li className="font-serif w-[100%] md:w-[80%] text-justify mt-5 text-[#4B5563]">
-                          How we use your data? We’ll only contact you about the
-                          review you left, and only if necessary.
-                        </li>
-                        <li className="font-serif w-[100%] md:w-[80%] text-justify mt-2 text-[#4B5563]">
-                          By submitting your review, you agree to Judge.me’s
-                          terms and conditions and privacy policy.
-                        </li>
+
+                        {/* Title Input */}
+                        <div>
+                          <h2 className="text-base font-serif mb-1">
+                            Review Title
+                          </h2>
+                          <input
+                            className="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-bg-green outline-none transition duration-200"
+                            name="title"
+                            placeholder="Give your review a title"
+                            value={formdata.title}
+                            onChange={(e) =>
+                              setFormdata({
+                                ...formdata,
+                                title: e.target.value,
+                              })
+                            }
+                            maxLength={100}
+                          />
+                        </div>
+
+                        {/* Review Text */}
+                        <div>
+                          <h2 className="text-base font-serif mb-1">
+                            Your Review
+                          </h2>
+                          <textarea
+                            className="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-bg-green outline-none transition duration-200 min-h-[120px]"
+                            name="review"
+                            placeholder="Write your review here"
+                            value={formdata.review}
+                            onChange={(e) =>
+                              setFormdata({
+                                ...formdata,
+                                review: e.target.value,
+                              })
+                            }
+                          />
+                        </div>
+
+                        {/* Name Input */}
+                        <div>
+                          <h2 className="text-base font-signika mb-1">
+                            Your Name
+                          </h2>
+                          <input
+                            className="w-full px-3 py-2 rounded-lg border-2 border-gray-200 focus:border-bg-green outline-none transition duration-200"
+                            name="name"
+                            placeholder="Enter your name (public)"
+                            value={formdata.name}
+                            onChange={(e) =>
+                              setFormdata({ ...formdata, name: e.target.value })
+                            }
+                          />
+                        </div>
                       </div>
 
-                      {/* Right side for file upload */}
-                      <div className="w-full md:w-[35%] flex flex-col items-center justify-center">
-                        <h1 className="font-serif text-md mt-5 mb-2">
-                          Picture/Video (optional)
-                        </h1>
-
-                        <div className="border-2 border-dashed border-[#4B5563]">
-                          <div className="hover:transform hover:scale-105 hover:translate-x-2 hover:translate-y-[-2] hover:shadow-2xl transition-transform duration-300">
-                            <label
-                              htmlFor="file"
-                              className="flex flex-col items-center justify-center w-98 h-80 text-center text-gray-600 cursor-pointer p-14"
-                            >
-                              <IoCloudUploadOutline size={80} fill="black" />
-                              <p className="mt-2">
-                                Drag and drop your file here or click to select
-                                a file!
-                              </p>
-                            </label>
+                      {/* Right Column */}
+                      <div>
+                        <h2 className="text-base font-serif mb-2">
+                          Add Photos (Required)
+                        </h2>
+                        <div className="border-2 border-dashed border-gray-300 flex justify-center items-center rounded-lg p-4 text-center h-[90%] hover:border-bg-green transition-colors duration-200">
+                          <label
+                            htmlFor="file"
+                            className="cursor-pointer block"
+                          >
+                            <IoCloudUploadOutline
+                              className="mx-auto text-bg-green"
+                              size={40}
+                            />
+                            <p className="mt-2 text-sm text-gray-600">
+                              Drag and drop your photos here or click to browse
+                            </p>
                             <input
                               className="hidden"
                               name="text"
@@ -1003,36 +1044,65 @@ const Cart = () => {
                               id="file"
                               onChange={handleImageUpload}
                               type="file"
+                              accept="image/*"
                             />
-                          </div>
+                          </label>
                         </div>
 
-                        <div className="grid grid-cols-3 mt-2 gap-4">
+                        {/* Image Preview Grid */}
+                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mt-4">
                           {formdata.reviewimage.map((file, index) => (
-                            <div key={index} className="border p-2">
+                            <div key={index} className="relative group">
                               <img
                                 src={URL.createObjectURL(file)}
-                                alt={`upload-${index}`}
-                                className="h-36 w-26"
+                                alt={`preview ${index}`}
+                                className="w-full h-20 object-cover rounded-lg"
                               />
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const newImages = formdata.reviewimage.filter(
+                                    (_, i) => i !== index
+                                  );
+                                  setFormdata({
+                                    ...formdata,
+                                    reviewimage: newImages,
+                                  });
+                                }}
+                                className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                              >
+                                <FaTrash size={12} />
+                              </button>
                             </div>
                           ))}
                         </div>
                       </div>
                     </div>
 
-                    {/* Note and Buttons at the bottom */}
-                    <div className="flex flex-col items-center mt-5 w-full">
-                      <div className="mt-6 flex flex-row gap-x-3 justify-center">
+                    {/* Footer */}
+                    <div className="mt-4 border-t pt-4 font-signika">
+                      <div className="text-xs text-gray-600 space-y-1 mb-4">
+                        <p>
+                          • How we use your data: We'll only contact you about
+                          the review you left, and only if necessary.
+                        </p>
+                        <p>
+                          • By submitting your review, you agree to our terms
+                          and conditions and privacy policy.
+                        </p>
+                      </div>
+
+                      <div className="flex justify-end gap-3 font-signika">
                         <button
+                          type="button"
                           onClick={toggleFormVisibility}
-                          className="cursor-pointer border-2 border-green-400 group relative flex gap-1.5 p-2 items-center justify-center w-40 md:w-52 h-10 text-black hover:bg-opacity-70 transition font-semibold shadow-md"
+                          className="px-4 py-1.5 border-2 border-bg-green text-bg-green rounded-lg hover:bg-red-700 hover:text-white hover:border-red-700 transition duration-200 text-sm"
                         >
-                          Cancel review
+                          Cancel
                         </button>
                         <button
                           type="submit"
-                          className="cursor-pointer group relative flex gap-1.5 p-2 items-center justify-center w-40 md:w-52 h-10 bg-green-900 bg-opacity-80 text-[#f1f1f1] hover:bg-opacity-70 transition font-semibold shadow-md"
+                          className="px-4 py-1.5 bg-bg-green text-white rounded-lg hover:bg-opacity-90 transition duration-200 text-sm"
                         >
                           Submit Review
                         </button>
@@ -1041,34 +1111,72 @@ const Cart = () => {
                   </div>
                 </form>
               )}
-              <div className="w-full grid grid-cols-3">
+              <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
                 {reviewData.map((item, index) => (
                   <div
                     key={index}
-                    className="w-[90%] flex flex-col md:flex-row justify-between gap-4 items-center p-4 mb-4 bg-white shadow-md rounded-lg mx-auto"
+                    className="w-full bg-white rounded-xl shadow-md hover:shadow-lg border-2 border-bg-green transition-shadow duration-300 overflow-hidden"
                   >
-                    {item.images.split(",").map((image, index) => (
-                      <img
-                        key={index}
-                        src={image}
-                        alt=""
-                        className="h-28 w-24 object-cover rounded-md"
-                      />
-                    ))}
-                    <div className="flex flex-col flex-grow">
-                      <h1 className="text-lg font-signika mb-2">
-                        Title: {item.title}
-                      </h1>
-                      <p className="font-signika mb-2 text-sm">
-                        Review: {item.review}
-                      </p>
-                      <div className="flex items-center text-base text-green-600 gap-x-1 mb-2">
-                        Rating: {item.rating}
-                        <FaRegStar size={14} />
+                    {/* Review Header with Rating and Name */}
+                    <div className="p-4 bg-gradient-to-r from-bg-green/5 bg-bg-green text-white to-transparent border-b">
+                      <div className="flex justify-between items-center mb-2">
+                        <div className="flex items-center gap-1">
+                          {[...Array(5)].map((_, i) => (
+                            <FaStar
+                              key={i}
+                              size={16}
+                              className={
+                                i < item.rating
+                                  ? "text-yellow-400"
+                                  : "text-gray-300"
+                              }
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm font-medium text-white">
+                          {item.name}
+                        </span>
                       </div>
-                      <h1 className="text-sm font-montserrat">
-                        Name: {item.name}
-                      </h1>
+                    </div>
+
+                    {/* Review Content */}
+                    <div className="p-4 h-auto lg:h-[70%]">
+                      <h3 className="font-signika text-lg font-semibold text-bg-green mb-2 line-clamp-1">
+                        {item.title}
+                      </h3>
+                      <p className="text-gray-600 text-sm mb-4 line-clamp-3">
+                        {item.review}
+                      </p>
+
+                      {/* Images Grid */}
+                      {item.images && (
+                        <div className="grid grid-cols-3 gap-2 mt-3">
+                          {item.images.split(",").map((image, idx) => (
+                            <div
+                              key={idx}
+                              className="relative group aspect-square"
+                            >
+                              <img
+                                src={image}
+                                alt=""
+                                className="w-full h-full object-cover rounded-lg transition-transform duration-300 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-lg" />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Review Footer */}
+                    <div className="px-4 py-3 bg-gray-50 text-xs text-bg-green border-t-2 border-dashed border-bg-green">
+                      <time dateTime={item.created_at}>
+                        {new Date(item.created_at).toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
                     </div>
                   </div>
                 ))}

@@ -70,7 +70,7 @@ export const WatchList = () => {
     <div className="container p-6 bg-gray-100 !min-w-full font-signika">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-bg-green mb-2 font-signika">
-          Shopping Bag
+          Watchlist
         </h1>
         <img
           src={yellowLine}
@@ -80,14 +80,14 @@ export const WatchList = () => {
       </div>
 
       <div className="mb-12 ml-5">
-        <h2 className="text-2xl font-semibold text-bg-green mb-2 py-0">
+        <h2 className="text-2xl font-semibold text-bg-green py-0">
           {watchlistItems.length}{" "}
-          {watchlistItems.length === 1 ? "item" : "items"} in your bag
+          {watchlistItems.length === 1 ? "item" : "items"} in your watchlist
         </h2>
         <img
           src={yellowLine}
           alt="scribble"
-          className="w-24 sm:w-20 md:w-24 lg:w-24 xl:w-24"
+          className="w-24 sm:w-20 md:w-24 lg:w-24 xl:w-24 mb-2"
         />
 
         {watchlistItems.length > 0 ? (
@@ -112,15 +112,21 @@ export const WatchList = () => {
           </div>
         ) : (
           <div className="flex flex-col justify-center items-center h-48 bg-white rounded-lg shadow-sm">
-            <p className="text-gray-500 text-lg mb-4">
-              Your shopping bag is empty
-            </p>
-            <button
-              onClick={() => navigate("/shop")}
-              className="px-6 py-2 bg-bg-green text-white rounded-lg hover:bg-green-700 transition-colors duration-300"
-            >
-              Continue Shopping
-            </button>
+            <div className="flex flex-col items-center justify-center py-8 px-4 bg-white rounded-lg">
+              <h3 className="text-xl font-semibold text-bg-green mb-2">
+                No Watchlist Items Found
+              </h3>
+              <p className="text-gray-500 text-center mb-6">
+                You haven&apos;t added any items to your watchlist yet. Start
+                shopping to see your watchlist here!
+              </p>
+              <button
+                onClick={() => navigate("/newdrops")}
+                className="px-6 py-2 bg-bg-green text-white rounded-lg hover:bg-green-700 transition-colors duration-300 font-medium"
+              >
+                Start Shopping
+              </button>
+            </div>
           </div>
         )}
       </div>
