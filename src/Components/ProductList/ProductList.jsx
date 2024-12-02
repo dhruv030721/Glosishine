@@ -24,6 +24,7 @@ const ProductList = ({
 }) => {
   const dispatch = useDispatch();
   const [isInWatchlist, setIsInWatchlist] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const [favProductId, setFavProductId] = useState(null);
   const userContext = useContext(AppContext);
   const cartItems = useSelector((state) => state.cart.items);
@@ -228,93 +229,83 @@ const ProductList = ({
 
   return (
     <div
-      data-aos="fade-zoom-in"
-      data-aos-easing="ease-in-back"
-      data-aos-delay="200"
-      data-aos-offset="0"
-      className={`relative w-full h-full rounded-lg bg-white bg-opacity-30 backdrop-blur-lg border-2 border-bg-green transition-all duration-200 flex flex-col overflow-hidden ${className}`}
+      className={`relative w-full bg-white ${className}`}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="relative flex flex-col overflow-hidden object-cover h-full font-signika">
-        <a
-          className="relative flex h-[100%] sm:h-[90%] md:h-[80%] lg:h-80 xl:h-96 2xl:h-[28rem] 4xl:h-[40rem] overflow-hidden"
-          href={`/product/${product.product_id}`}
-        >
+      {/* Product Image Container with Fixed Aspect Ratio */}
+      <div className="relative aspect-[3/4] w-full">
+        <a href={`/product/${product.product_id}`}>
           <img
-            className="peer absolute top-0 right-0 h-full w-full object-cover"
+            className="absolute inset-0 w-full h-full object-cover"
             src={product.images?.[0] || default_product_img}
             alt={product.product_name}
           />
-          {product.images && product.images.length > 1 ? (
-            <img
-              className="peer-hover:right-0 absolute top-0 -right-[400px] md:-right-[500px] lg:-right-[700px] xl:-right-[800px] 2xl:-right-[900px] 4xl:-right-[1000px] h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-              src={product.images?.[index] || product.images?.[1]}
-              alt={product.product_name}
-            />
-          ) : (
-            <img
-              className="peer-hover:right-0 absolute top-0 -right-[400px] md:-right-[500px] lg:-right-[700px] xl:-right-[800px] 2xl:-right-[900px] 4xl:-right-[1000px] h-full w-full object-cover transition-all delay-100 duration-1000 hover:right-0"
-              src={default_product_img_1}
-              alt={product.product_name}
-            />
-          )}
-
-          <svg
-            className="group-hover:animate-ping group-hover:opacity-30 peer-hover:opacity-0 pointer-events-none absolute inset-x-0 bottom-5 mx-auto text-3xl text-white transition-opacity"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-            role="img"
-            width="1em"
-            height="1em"
-            preserveAspectRatio="xMidYMid meet"
-            viewBox="0 0 32 32"
-          >
-            <path
-              fill="currentColor"
-              d="M2 10a4 4 0 0 1 4-4h20a4 4 0 0 1 4 4v10a4 4 0 0 1-2.328 3.635a2.996 2.996 0 0 0-.55-.756l-8-8A3 3 0 0 0 14 17v7H6a4 4 0 0 1-4-4V10Zm14 19a1 1 0 0 0 1.8.6l2.7-3.6H25a1 1 0 0 0 .707-1.707l-8-8A1 1 0 0 0 16 17v12Z"
-            />
-          </svg>
         </a>
-        <button
-          onClick={handleWatchlistToggle}
-          className="absolute top-2 right-2 p-2 rounded-lg bg-bg-green hover:bg-green-700 transition-all duration-200"
-          style={{ zIndex: 100 }}
-        >
-          {isInWatchlist ? (
-            <FaHeart className="text-white text-xl" />
-          ) : (
-            <FaRegHeart className="text-white text-xl" />
-          )}
-        </button>
 
-        <div className="mt-4 z-10 flex flex-col text-center px-4">
-          <a href={`/product/${product.product_id}`} className="w-full">
-            <h5 className="text-sm  md:text-base lg:text-lg xl:text-xl 2xl:text-2xl 4xl:text-3xl font-semibold text-black mb-2">
-              {product.product_name}
-            </h5>
-          </a>
-
-          <div className="w-full flex items-center justify-between mb-2">
-            <div className="flex flex-col items-start space-x-2 md:space-x-1">
-              <span className="text-md  md:text-[20px] lg:text-md xl:text-xxs 2xl:text-lg 4xl:text-sm text-black font-bold">
-                ₹{product.sale_price}
-              </span>
-              <div className="flex flex-row items-center space-x-2 md:space-x-3">
-                <span className="text-sm font-semibold md:text-sm lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-gray-500 line-through">
-                  ₹{product.regular_price}
-                </span>
-                <span className="text-xxs bg-bg-green py-1 px-2 w-fit mx-auto font-semibold rounded-md md:text-xs lg:text-5xs xl:text-xxs 2xl:text-xs 4xl:text-sm text-white">
-                  ({product.discount}% OFF)
-                </span>
-              </div>
-            </div>
-
+        {/* Desktop Wishlist Button - Hidden on mobile */}
+        <div className="hidden sm:block">
+          {isHovered && (
             <button
-              onClick={handleAddToBag}
-              className="p-2 rounded-lg bg-bg-green hover:bg-green-700 text-white transition-all duration-200"
+              onClick={handleWatchlistToggle}
+              className="absolute bottom-0 left-0 right-0 bg-white py-1 px-2 flex items-center justify-center gap-2"
             >
-              <FaShoppingCart className="text-xl" />
+              {!isInWatchlist ? (
+                <>
+                  <FaRegHeart className="text-bg-green text-base" />
+                  <span className="text-[10px] font-medium">WISHLIST</span>
+                </>
+              ) : (
+                <>
+                  <FaHeart className="text-bg-green text-base" />
+                  <span className="text-[10px] font-medium">Remove</span>
+                </>
+              )}
             </button>
+          )}
+        </div>
+      </div>
+
+      {/* Product Details with Consistent Padding */}
+      <div className="p-1.5">
+        <div className="flex items-start justify-between">
+          <div>
+            {/* Brand Name */}
+            <h3 className="font-medium text-sm text-neutral-900 truncate">
+              {product.brand}
+            </h3>
+
+            {/* Product Name */}
+            <p className="text-[11px] text-neutral-600 truncate mt-0.5">
+              {product.product_name}
+            </p>
           </div>
+
+          {/* Mobile Wishlist Button - Hidden on desktop */}
+          <button onClick={handleWatchlistToggle} className="sm:hidden ml-1">
+            {isInWatchlist ? (
+              <FaHeart className="text-bg-green text-base" />
+            ) : (
+              <FaRegHeart className="text-bg-green text-base" />
+            )}
+          </button>
+        </div>
+
+        {/* Updated Price Section with better spacing */}
+        <div className="flex flex-wrap items-center gap-x-1 mt-1">
+          <span className="font-medium text-xs whitespace-nowrap">
+            ₹{product.sale_price}
+          </span>
+          {product.regular_price && (
+            <>
+              <span className="text-neutral-500 line-through text-[10px] whitespace-nowrap">
+                ₹{product.regular_price}
+              </span>
+              <span className="text-bg-green text-[10px] whitespace-nowrap">
+                ({product.discount}% OFF)
+              </span>
+            </>
+          )}
         </div>
       </div>
     </div>

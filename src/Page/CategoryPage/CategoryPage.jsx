@@ -17,7 +17,7 @@ const CategoryPage = () => {
   ring2.register();
 
   const itemsPerPage = {
-    mobile: 1,
+    mobile: 2,
     tablet: 3,
     desktop: 4,
   };
@@ -136,15 +136,11 @@ const CategoryPage = () => {
 
   return (
     <div className="container p-6 bg-gray-100 !min-w-full font-signika">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-bg-green mb-2 font-signika">
+      <div className="mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-bg-green mb-2 font-signika">
           {categoryName.toUpperCase()}
         </h1>
-        <img
-          src={yellowLine}
-          alt="scribble"
-          className="w-24 sm:w-20 md:w-24 lg:w-24 xl:w-24"
-        />
+        <img src={yellowLine} alt="scribble" className="w-20 sm:w-24" />
       </div>
       {Object.keys(products).length === 0 ? (
         <p className="text-center text-gray-500">
@@ -152,16 +148,16 @@ const CategoryPage = () => {
         </p>
       ) : (
         Object.entries(products).map(([subCategory, subCategoryProducts]) => (
-          <div key={subCategory} className="mb-12 ml-5">
-            <h2 className="text-2xl font-semibold text-bg-green mb-2 py-0">
+          <div key={subCategory} className="mb-8">
+            <h2 className="text-xl sm:text-2xl font-semibold text-bg-green mb-2">
               {subCategory}
             </h2>
             <img
               src={yellowLine}
               alt="scribble"
-              className="w-24 sm:w-20 md:w-24 lg:w-24 xl:w-24"
+              className="w-20 sm:w-24 mb-4"
             />
-            <div className="w-full px-4 sm:px-6 md:px-8 pt-4 pb-0 overflow-hidden relative">
+            <div className="w-full overflow-hidden relative">
               <div
                 className="flex transition-transform duration-500 ease-in-out"
                 style={{
@@ -171,20 +167,21 @@ const CategoryPage = () => {
                   }%)`,
                 }}
               >
-                {subCategoryProducts.map((product, index) => (
-                  <div
-                    key={product.product_id}
-                    className="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/4 px-2"
-                  >
-                    <ProductList
-                      product={product}
-                      index={index}
-                      watchlistItems={watchlistItems}
-                      setWatchlistItems={setWatchlistItems}
-                      className="min-h-[350px] sm:min-h-[350px] md:min-h-[500px]"
-                    />
-                  </div>
-                ))}
+                <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+                  {subCategoryProducts.map((product, index) => (
+                    <div
+                      key={product.product_id}
+                      className="w-[160px] sm:w-[180px] md:w-[200px]"
+                    >
+                      <ProductList
+                        product={product}
+                        index={index}
+                        watchlistItems={watchlistItems}
+                        setWatchlistItems={setWatchlistItems}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
               {shouldShowArrows(subCategoryProducts) && (
                 <>

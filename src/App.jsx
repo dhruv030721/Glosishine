@@ -105,8 +105,9 @@ function App() {
 
   // Updated ProtectedAdminRoute component
   const ProtectedAdminRoute = ({ children }) => {
-    const { adminToken } = useContext(AppContext);
+    const { isAdminAuthenticated } = useContext(AppContext);
     const location = useLocation();
+    const navigate = useNavigate();
 
     useEffect(() => {
       if (
@@ -116,7 +117,7 @@ function App() {
       ) {
         navigate("/admin");
       }
-    }, [isAdminAuthenticated, location.pathname]);
+    }, []);
 
     if (
       !isAdminAuthenticated &&

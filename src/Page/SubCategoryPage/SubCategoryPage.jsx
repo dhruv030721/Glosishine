@@ -60,30 +60,29 @@ const SubCategoryPage = () => {
 
   return (
     <div className="container p-6 bg-gray-100 font-montserrat !min-w-full">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold text-bg-green mb-2 font-signika">
+      <div className="mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-bg-green mb-2 font-signika">
           {subCategoryName.toUpperCase()}
         </h1>
-        <img
-          src={yellowLine}
-          alt="scribble"
-          className="w-24 sm:w-20 md:w-24 lg:w-24 xl:w-24"
-        />
+        <img src={yellowLine} alt="scribble" className="w-20 sm:w-24" />
       </div>
       {products.length === 0 ? (
         <p className="text-center text-gray-500">
           No products available for this subcategory at the moment.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
           {products.map((product) => (
-            <ProductList
+            <div
               key={product.product_id}
-              product={product}
-              watchlistItems={watchlistItems}
-              setWatchlistItems={setWatchlistItems}
-              className="min-h-[400px] sm:min-h-[400px] md:min-h-[500px]"
-            />
+              className="w-[160px] sm:w-[180px] md:w-[200px]"
+            >
+              <ProductList
+                product={product}
+                watchlistItems={watchlistItems}
+                setWatchlistItems={setWatchlistItems}
+              />
+            </div>
           ))}
         </div>
       )}

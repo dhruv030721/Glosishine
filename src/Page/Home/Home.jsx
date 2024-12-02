@@ -56,9 +56,9 @@ const Home = () => {
   const [autoPlay, setAutoPlay] = useState(true);
 
   const itemsPerPage = {
-    mobile: 1,
+    mobile: 2,
     tablet: 3,
-    desktop: 5,
+    desktop: 4,
   };
 
   const getItemsPerPage = () => {
@@ -253,7 +253,7 @@ const Home = () => {
   }
 
   return (
-    <div className="w-full h-full overflow-hidden">
+    <div className="w-full h-full overflow-hidden bg-gray-100">
       <section data-aos="fade-up" className="mb-8 sm:mb-12 md:mb-16">
         <div
           className="flex items-center justify-center max-h-[90vh]"
@@ -359,7 +359,7 @@ const Home = () => {
               {newDropProducts.map((product, index) => (
                 <div
                   key={product.product_id}
-                  className="flex-none w-full sm:w-1/2 md:w-1/3 lg:w-1/3 xl:w-1/5 px-2"
+                  className="flex-none w-1/2 sm:w-1/3 md:w-1/4 lg:w-1/6 xl:w-1/6 px-2"
                 >
                   <ProductList
                     product={product}
@@ -367,14 +367,14 @@ const Home = () => {
                     onRemove={handleRemove}
                     watchlistItems={watchlistItems}
                     setWatchlistItems={setWatchlistItems}
-                    className="min-h-[350px] sm:min-h-[350px] md:min-h-[500px]"
+                    className="min-h-[250px] sm:min-h-[300px] md:min-h-[350px]"
                   />
                 </div>
               ))}
             </div>
             <button
               onClick={prevSlide}
-              className="absolute text-white left-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
+              className="absolute text-white left-2 top-1/3 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -393,7 +393,7 @@ const Home = () => {
             </button>
             <button
               onClick={nextSlide}
-              className="absolute text-white right-2 top-1/2 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
+              className="absolute text-white right-2 top-1/3 transform -translate-y-1/2 bg-bg-green bg-opacity-50 hover:bg-opacity-100 transition-all duration-200 rounded-full p-1 z-10"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -522,11 +522,14 @@ const Home = () => {
 
       <section
         data-aos="fade-up"
-        className="mt-10 sm:mt-10 md:mt-10 mb-8 sm:mb-12 md:mb-16"
+        className="mt-10 sm:mt-10 md:mt-10 mb-8 sm:mb-12 md:mb-16 flex justify-center"
       >
-        <TVVideoSection
-          videoUrl={seasonalVideos.video1[0].url}
-          videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
+        <video
+          src={seasonalVideos.video1[0].url}
+          autoPlay
+          muted
+          loop
+          className="w-[75%] h-auto"
         />
       </section>
 
@@ -552,11 +555,14 @@ const Home = () => {
 
       <section
         data-aos="fade-up"
-        className="mt-12 sm:mt-16 md:mt-20 mb-8 sm:mb-12 md:mb-16"
+        className="mt-12 sm:mt-16 md:mt-20 mb-8 sm:mb-12 md:mb-16 flex justify-center"
       >
-        <TVVideoSection
-          videoUrl={seasonalVideos.video2[0].url}
-          videoClassName="2xl:scale-x-[1.02] 2xl:scale-y-[1.05] 2xl:left-[-5.35%] 2xl:top-[-10.5%]"
+        <video
+          src={seasonalVideos.video2[0].url}
+          autoPlay
+          muted
+          loop
+          className="w-[75%] h-auto"
         />
       </section>
 
