@@ -55,7 +55,7 @@ const NewDrops = () => {
   }
 
   return (
-    <div className="container p-6 bg-gray-100 font-montserrat !min-w-[100%]">
+    <div className="container p-6 bg-gray-100 font-signika !min-w-[100%]">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-bg-green mb-2 font-signika">
           New Drops
@@ -71,14 +71,14 @@ const NewDrops = () => {
           No new drop products available at the moment.
         </p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-6">
           {products.map((product) => (
             <ProductList
               key={product.product_id}
               product={product}
               watchlistItems={watchlistItems}
               setWatchlistItems={setWatchlistItems}
-              className="min-h-[400px] sm:min-h-[350px] md:min-h-[500px]"
+              className="min-h-[250px] sm:min-h-[300px] md:min-h-[350px]"
             />
           ))}
         </div>

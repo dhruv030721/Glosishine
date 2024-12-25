@@ -4,7 +4,7 @@ import { FaTimesCircle } from "react-icons/fa";
 
 const OrderFailed = () => {
   return (
-    <div className="min-h-screen bg-gray-50 flex font-montserrat flex-col justify-center items-center px-4 py-12">
+    <div className="min-h-screen bg-gray-50 flex font-signika flex-col justify-center items-center px-4 py-12">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8 text-center">
         <FaTimesCircle className="text-red-500 text-6xl mx-auto mb-6" />
         <h1 className="text-3xl font-bold text-gray-800 mb-4">Order Failed</h1>

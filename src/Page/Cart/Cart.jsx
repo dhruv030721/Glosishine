@@ -451,13 +451,15 @@ const Cart = () => {
       ) : (
         filterdata.map((item) => (
           <>
-            <div className="w-full font-montserrat mt-5 px-4 lg:px-10 mb-5 flex flex-row h-10 items-center gap-x-3 overflow-x-auto whitespace-nowrap overflow-y-hidden">
+            <div className="w-full font-signika mt-5 px-4 lg:px-10 mb-5 flex flex-row h-10 items-center gap-x-3 overflow-x-auto whitespace-nowrap overflow-y-hidden">
               <Link to="/">Home</Link>
               <MdOutlineChevronRight
                 className="h-full flex items-center mt-1"
                 size={17}
               />
-              <Link to={`/category/${item.category}`}>{item.category}</Link>
+              <Link to={`/category/${item.category}`}>
+                {item.category.charAt(0) + item.category.slice(1).toLowerCase()}
+              </Link>
               {item.subcategory && (
                 <>
                   <MdOutlineChevronRight
@@ -465,7 +467,8 @@ const Cart = () => {
                     size={17}
                   />
                   <Link to={`/category/${item.category}/${item.subcategory}`}>
-                    {item.subcategory}
+                    {item.subcategory.charAt(0) +
+                      item.subcategory.slice(1).toLowerCase()}
                   </Link>
                 </>
               )}
@@ -539,7 +542,7 @@ const Cart = () => {
                   <h1 className="text-2xl font-signika font-semibold">
                     {item.product_name}
                   </h1>
-                  <div className="flex flex-row font-montserrat gap-x-3 mt-3">
+                  <div className="flex flex-row font-signika gap-x-3 mt-3">
                     <span className="text-sm text-black font-bold line-through">
                       {item.regular_price}
                     </span>
@@ -554,7 +557,7 @@ const Cart = () => {
                     Tax included.
                   </p>
                   <div className="flex flex-row gap-x-1">
-                    <p className="mt-4 font-montserrat font-md">
+                    <p className="mt-4 font-signika font-md">
                       Or 3 interest free payments of ₹433
                     </p>
                     <img src={brand} alt="" className="w-12 mt-4" />
@@ -565,7 +568,7 @@ const Cart = () => {
                   </div>
                   {/* <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
-                  <p className=" text-sm font-montserrat">
+                  <p className=" text-sm font-signika">
                     Get this for Regular priceSale price
                     <span className="text-red-500">Rs. 1,169.10</span> Use Code
                     :
@@ -576,7 +579,7 @@ const Cart = () => {
                 </div>
                 <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
-                  <p className="font-montserrat text-sm">
+                  <p className="font-signika text-sm">
                     Get this for Regular priceSale price
                     <span className="text-red-500">Rs. 1,039.20</span> Use Code
                     :
@@ -587,7 +590,7 @@ const Cart = () => {
                 </div>
                 <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
-                  <p className="font-montserrat text-sm">
+                  <p className="font-signika text-sm">
                     Get this for Regular priceSale price
                     <span className="text-red-500">Rs. 974.25</span> Use Code :
                     <span className="font-semibold">
@@ -675,7 +678,7 @@ const Cart = () => {
                       )}
                     </button>
                   </div>
-                  <p className="text-md font-montserrat mt-4">
+                  <p className="text-md font-signika mt-4">
                     {item.product_description}
                   </p>
                   <button className="text-sm flex items-center font-monserrat gap-x-2 text-bg-green hover:bg-bg-green hover:text-white py-2 px-4 border-2 border-bg-green rounded-lg hover:shadow-md">
@@ -690,23 +693,23 @@ const Cart = () => {
                     </a>
                   </button>
                   {/* <p className='text-lg font-monserrat mt-5 font-semibold'>Product Specification:</p>
-                                    <div className='ml-10 font-montserrat mt-7'>
+                                    <div className='ml-10 font-signika mt-7'>
                                         {item.product_specification && item.product_specification.split(/,\r?\n|\r|\n/).filter(spec => spec.trim() !== "").map((spec, index) => (
                                             <p key={index}>&#x2022;<span className='ml-2 '>{spec}</span></p>
                                         ))}
                                     </div> */}
-                  {/* <p className='text-md font-montserrat mt-5 '><span className='font-semibold mr-2'>Wash Care:</span>Cold machine wash. For more details see the wash care label attached </p>
-                                    <p className='mt-5 pb-5 font-montserrat border-b-[1px] border-black'>The product's actual color may vary slightly due to photographic lighting sources or your device.</p>
-                                    <p className='mt-5 font-montserrat font-semibold'>Manufactured, Marketed & Packed By Finch</p>
-                                    <p className='mt-5 font-montserrat'>{item.manufacturing_details}</p>
-                                    <p className='text-md font-montserrat mt-5 '><span className='font-semibold mr-2'>Country Of Origin:</span>{item.country_of_origin}</p> */}
+                  {/* <p className='text-md font-signika mt-5 '><span className='font-semibold mr-2'>Wash Care:</span>Cold machine wash. For more details see the wash care label attached </p>
+                                    <p className='mt-5 pb-5 font-signika border-b-[1px] border-black'>The product's actual color may vary slightly due to photographic lighting sources or your device.</p>
+                                    <p className='mt-5 font-signika font-semibold'>Manufactured, Marketed & Packed By Finch</p>
+                                    <p className='mt-5 font-signika'>{item.manufacturing_details}</p>
+                                    <p className='text-md font-signika mt-5 '><span className='font-semibold mr-2'>Country Of Origin:</span>{item.country_of_origin}</p> */}
                 </div>
               </div>
             </div>
 
             <div className="flex flex-col lg:flex-row gap-4 lg:gap-7 p-4 lg:p-7">
               <div className="w-full lg:w-[60%]">
-                <div className="flex flex-col sm:flex-row border-2 border-black border-dashed h-full font-montserrat p-4 sm:p-5 w-full gap-4 sm:gap-2">
+                <div className="flex flex-col sm:flex-row border-2 border-black border-dashed h-full font-signika p-4 sm:p-5 w-full gap-4 sm:gap-2">
                   <div className="flex flex-row sm:flex-col items-center sm:items-start">
                     <img
                       src={IconDelivery}
@@ -726,7 +729,7 @@ const Cart = () => {
                   </div>
                 </div>
 
-                <div className="hidden flex-col sm:flex-row border-2 border-black border-dashed border-t-0 font-montserrat p-4 sm:p-5 w-full gap-4 sm:gap-5">
+                <div className="hidden flex-col sm:flex-row border-2 border-black border-dashed border-t-0 font-signika p-4 sm:p-5 w-full gap-4 sm:gap-5">
                   <div className="flex flex-row sm:flex-col items-center sm:items-start">
                     <img
                       src={IconReturn}
@@ -756,7 +759,7 @@ const Cart = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-row justify-center items-start h-auto font-montserrat border-2 border-black border-dashed p-4 sm:p-5 mt-4 lg:mt-0">
+              <div className="flex flex-col sm:flex-row justify-center items-start h-auto font-signika border-2 border-black border-dashed p-4 sm:p-5 mt-4 lg:mt-0">
                 <div className="flex flex-row sm:flex-col items-start sm:items-start">
                   <img
                     src={IconSecure}

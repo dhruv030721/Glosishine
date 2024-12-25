@@ -92,7 +92,7 @@ export const WatchList = () => {
 
         {watchlistItems.length > 0 ? (
           <div className="w-full px-4 sm:px-6 md:px-8 pt-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-6 lg:gap-6">
               {watchlistItems.map((product, index) => (
                 <div
                   key={product.id}
@@ -104,7 +104,6 @@ export const WatchList = () => {
                     onRemove={handleRemove}
                     watchlistItems={watchlistItems}
                     setWatchlistItems={setWatchlistItems}
-                    className="h-full min-h-[350px] sm:min-h-[350px] md:min-h-[500px]"
                   />
                 </div>
               ))}

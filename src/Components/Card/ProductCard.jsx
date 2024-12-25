@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { RiShoppingBag4Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { AppContext } from "../../App";
+import cartimage3 from "../../assets/cartimage3.jpg";
 
 const ProductCard = ({ product }) => {
   const Appcontext = useContext(AppContext);
@@ -34,7 +35,7 @@ const ProductCard = ({ product }) => {
             {product.product_name}
           </h1>
         </div>
-        <p className="text-gray-700 font-montserrat text-sm mb-2">
+        <p className="text-gray-700 font-signika text-sm mb-2">
           {product.brand_name}
         </p>
         <div className="mt-2">

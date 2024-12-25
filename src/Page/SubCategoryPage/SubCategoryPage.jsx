@@ -59,7 +59,7 @@ const SubCategoryPage = () => {
   }
 
   return (
-    <div className="container p-6 bg-gray-100 font-montserrat !min-w-full">
+    <div className="container p-6 bg-gray-100 font-signika !min-w-full">
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold text-bg-green mb-2 font-signika">
           {subCategoryName.toUpperCase()}
@@ -71,11 +71,11 @@ const SubCategoryPage = () => {
           No products available for this subcategory at the moment.
         </p>
       ) : (
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4 lg:grid-cols-5 xl:grid-cols-6">
+        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3 md:grid-cols-4 md:gap-4 lg:grid-cols-6 xl:grid-cols-6">
           {products.map((product) => (
             <div
               key={product.product_id}
-              className="w-[160px] sm:w-[180px] md:w-[200px]"
+              className="w-[160px] sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[240px]"
             >
               <ProductList
                 product={product}

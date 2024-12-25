@@ -95,7 +95,7 @@ const Footer = () => {
             <h1 className="link-hover-effect">
               402, Times Trade Center, Opposite Polaris <br />
               Mall, Near Bhaiya Nagar, BRTS Cenal Road <br />
-              BRTS CANAL ROAD Surat, Gujarat, 395010
+              Surat, Gujarat, 395010
             </h1>
             <h1 className="link-hover-effect hidden">Email: info@myfinch.in</h1>
             <h1 className="link-hover-effect hidden">

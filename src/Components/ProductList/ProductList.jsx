@@ -276,7 +276,7 @@ const ProductList = ({
             </h3>
 
             {/* Product Name */}
-            <p className="text-[11px] text-neutral-600 truncate mt-0.5">
+            <p className="text-sm text-neutral-600 truncate mt-0.5">
               {product.product_name}
             </p>
           </div>

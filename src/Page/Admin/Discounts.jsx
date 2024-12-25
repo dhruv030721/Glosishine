@@ -28,6 +28,7 @@ import {
 import CommonTable from "../../Components/CommonTable/CommonTable";
 import toast from "react-hot-toast";
 import { ring2 } from "ldrs";
+import { current } from "@reduxjs/toolkit";
 
 const GreenButton = styled(Button)(({ theme }) => ({
   backgroundColor: "#064C3A",
@@ -277,6 +278,12 @@ const Discounts = () => {
           </td>
           <td className="px-2 py-4 whitespace-nowrap text-sm">
             {formatDate(discount.end_date)}
+            <br />
+            <span className="text-red-500 text-xs">
+              {new Date(discount.end_date) < new Date()
+                ? "Expired"
+                : discount.active === 0 && "In-Active"}
+            </span>
           </td>
         </>
       )}
