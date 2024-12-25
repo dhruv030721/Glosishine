@@ -28,11 +28,11 @@ import {
 import CartTable from "./CartTable";
 import CartCheckout from "./CartCheckout";
 import yellowLine from "../../assets/Yellow-Line.svg";
-
 const MAX_QUANTITY = 10; // Set the maximum quantity limit
 
 export const CartPage = () => {
   const { user } = useContext(AppContext);
+  const appContext = useContext(AppContext);
   const cartItems = useSelector((state) => state.cart.items);
   const cartStatus = useSelector((state) => state.cart.status);
   const cartError = useSelector((state) => state.cart.error);
@@ -50,6 +50,7 @@ export const CartPage = () => {
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
   const [editingAddress, setEditingAddress] = useState(null);
+  let salePrice = 0;
 
   const fetchCartItems = () => {
     if (user?.[0]?.email) {
@@ -299,12 +300,20 @@ export const CartPage = () => {
   };
 
   // Calculate cart total and total discount
-  const cartTotal = cartItems.reduce(
-    (total, item) => total + item?.regular_price * item?.quantity,
-    0
-  );
+  const cartTotal = cartItems.reduce((total, item) => {
+    const product = appContext.getdata.find(
+      (prod) => prod.product_id === item.product_id
+    );
+    salePrice = product?.sale_price || item?.sale_price || 0;
+    return total + salePrice * item?.quantity;
+  }, 0);
+
   const totalDiscount = cartItems.reduce((total, item) => {
-    const discountAmount = ((item?.discount || 0) / 100) * item?.regular_price;
+    const product = appContext.getdata.find(
+      (prod) => prod.product_id === item.product_id
+    );
+    const salePrice = product?.sale_price || item?.sale_price || 0;
+    const discountAmount = ((item?.discount || 0) / 100) * salePrice;
     return total + discountAmount * item?.quantity;
   }, 0);
 
@@ -379,7 +388,7 @@ export const CartPage = () => {
                   product_id: item.product_id,
                   size: item.size,
                   quantity: item.quantity.toString(),
-                  price: (item.regular_price * item.quantity).toString(),
+                  price: (salePrice * item.quantity).toString(),
                 })),
               };
 
@@ -469,7 +478,7 @@ export const CartPage = () => {
         product_id: item.product_id,
         size: item.size,
         quantity: item.quantity.toString(),
-        price: (item.regular_price * item.quantity).toString(),
+        price: (salePrice * item.quantity).toString(),
       })),
     };
 
