@@ -263,13 +263,51 @@ const DashboardContent = () => {
       </tr>
       {expandedOrder === order.order_id && (
         <tr>
-          <td colSpan="6" className="px-4 py-4">
-            <div className="bg-gray-50 p-4 rounded-md">
+          <td colSpan="6" className="px-4 py-4 w-inherit">
+            <div className="bg-gray-50 p-4 rounded-md w-full">
+              {/* Add User Details Section */}
+              <div className="mb-4">
+                <h4 className="font-bold mb-2">User Details</h4>
+                <div className="bg-white p-4 rounded-md border border-gray-200">
+                  <table className="min-w-full bg-white border border-gray-200 rounded-md">
+                    <thead>
+                      <tr className="border-b bg-gray-50">
+                        <th className="px-4 py-2 font-medium">Name</th>
+                        <th className="px-4 py-2 font-medium">Email</th>
+                        <th className="px-4 py-2 font-medium">Contact</th>
+                        <th className="px-4 py-2 font-medium">Address</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td className="px-4 py-2 min-w-32 text-center">
+                          {order.shipping_details.name}
+                        </td>
+                        <td className="px-4 py-2 text-center">{order.email}</td>
+                        <td className="px-4 py-2 text-center">
+                          {order.shipping_details.contact || "N/A"}
+                        </td>
+                        <td className="px-4 py-2 max-w-40">
+                          {order.shipping_details.address +
+                            ", " +
+                            order.shipping_details.city +
+                            ", " +
+                            order.shipping_details.state +
+                            ", " +
+                            order.shipping_details.postal_code}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
               <h4 className="font-bold mb-2">Order Details</h4>
               <table className="min-w-full bg-white border border-gray-200">
                 <thead>
                   <tr className="bg-gray-100">
                     <th className="px-4 py-2 text-left">Product</th>
+                    <th className="px-4 py-2 text-left">SKU</th>
                     <th className="px-4 py-2 text-left">Size</th>
                     <th className="px-4 py-2 text-left">Price</th>
                     <th className="px-4 py-2 text-left">Quantity</th>
@@ -289,6 +327,9 @@ const DashboardContent = () => {
                           {item.product_details.name}
                         </div>
                       </td>
+                      <td className="px-4 py-2 text-gray-600">
+                        {item.product_details.sku}
+                      </td>
                       <td className="px-4 py-2">{item.size}</td>
                       <td className="px-4 py-2 text-bg-green">
                         ₹{parseFloat(item.product_details.price).toFixed(2)}
@@ -305,7 +346,7 @@ const DashboardContent = () => {
                 </tbody>
                 <tfoot>
                   <tr className="border-t border-gray-200 font-bold">
-                    <td colSpan="4" className="px-4 py-2 text-right">
+                    <td colSpan="5" className="px-4 py-2 text-right">
                       Total:
                     </td>
                     <td className="px-4 py-2">
