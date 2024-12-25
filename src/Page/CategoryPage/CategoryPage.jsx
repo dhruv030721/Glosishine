@@ -19,7 +19,7 @@ const CategoryPage = () => {
   const itemsPerPage = {
     mobile: 2,
     tablet: 3,
-    desktop: 4,
+    desktop: 6,
   };
 
   const getItemsPerPage = () => {
