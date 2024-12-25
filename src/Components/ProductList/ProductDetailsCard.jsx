@@ -52,7 +52,7 @@ const ProductDetailsCard = ({ product }) => {
 
   return (
     <>
-      <div className="bg-bg-green bg-opacity-10 rounded-lg p-4 cursor-pointer my-5">
+      <div className="bg-bg-green bg-opacity-10 border-2 border-zinc-500 font-signika rounded-lg p-4 cursor-pointer my-5">
         <h3 className="text-bg-green font-semibold text-lg mb-2">
           Product Details
         </h3>
@@ -68,7 +68,7 @@ const ProductDetailsCard = ({ product }) => {
           </span>
         )}
         <button
-          className="mt-2 cursor-pointer group relative flex gap-1.5 p-2 rounded-lg items-center justify-center w-40 md:w-40 h-8 bg-bg-green bg-opacity-100 text-[#f1f1f1] hover:bg-opacity-70 transition font-semibold shadow-md"
+          className="mt-2 cursor-pointer group relative flex gap-1.5 p-2 rounded-lg items-center justify-center w-40 md:w-40 h-8  bg-opacity-100 text-green-900 border-2 border-zinc-500 hover:bg-opacity-70 transition font-semibold "
           onClick={toggleModal}
         >
           View All Details
@@ -96,7 +96,7 @@ const ProductDetailsCard = ({ product }) => {
           }}
         >
           <div className="bg-bg-green text-white p-4 rounded-t-lg">
-            <h2 className="text-xl font-semibold">Product Details</h2>
+            <h2 className="text-xl font-semibold font-signika">Product Details</h2>
           </div>
 
           <button

@@ -682,17 +682,6 @@ const Cart = () => {
                     </button>
                   </div>
                   <ProductDetailsCard product={item} />
-                  <button className="text-sm flex items-center font-monserrat gap-x-2 text-bg-green hover:bg-bg-green hover:text-white py-2 px-4 border-2 border-bg-green rounded-lg hover:shadow-md">
-                    <a
-                      href={window.location.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center"
-                    >
-                      <RiShare2Line size={20} className="mr-2" />
-                      <span className="font-semibold">Share</span>
-                    </a>
-                  </button>
                   {/* <p className='text-lg font-monserrat mt-5 font-semibold'>Product Specification:</p>
                                     <div className='ml-10 font-signika mt-7'>
                                         {item.product_specification && item.product_specification.split(/,\r?\n|\r|\n/).filter(spec => spec.trim() !== "").map((spec, index) => (
