@@ -45,7 +45,7 @@ const PricingStock = ({ formdata, setFormdata }) => {
           value={formdata.regularprize}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -58,7 +58,7 @@ const PricingStock = ({ formdata, setFormdata }) => {
           value={formdata.saleprize}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -71,7 +71,7 @@ const PricingStock = ({ formdata, setFormdata }) => {
           value={formdata.brandname}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>

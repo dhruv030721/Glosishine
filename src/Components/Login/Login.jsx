@@ -88,7 +88,7 @@ const Login = () => {
           <div className="mb-6 space-y-4">
             <div className="space-y-2">
               <label
-                className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="email"
               >
                 Email
@@ -106,7 +106,7 @@ const Login = () => {
                   onChange={(e) =>
                     setUserdata({ ...userdata, email: e.target.value })
                   }
-                  className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                  className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                   id="email"
                   placeholder="mail@example.com"
                   required
@@ -116,7 +116,7 @@ const Login = () => {
             </div>
             <div className="space-y-2">
               <label
-                className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="password"
               >
                 Password
@@ -134,7 +134,7 @@ const Login = () => {
                   onChange={(e) =>
                     setUserdata({ ...userdata, password: e.target.value })
                   }
-                  className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                  className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                   id="password"
                   placeholder="Enter password"
                   required
@@ -156,7 +156,7 @@ const Login = () => {
             Login
           </button>
         </form>
-        <div className="text-sm text-center mt-6 font-poppins">
+        <div className="text-sm text-center mt-6 font-signika">
           No account?{" "}
           <Link
             className="font-medium text-green-900 hover:text-green-800 underline"

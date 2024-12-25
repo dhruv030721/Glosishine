@@ -30,7 +30,7 @@ const ProductCard = ({ product }) => {
       </Link>
       <div className="px-4 py-4">
         <div className="flex">
-          <h1 className="font-bold w-full flex justify-start font-poppins text-md mb-2">
+          <h1 className="font-bold w-full flex justify-start font-signika text-md mb-2">
             {product.product_name}
           </h1>
         </div>
@@ -38,13 +38,13 @@ const ProductCard = ({ product }) => {
           {product.brand_name}
         </p>
         <div className="mt-2">
-          <span className="text-md font-semibold font-poppins text-black">
+          <span className="text-md font-semibold font-signika text-black">
             {product.sale_price}
           </span>
-          <span className="text-sm text-gray-500 font-poppins line-through ml-2">
+          <span className="text-sm text-gray-500 font-signika line-through ml-2">
             {product.regular_price}
           </span>
-          <span className="text-sm text-red-500 font-poppins ml-2">
+          <span className="text-sm text-red-500 font-signika ml-2">
             ({product.discount}% OFF)
           </span>
         </div>

@@ -18,7 +18,7 @@ const Footer = () => {
           </div>
 
           {/* Existing Footer Sections */}
-          <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto hidden">
+          <div className="flex flex-col gap-y-3 font-signika text-sm mb-5 md:mb-0 w-full sm:w-auto hidden">
             <h1 className="text-lg mb-4 relative">
               Finch
               <img
@@ -46,7 +46,7 @@ const Footer = () => {
               Blogs
             </Link>
           </div>
-          <div className="hidden flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
+          <div className="hidden flex flex-col gap-y-3 font-signika text-sm mb-5 md:mb-0 w-full sm:w-auto">
             <h1 className="text-lg mb-4 relative">
               Policies
               <img
@@ -68,7 +68,7 @@ const Footer = () => {
               Return & Exchange Policy
             </Link>
           </div>
-          <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
+          <div className="flex flex-col gap-y-3 font-signika text-sm mb-5 md:mb-0 w-full sm:w-auto">
             <h1 className="text-lg mb-4 relative">
               How Can We Help You?
               <img
@@ -83,7 +83,7 @@ const Footer = () => {
             <h1 className="link-hover-effect hidden">Track Order</h1>
             <h1 className="link-hover-effect hidden">Return/Exchange</h1>
           </div>
-          <div className="flex flex-col gap-y-3 font-poppins text-sm mb-5 md:mb-0 w-full sm:w-auto">
+          <div className="flex flex-col gap-y-3 font-signika text-sm mb-5 md:mb-0 w-full sm:w-auto">
             <h1 className="text-lg mb-4 relative">
               Reach Us
               <img

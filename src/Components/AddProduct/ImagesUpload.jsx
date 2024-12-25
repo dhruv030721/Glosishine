@@ -33,7 +33,7 @@ const ImagesUpload = ({ formdata, handleImageUpload, handleRemoveImage }) => {
   };
 
   return (
-    <div className="container mx-auto p-4 font-poppins">
+    <div className="container mx-auto p-4 font-signika">
       <h2 className="text-2xl font-bold mb-4">Upload Multiple Images</h2>
       <form className="bg-white text-bg-green shadow-lg border border-bg-green rounded-lg p-6 text-center max-w-md mx-auto mb-4">
         <span className="text-2xl font-semibold text-bg-green">
@@ -84,7 +84,7 @@ const ImagesUpload = ({ formdata, handleImageUpload, handleRemoveImage }) => {
             ) : null;
           })
         ) : (
-          <p className="text-gray-500 font-poppins">No images uploaded yet</p>
+          <p className="text-gray-500 font-signika">No images uploaded yet</p>
         )}
       </div>
       {error && <p className="text-red-500 mt-2">{error}</p>}

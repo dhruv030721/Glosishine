@@ -161,7 +161,7 @@ const Register = () => {
             <div className="mb-6 space-y-4">
               <div className="space-y-2">
                 <label
-                  className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="firstname"
                 >
                   First Name
@@ -179,7 +179,7 @@ const Register = () => {
                     onChange={(e) =>
                       setUser({ ...user, firstname: e.target.value })
                     }
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     required
                     id="firstname"
                     placeholder="Enter first name"
@@ -189,7 +189,7 @@ const Register = () => {
               </div>
               <div className="space-y-2">
                 <label
-                  className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="lastname"
                 >
                   Last Name
@@ -207,7 +207,7 @@ const Register = () => {
                     onChange={(e) =>
                       setUser({ ...user, lastname: e.target.value })
                     }
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     required
                     id="lastname"
                     placeholder="Enter last name"
@@ -217,7 +217,7 @@ const Register = () => {
               </div>
               <div className="space-y-2">
                 <label
-                  className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="email"
                 >
                   Email
@@ -235,7 +235,7 @@ const Register = () => {
                     onChange={(e) =>
                       setUser({ ...user, email: e.target.value })
                     }
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     required
                     id="email"
                     placeholder="mail@example.com"
@@ -245,7 +245,7 @@ const Register = () => {
               </div>
               <div className="space-y-2">
                 <label
-                  className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="password"
                 >
                   Password
@@ -263,7 +263,7 @@ const Register = () => {
                     onChange={(e) =>
                       setUser({ ...user, password: e.target.value })
                     }
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     required
                     id="password"
                     placeholder="Enter password"
@@ -273,7 +273,7 @@ const Register = () => {
               </div>
               <div className="space-y-2">
                 <label
-                  className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="mobile_number"
                 >
                   Mobile No
@@ -291,7 +291,7 @@ const Register = () => {
                     onChange={(e) =>
                       setUser({ ...user, mobile_number: e.target.value })
                     }
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     required
                     id="mobile_number"
                     placeholder="Enter mobile no"
@@ -312,14 +312,14 @@ const Register = () => {
             <h3 className="text-xl font-monserrat font-semibold text-center text-gray-900">
               Verify Email
             </h3>
-            <p className="text-sm text-center text-gray-600 font-poppins">
+            <p className="text-sm text-center text-gray-600 font-signika">
               We have sent an OTP to{" "}
               <span className="font-semibold">{user.email}</span> for email
               verification.
             </p>
             <div className="space-y-2">
               <label
-                className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                 htmlFor="otp"
               >
                 OTP
@@ -328,7 +328,7 @@ const Register = () => {
                 type="text"
                 value={user.otp}
                 onChange={(e) => setUser({ ...user, otp: e.target.value })}
-                className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                 id="otp"
                 placeholder="Enter OTP"
                 name="otp"
@@ -357,7 +357,7 @@ const Register = () => {
             </div>
           </div>
         )}
-        <div className="text-sm text-center mt-6 font-poppins">
+        <div className="text-sm text-center mt-6 font-signika">
           Already have an account?{" "}
           <Link
             to="/login"

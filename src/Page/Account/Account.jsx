@@ -157,7 +157,7 @@ const Account = () => {
           </div>
         </div>
         <div>
-          <h2 className="text-xl sm:text-2xl font-poppins font-bold">
+          <h2 className="text-xl sm:text-2xl font-signika font-bold">
             {userData.name}
           </h2>
           <p className="text-sm sm:text-base text-gray-500 font-monserrat">
@@ -201,13 +201,13 @@ const Account = () => {
           </h2>
           <div className="flex flex-col sm:flex-row justify-center gap-3 mt-6">
             <button
-              className="w-full sm:w-auto px-4 py-2 text-black bg-gray-200 hover:bg-gray-300 text-base font-poppins rounded-lg font-semibold transition-colors"
+              className="w-full sm:w-auto px-4 py-2 text-black bg-gray-200 hover:bg-gray-300 text-base font-signika rounded-lg font-semibold transition-colors"
               onClick={onClose}
             >
               Cancel
             </button>
             <button
-              className="w-full sm:w-auto px-4 py-2 text-white bg-red-600 hover:bg-red-700 text-base font-poppins rounded-lg font-semibold transition-colors"
+              className="w-full sm:w-auto px-4 py-2 text-white bg-red-600 hover:bg-red-700 text-base font-signika rounded-lg font-semibold transition-colors"
               onClick={onLogout}
             >
               Confirm
@@ -428,13 +428,13 @@ const Account = () => {
   //         </h2>
   //         <button
   //           onClick={onLogout}
-  //           className="w-full text-white bg-red-600 hover:bg-red-700 text-lg font-poppins items-center flex justify-center p-2 rounded-lg font-semibold mb-2"
+  //           className="w-full text-white bg-red-600 hover:bg-red-700 text-lg font-signika items-center flex justify-center p-2 rounded-lg font-semibold mb-2"
   //         >
   //           Logout
   //         </button>
   //         <button
   //           onClick={onClose}
-  //           className="w-full text-bg-green bg-gray-200 hover:bg-gray-300 text-lg font-poppins items-center flex justify-center p-2 rounded-lg font-semibold"
+  //           className="w-full text-bg-green bg-gray-200 hover:bg-gray-300 text-lg font-signika items-center flex justify-center p-2 rounded-lg font-semibold"
   //         >
   //           Close
   //         </button>

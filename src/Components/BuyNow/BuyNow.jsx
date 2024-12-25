@@ -205,7 +205,7 @@ const BuyNow = () => {
                           type="text"
                           id="fullName"
                           placeholder="Your full name"
-                          className="w-full px-3 py-2 border border-gray-300 font-serif rounded focus:outline-none text-[12px]"
+                          className="w-full px-3 py-2 border border-gray-300 font-signika rounded focus:outline-none text-[12px]"
                         />
                       </div>
                       <div className="mb-4">
@@ -219,7 +219,7 @@ const BuyNow = () => {
                           type="text"
                           id="areaName"
                           placeholder="Search your area or building name..."
-                          className="w-full px-3 py-2 border border-gray-300 rounded font-serif focus:outline-none text-[12px]"
+                          className="w-full px-3 py-2 border border-gray-300 rounded font-signika focus:outline-none text-[12px]"
                         />
                       </div>
                       <div className="mb-4">
@@ -233,7 +233,7 @@ const BuyNow = () => {
                           type="text"
                           id="houseNumber"
                           placeholder="For ex: House no. 12 (Optional)"
-                          className="w-full px-3 py-2 border border-gray-300 rounded font-serif focus:outline-none text-[12px]"
+                          className="w-full px-3 py-2 border border-gray-300 rounded font-signika focus:outline-none text-[12px]"
                         />
                       </div>
                       <div className="mb-4">
@@ -247,7 +247,7 @@ const BuyNow = () => {
                           type="text"
                           id="pinCode"
                           placeholder="For ex: 560059"
-                          className="w-full px-3 py-2 border border-gray-300 rounded font-serif focus:outline-none text-[12px]"
+                          className="w-full px-3 py-2 border border-gray-300 rounded font-signika focus:outline-none text-[12px]"
                         />
                       </div>
                       <div className="mb-4">
@@ -281,7 +281,7 @@ const BuyNow = () => {
                       <button
                         type="button"
                         onClick={handlethird}
-                        className="w-full bg-green-500 text-white py-2 rounded font-serif hover:bg-green-600 transition duration-200"
+                        className="w-full bg-green-500 text-white py-2 rounded font-signika hover:bg-green-600 transition duration-200"
                       >
                         Continue
                       </button>
@@ -310,7 +310,7 @@ const BuyNow = () => {
                     <div className="border-2 border-gray-300 rounded-md flex mt-2 flex-col">
                       <div className="border-b-2 border-gray-300 p-2 flex flex-row items-center">
                         <CiLocationOn />
-                        <h1 className="text-[12px] font-serif">
+                        <h1 className="text-[12px] font-signika">
                           12,wefq,bengaluru,karnataka,405010
                         </h1>
                         <button className="text-sm font-semibold underline ml-8">

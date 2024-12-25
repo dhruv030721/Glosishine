@@ -110,7 +110,7 @@ const ForgotPassword = () => {
               <div className="space-y-2">
                 <label
                   htmlFor="email"
-                  className="text-sm font-poppins font-medium leading-none"
+                  className="text-sm font-signika font-medium leading-none"
                 >
                   Email
                 </label>
@@ -127,7 +127,7 @@ const ForgotPassword = () => {
                     type="email"
                     autoComplete="email"
                     required
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     placeholder="mail@example.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -150,7 +150,7 @@ const ForgotPassword = () => {
               <div className="space-y-2">
                 <label
                   htmlFor="otp"
-                  className="text-sm font-poppins font-medium leading-none"
+                  className="text-sm font-signika font-medium leading-none"
                 >
                   Enter OTP
                 </label>
@@ -159,7 +159,7 @@ const ForgotPassword = () => {
                   name="otp"
                   type="text"
                   required
-                  className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                   placeholder="Enter OTP"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
@@ -181,7 +181,7 @@ const ForgotPassword = () => {
               <div className="space-y-2">
                 <label
                   htmlFor="newPassword"
-                  className="text-sm font-poppins font-medium leading-none"
+                  className="text-sm font-signika font-medium leading-none"
                 >
                   New Password
                 </label>
@@ -197,7 +197,7 @@ const ForgotPassword = () => {
                     name="newPassword"
                     type="password"
                     required
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     placeholder="New Password"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
@@ -207,7 +207,7 @@ const ForgotPassword = () => {
               <div className="space-y-2">
                 <label
                   htmlFor="confirmPassword"
-                  className="text-sm font-poppins font-medium leading-none"
+                  className="text-sm font-signika font-medium leading-none"
                 >
                   Confirm Password
                 </label>
@@ -223,7 +223,7 @@ const ForgotPassword = () => {
                     name="confirmPassword"
                     type="password"
                     required
-                    className="border-input font-poppins bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
+                    className="border-input font-signika bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pl-10"
                     placeholder="Confirm Password"
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
@@ -260,7 +260,7 @@ const ForgotPassword = () => {
               ? "Verify OTP"
               : "Reset Password"}
           </h2>
-          <p className="text-center text-sm text-gray-600 font-poppins">
+          <p className="text-center text-sm text-gray-600 font-signika">
             {step === 1
               ? "Enter your email address and we'll send you an OTP to reset your password."
               : step === 2
@@ -269,7 +269,7 @@ const ForgotPassword = () => {
           </p>
         </div>
         {renderStep()}
-        <div className="text-sm text-center mt-6 font-poppins">
+        <div className="text-sm text-center mt-6 font-signika">
           Remember your password?{" "}
           <Link
             to="/login"

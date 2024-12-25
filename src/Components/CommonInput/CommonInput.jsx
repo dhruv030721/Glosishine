@@ -11,7 +11,7 @@ const CommonInput = ({
   options = [], // New prop for select options
 }) => {
   return (
-    <div className="relative w-full mb-6 font-poppins">
+    <div className="relative w-full mb-6 font-signika">
       <div className="input-group w-full">
         {type === "select" ? (
           <div className="relative">
@@ -20,7 +20,7 @@ const CommonInput = ({
               name={name}
               value={value}
               onChange={onChange}
-              className="w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 pr-8 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none appearance-none font-poppins"
+              className="w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 pr-8 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none appearance-none font-signika"
             >
               <option value="" disabled hidden>
                 {label}
@@ -43,7 +43,7 @@ const CommonInput = ({
             <label
               className={`absolute left-4 text-[16px] pointer-events-none transform translate-y-4 transition-all ${
                 value ? "translate-y-[-50%] scale-75" : ""
-              } peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white font-poppins`}
+              } peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white font-signika`}
             >
               {label}
             </label>
@@ -55,7 +55,7 @@ const CommonInput = ({
             value={value}
             onChange={onChange}
             rows={rows}
-            className="w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none font-poppins"
+            className="w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none font-signika"
           />
         ) : (
           <input
@@ -66,7 +66,7 @@ const CommonInput = ({
             onChange={onChange}
             className={`w-full peer border border-solid border-bg-green rounded-lg bg-transparent p-4 text-bg-green text-lg transition-all focus-visible:border-2 focus-visible:border-solid focus-visible:border-bg-green focus-visible:outline-none ${
               type === "number" ? "appearance-none" : ""
-            } font-poppins`}
+            } font-signika`}
             style={
               type === "number"
                 ? { MozAppearance: "textfield", WebkitAppearance: "none" }
@@ -75,7 +75,7 @@ const CommonInput = ({
           />
         )}
         {type != "select" && (
-          <label className="absolute left-4 text-[16px] pointer-events-none transform translate-y-4 transition-all peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white font-poppins">
+          <label className="absolute left-4 text-[16px] pointer-events-none transform translate-y-4 transition-all peer-focus:translate-y-[-50%] peer-focus:scale-75 peer-valid:translate-y-[-50%] peer-valid:scale-75 px-1 text-bg-green bg-white font-signika">
             {label}
           </label>
         )}

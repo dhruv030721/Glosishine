@@ -79,7 +79,7 @@ const Admin = () => {
             <div className="mb-10 space-y-3">
               <div className="space-y-2">
                 <label
-                  className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="email"
                 >
                   Email
@@ -91,7 +91,7 @@ const Admin = () => {
                     setAdminuser({ ...adminuser, email: e.target.value })
                   }
                   placeholder="Enter email"
-                  className="bg-white p-3 pr-12 font-poppins text-sm leading-5 w-full rounded-lg border border-gray-300 shadow-sm outline-none focus:ring focus:ring-indigo-200"
+                  className="bg-white p-3 pr-12 font-signika text-sm leading-5 w-full rounded-lg border border-gray-300 shadow-sm outline-none focus:ring focus:ring-indigo-200"
                 />
                 <span className="absolute inset-y-0 right-0 flex items-center pr-3">
                   {/* Icon can be added here if needed */}
@@ -99,7 +99,7 @@ const Admin = () => {
               </div>
               <div className="space-y-2">
                 <label
-                  className="text-sm font-poppins font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  className="text-sm font-signika font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   htmlFor="password"
                 >
                   Password
@@ -111,12 +111,12 @@ const Admin = () => {
                     setAdminuser({ ...adminuser, password: e.target.value })
                   }
                   placeholder="Enter password"
-                  className="bg-white p-3 font-poppins pr-12 text-sm leading-5 w-full rounded-lg border border-gray-300 shadow-sm outline-none focus:ring focus:ring-indigo-200"
+                  className="bg-white p-3 font-signika pr-12 text-sm leading-5 w-full rounded-lg border border-gray-300 shadow-sm outline-none focus:ring focus:ring-indigo-200"
                 />
               </div>
               <button
                 type="submit"
-                className="cursor-pointer font-poppins group relative flex gap-1.5 p-2 items-center justify-center w-full h-12 bg-bg-green hover:bg-black text-[#f1f1f1] rounded-lg transition font-semibold shadow-md"
+                className="cursor-pointer font-signika group relative flex gap-1.5 p-2 items-center justify-center w-full h-12 bg-bg-green hover:bg-black text-[#f1f1f1] rounded-lg transition font-semibold shadow-md"
               >
                 Login Now
               </button>

@@ -783,13 +783,13 @@ const Cart = () => {
 
             <div className="mt-7 border-black w-full hidden flex flex-col md:flex-row pl-4 pr-4 lg:pl-10 lg:pr-10 bg-yellow-100 border-b-2 border-t-2">
               <div className="w-full md:w-[50%] p-4 lg:p-10 ">
-                <p className="text-black text-3xl md:text-4xl lg:text-5xl font-mono font-semibold">
+                <p className="text-black text-3xl md:text-4xl lg:text-5xl font-signika font-semibold">
                   <span className="text-yellow-600 mr-3">5000+</span>PEOPLE
                   <br /> LOVES US
                 </p>
                 <div className="flex flex-col mt-5">
                   <div className="flex flex-row items-center pb-5 pt-5 border-b-[1px] border-black">
-                    <h1 className="text-xl md:text-2xl font-serif flex justify-start w-full">
+                    <h1 className="text-xl md:text-2xl font-signika flex justify-start w-full">
                       Quality
                     </h1>
                     <div className="flex flex-row gap-x-1 ">
@@ -804,7 +804,7 @@ const Cart = () => {
                     </h1>
                   </div>
                   <div className="flex flex-row items-center pb-5 pt-5 border-b-[1px] border-black">
-                    <h1 className="text-xl md:text-2xl font-serif flex justify-start w-full">
+                    <h1 className="text-xl md:text-2xl font-signika flex justify-start w-full">
                       Durability
                     </h1>
                     <div className="flex flex-row gap-x-1">
@@ -819,7 +819,7 @@ const Cart = () => {
                     </h1>
                   </div>
                   <div className="flex flex-row items-center pb-5 pt-5 border-b-[1px] border-black">
-                    <h1 className="text-xl md:text-2xl font-serif flex justify-start w-full">
+                    <h1 className="text-xl md:text-2xl font-signika flex justify-start w-full">
                       Design
                     </h1>
                     <div className="flex flex-row gap-x-1">
@@ -834,7 +834,7 @@ const Cart = () => {
                     </h1>
                   </div>
                   <div className="flex flex-row items-center pb-5 pt-5 border-b-[1px] border-black">
-                    <h1 className="text-xl md:text-2xl font-serif flex justify-start w-full">
+                    <h1 className="text-xl md:text-2xl font-signika flex justify-start w-full">
                       Value for money
                     </h1>
                     <div className="flex flex-row gap-x-1">
@@ -849,7 +849,7 @@ const Cart = () => {
                     </h1>
                   </div>
                 </div>
-                <h1 className="text-lg md:text-xl font-serif mt-5">
+                <h1 className="text-lg md:text-xl font-signika mt-5">
                   Free Shipping | 100% Smile Guarantee
                 </h1>
               </div>
@@ -864,7 +864,7 @@ const Cart = () => {
                 data-aos-duration="1500"
                 className="w-full flex flex-col items-center"
               >
-                <h1 className="text-2xl font-serif mb-4">Customer Reviews</h1>
+                <h1 className="text-2xl font-signika mb-4">Customer Reviews</h1>
                 <div className="flex flex-row p-5">
                   <div className="flex flex-col pr-6 pt-2 pb-2 border-r-[1px] border-yellow-400">
                     <div className="flex flex-row gap-x-1">
@@ -874,7 +874,7 @@ const Cart = () => {
                       <FaRegStar size={15} />
                       <FaRegStar size={15} />
                     </div>
-                    <h1 className="font-serif">
+                    <h1 className="font-signika">
                       Be the first to write a review
                     </h1>
                   </div>
@@ -901,7 +901,7 @@ const Cart = () => {
                   <div className="max-w-7xl mx-auto p-3 sm:p-4 lg:p-6">
                     {/* Header */}
                     <div className="flex justify-between items-center border-b pb-3 mb-4">
-                      <h1 className="text-xl sm:text-2xl font-serif text-bg-green">
+                      <h1 className="text-xl sm:text-2xl font-signika text-bg-green">
                         Write a review
                       </h1>
                       <button
@@ -930,7 +930,9 @@ const Cart = () => {
                       <div className="space-y-4">
                         {/* Rating */}
                         <div>
-                          <h2 className="text-base font-serif mb-2">Rating</h2>
+                          <h2 className="text-base font-signika mb-2">
+                            Rating
+                          </h2>
                           <div className="flex gap-1">
                             {[...Array(5)].map((_, index) => {
                               const ratingValue = index + 1;
@@ -966,7 +968,7 @@ const Cart = () => {
 
                         {/* Title Input */}
                         <div>
-                          <h2 className="text-base font-serif mb-1">
+                          <h2 className="text-base font-signika mb-1">
                             Review Title
                           </h2>
                           <input
@@ -986,7 +988,7 @@ const Cart = () => {
 
                         {/* Review Text */}
                         <div>
-                          <h2 className="text-base font-serif mb-1">
+                          <h2 className="text-base font-signika mb-1">
                             Your Review
                           </h2>
                           <textarea
@@ -1022,7 +1024,7 @@ const Cart = () => {
 
                       {/* Right Column */}
                       <div>
-                        <h2 className="text-base font-serif mb-2">
+                        <h2 className="text-base font-signika mb-2">
                           Add Photos (Required)
                         </h2>
                         <div className="border-2 border-dashed border-gray-300 flex justify-center items-center rounded-lg p-4 text-center h-[90%] hover:border-bg-green transition-colors duration-200">
@@ -1183,7 +1185,7 @@ const Cart = () => {
               </div>
             </div>
             <div className="p-7">
-              <h1 className="text-2xl font-semibold ml-5 font-serif">
+              <h1 className="text-2xl font-semibold ml-5 font-signika">
                 Related Products
               </h1>
               <div className="w-full p-5">

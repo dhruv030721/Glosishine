@@ -260,7 +260,7 @@ const Navbar = () => {
     <>
       <div className="w-full h-full">
         {activeDiscounts.length > 0 ? (
-          <marquee className="w-full bg-emerald-900 h-11 text-white text-sm flex items-center justify-center font-poppins">
+          <marquee className="w-full bg-emerald-900 h-11 text-white text-sm flex items-center justify-center font-signika">
             {activeDiscounts.map((discount, index) => (
               <span key={index} className="mx-16">
                 Get Flat {discount.discount}% Off on all Products Use Code "
@@ -271,7 +271,7 @@ const Navbar = () => {
             ))}
           </marquee>
         ) : (
-          <div className="w-full bg-emerald-900 h-11 text-white text-sm flex items-center justify-center font-poppins">
+          <div className="w-full bg-emerald-900 h-11 text-white text-sm flex items-center justify-center font-signika">
             Welcome to Glosishine
           </div>
         )}
@@ -280,7 +280,7 @@ const Navbar = () => {
           <Link to="/">
             <img src={logo} alt="" className="h-12 w-34" />
           </Link>
-          <div className="hidden md:flex gap-x-5 font-poppins font-semibold">
+          <div className="hidden md:flex gap-x-5 font-signika font-semibold">
             {items.map((item, index) => (
               <div className="flex flex-row gap-x-4" key={index}>
                 <Link to={item.link}>{item.name}</Link>
@@ -478,7 +478,7 @@ const Navbar = () => {
               <input
                 type="search"
                 placeholder="Search..."
-                className="w-full rounded-md font-poppins border border-gray-200 bg-gray-100 py-2 pl-12 pr-4 text-sm focus:border-gray-300 focus:outline-none focus:ring-0 "
+                className="w-full rounded-md font-signika border border-gray-200 bg-gray-100 py-2 pl-12 pr-4 text-sm focus:border-gray-300 focus:outline-none focus:ring-0 "
               />
             </div>
             <button
@@ -593,7 +593,7 @@ const Navbar = () => {
               <Link
                 key={index}
                 to={item.link}
-                className="text-black font-poppins px-4 py-2 rounded-full transition-all duration-300 hover:bg-bg-green hover:text-white"
+                className="text-black font-signika px-4 py-2 rounded-full transition-all duration-300 hover:bg-bg-green hover:text-white"
               >
                 {item.name}
               </Link>

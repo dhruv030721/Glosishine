@@ -82,7 +82,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.countryorigin}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -95,7 +95,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.nack}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -108,7 +108,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.occupation}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -121,7 +121,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.patent}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -134,7 +134,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.patenttype}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -147,7 +147,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.sleevelength}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -160,7 +160,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.chestsize}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -173,7 +173,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.lengthsize}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -195,7 +195,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.sku}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -209,7 +209,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={parseInt(formdata.noofpocket)}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -222,7 +222,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
           value={formdata.sleevestyle}
           onChange={handleChange}
           variant="outlined"
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
@@ -237,7 +237,7 @@ const ProductDetails = ({ formdata, setFormdata }) => {
             { value: "Yes", label: "Yes" },
             { value: "No", label: "No" },
           ]}
-          className="font-poppins"
+          className="font-signika"
           onBlur={handleBlur}
         />
       </Grid>
