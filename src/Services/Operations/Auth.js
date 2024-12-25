@@ -5,6 +5,7 @@ import {
   authendpoints,
   orderendpoints,
   userendpoints,
+  usermoduleendpoints,
 } from "../Apis";
 import { setItem } from "../LocalStorageService";
 
@@ -29,6 +30,7 @@ const {
   GETUSERORDERS_API,
   UPDATEORDERSTATUS_API,
 } = orderendpoints;
+const { GETALLUSERS_API } = usermoduleendpoints;
 
 export default class Global {
   static token;
@@ -181,4 +183,9 @@ export const SaveShipping = async (shippingData) => {
     console.error("Error saving shipping address:", error);
     throw error;
   }
+};
+
+export const GetAllUsers = async () => {
+  const response = await apiConnector("GET", GETALLUSERS_API);
+  return response.data;
 };

@@ -83,6 +83,10 @@ export const orderendpoints = {
   UPDATEORDERSTATUS_API: BASE_URL + "order/update-order-status.php",
 };
 
+export const usermoduleendpoints = {
+  GETALLUSERS_API: BASE_URL + "user_module/get-users.php",
+};
+
 export const dashboardendpoints = {
   GETDASHBOARD_API: BASE_URL + "dashboard/dashboard.php",
 };
