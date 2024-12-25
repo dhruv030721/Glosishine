@@ -254,16 +254,24 @@ const Account = () => {
             </div>
           </div>
         </td>
-        <td className="px-4 py-4 whitespace-nowrap text-sm text-bg-green">
-          ₹{" "}
-          {order.order_items
-            .reduce(
-              (total, item) =>
-                total + parseFloat(item.product_details.price) * item.quantity,
-              0
-            )
-            .toFixed(2)}
-          {` (${order.payment_type})`}
+        <td className="px-4 py-4 whitespace-nowrap">
+          <div className="text-sm text-bg-green">
+            ₹ {parseFloat(order.amount).toFixed(2)}
+          </div>
+          {(() => {
+            const { discountPercentage, hasDiscount } =
+              calculateDiscount(order);
+
+            return (
+              <>
+                {hasDiscount && (
+                  <div className="text-xs text-green-600">
+                    ({discountPercentage}% off)
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
           <span
@@ -328,17 +336,35 @@ const Account = () => {
                     <td colSpan="4" className="px-4 py-2 text-right">
                       Total:
                     </td>
-                    <td className="px-4 py-2">
-                      ₹
-                      {order.order_items
-                        .reduce(
-                          (total, item) =>
-                            total +
-                            parseFloat(item.product_details.price) *
-                              item.quantity,
-                          0
-                        )
-                        .toFixed(2)}
+                    <td className="px-4 py-2 flex items-center gap-x-2">
+                      {(() => {
+                        const {
+                          totalBeforeDiscount,
+                          actualAmount,
+                          discountPercentage,
+                          hasDiscount,
+                        } = calculateDiscount(order);
+
+                        return (
+                          <>
+                            <div
+                              className={`text-nowrap ${
+                                hasDiscount ? "" : "hidden"
+                              } line-through`}
+                            >
+                              ₹{totalBeforeDiscount}
+                            </div>
+                            <div className="text-sm text-bg-green">
+                              ₹{actualAmount}
+                            </div>
+                            {hasDiscount && (
+                              <div className="text-xs text-green-600">
+                                ({discountPercentage}% off)
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                     </td>
                   </tr>
                 </tfoot>
@@ -465,6 +491,26 @@ const Account = () => {
       return utcDateString; // Return original string if formatting fails
     }
   };
+
+  function calculateDiscount(order) {
+    const totalBeforeDiscount = order.order_items.reduce(
+      (total, item) =>
+        total + parseFloat(item.product_details.price) * item.quantity,
+      0
+    );
+
+    const actualAmount = parseFloat(order.amount);
+    const discountAmount = totalBeforeDiscount - actualAmount;
+    const discountPercentage = (discountAmount / totalBeforeDiscount) * 100;
+
+    return {
+      totalBeforeDiscount: totalBeforeDiscount.toFixed(2),
+      actualAmount: actualAmount.toFixed(2),
+      discountAmount: discountAmount.toFixed(2),
+      discountPercentage: discountPercentage.toFixed(1),
+      hasDiscount: discountAmount > 0,
+    };
+  }
 
   if (loading) {
     return (

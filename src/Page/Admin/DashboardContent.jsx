@@ -179,6 +179,27 @@ const DashboardContent = () => {
 
   const summaryData = getSummaryData();
 
+  //calculate discount percetage & price
+  function calculateDiscount(order) {
+    const totalBeforeDiscount = order.order_items.reduce(
+      (total, item) =>
+        total + parseFloat(item.product_details.price) * item.quantity,
+      0
+    );
+
+    const actualAmount = parseFloat(order.amount);
+    const discountAmount = totalBeforeDiscount - actualAmount;
+    const discountPercentage = (discountAmount / totalBeforeDiscount) * 100;
+
+    return {
+      totalBeforeDiscount: totalBeforeDiscount.toFixed(2),
+      actualAmount: actualAmount.toFixed(2),
+      discountAmount: discountAmount.toFixed(2),
+      discountPercentage: discountPercentage.toFixed(1),
+      hasDiscount: discountAmount > 0,
+    };
+  }
+
   const renderRow = (order, index) => (
     <React.Fragment key={order.order_id}>
       <tr>
@@ -215,15 +236,28 @@ const DashboardContent = () => {
             </div>
           </div>
         </td>
-        <td className="px-4 py-4 whitespace-nowrap text-sm text-bg-green">
-          ₹{" "}
-          {order.order_items
-            .reduce(
-              (total, item) =>
-                total + parseFloat(item.product_details.price) * item.quantity,
-              0
-            )
-            .toFixed(2)}
+        <td className="px-4 py-4 whitespace-nowrap">
+          <div className="text-sm text-bg-green">
+            ₹ {parseFloat(order.amount).toFixed(2)}
+          </div>
+          {(() => {
+            const {
+              totalBeforeDiscount,
+              actualAmount,
+              discountPercentage,
+              hasDiscount,
+            } = calculateDiscount(order);
+
+            return (
+              <>
+                {hasDiscount && (
+                  <div className="text-xs text-green-600">
+                    ({discountPercentage}% off)
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </td>
         <td className="px-4 py-4 whitespace-nowrap">
           <Select
@@ -271,11 +305,11 @@ const DashboardContent = () => {
                 <div className="bg-white p-4 rounded-md border border-gray-200">
                   <table className="min-w-full bg-white border border-gray-200 rounded-md">
                     <thead>
-                      <tr className="border-b bg-gray-50">
-                        <th className="px-4 py-2 font-medium">Name</th>
-                        <th className="px-4 py-2 font-medium">Email</th>
-                        <th className="px-4 py-2 font-medium">Contact</th>
-                        <th className="px-4 py-2 font-medium">Address</th>
+                      <tr className="border-b bg-gray-100">
+                        <th className="px-4 py-2">Name</th>
+                        <th className="px-4 py-2">Email</th>
+                        <th className="px-4 py-2">Contact</th>
+                        <th className="px-4 py-2">Address</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -349,17 +383,35 @@ const DashboardContent = () => {
                     <td colSpan="5" className="px-4 py-2 text-right">
                       Total:
                     </td>
-                    <td className="px-4 py-2">
-                      ₹
-                      {order.order_items
-                        .reduce(
-                          (total, item) =>
-                            total +
-                            parseFloat(item.product_details.price) *
-                              item.quantity,
-                          0
-                        )
-                        .toFixed(2)}
+                    <td className="px-4 py-2 flex items-center gap-x-2">
+                      {(() => {
+                        const {
+                          totalBeforeDiscount,
+                          actualAmount,
+                          discountPercentage,
+                          hasDiscount,
+                        } = calculateDiscount(order);
+
+                        return (
+                          <>
+                            <div
+                              className={`text-nowrap ${
+                                hasDiscount ? "" : "hidden"
+                              } line-through`}
+                            >
+                              ₹{totalBeforeDiscount}
+                            </div>
+                            <div className="text-sm text-bg-green">
+                              ₹{actualAmount}
+                            </div>
+                            {hasDiscount && (
+                              <div className="text-xs text-green-600">
+                                ({discountPercentage}% off)
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
                     </td>
                   </tr>
                 </tfoot>
