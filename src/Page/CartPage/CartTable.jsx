@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { FaSpinner, FaTrash } from "react-icons/fa";
+import { useContext } from "react";
+import { AppContext } from "../../App";
 
 const CartTable = ({
   cartItems,
@@ -9,6 +11,8 @@ const CartTable = ({
   handleDeleteItem,
   MAX_QUANTITY,
 }) => {
+  const appContext = useContext(AppContext);
+
   return (
     <div className="p-3 sm:p-4 md:p-6 bg-white shadow-lg rounded-md">
       {/* Header Row (hidden on mobile) */}
@@ -33,7 +37,10 @@ const CartTable = ({
       {/* Cart Items */}
       {cartItems.length > 0 ? (
         cartItems.map((item) => {
-          const salePrice = item?.sale_price;
+          const product = appContext.getdata.find(
+            (prod) => prod.product_id === item.product_id
+          );
+          const salePrice = product?.sale_price || item?.sale_price;
           const discountAmount =
             ((item?.discount || 0) / 100) * item?.regular_price;
           const discountedPrice = item?.regular_price - discountAmount;
@@ -77,9 +84,7 @@ const CartTable = ({
                         Size: {item?.size}
                       </p>
                       <div className="flex justify-between items-center mt-2 sm:hidden">
-                        <p className="text-sm font-semibold">
-                          ₹{item?.regular_price}
-                        </p>
+                        <p className="text-sm font-semibold">₹{salePrice}</p>
                         <div className="flex items-center">
                           <button
                             className="text-gray-500 border border-gray-300 rounded-l px-2 py-1"
@@ -122,7 +127,7 @@ const CartTable = ({
                   <div className="hidden sm:flex w-full sm:w-3/5 justify-between items-center">
                     <div className="w-1/3 text-center">
                       <p className="text-sm sm:text-base font-semibold">
-                        ₹{item?.regular_price}
+                        ₹{salePrice}
                       </p>
                     </div>
                     <div className="w-1/3 flex justify-center items-center px-2 py-1 rounded">
@@ -155,7 +160,7 @@ const CartTable = ({
                     </div>
                     <div className="w-1/3 text-center">
                       <p className="text-sm sm:text-base font-semibold text-orange-400">
-                        ₹{(item?.regular_price * item?.quantity).toFixed(2)}
+                        ₹{(salePrice * item?.quantity).toFixed(2)}
                       </p>
                     </div>
                   </div>

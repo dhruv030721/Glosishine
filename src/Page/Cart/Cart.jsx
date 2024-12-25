@@ -47,6 +47,7 @@ import { Carousel } from "@material-tailwind/react";
 import ProductList from "../../Components/ProductList/ProductList";
 import { fetchCartItemsAsync } from "../../Slice/CartSlice";
 import { FaTrash } from "react-icons/fa";
+import ProductDetailsCard from "../../Components/ProductList/ProductDetailsCard";
 
 const Cart = () => {
   const { id } = useParams();
@@ -195,7 +196,7 @@ const Cart = () => {
   //         <>
   //           <p>
   //             We offer 7 days hassle-free returns & exchange from the date of
-  //             delivery. We DO NOT offer reverse pick-up services. You’ll have to
+  //             delivery. We DO NOT offer reverse pick-up services. You'll have to
   //             courier the product(s) to the following address: No.7, Ground
   //             Floor, Uniform Factory, 6th Cross, H Siddaiah Road, Sudhamanagar,
   //             Bengaluru - 560027
@@ -543,28 +544,30 @@ const Cart = () => {
                     {item.product_name}
                   </h1>
                   <div className="flex flex-row font-signika gap-x-3 mt-3">
-                    <span className="text-sm text-black font-bold line-through">
-                      {item.regular_price}
+                    <span className="text-md text-green-700 font-bold">
+                      ₹{item.sale_price}
                     </span>
-                    <span className="text-sm text-green-700 font-bold">
-                      {item.sale_price}
+                    <span className="text-md text-black font-bold line-through">
+                      ₹{item.regular_price}
                     </span>
-                    <span className="rounded-full bg-black px-2 text-center text-sm font-medium text-white">
+                    <span className="rounded-full align-middle bg-black px-2 pt-[2px] text-center text-sm font-medium text-white">
                       {item.discount}% OFF
                     </span>
                   </div>
-                  <p className="text-sm font-monserrat font-light mt-3">
-                    Tax included.
-                  </p>
-                  <div className="flex flex-row gap-x-1">
-                    <p className="mt-4 font-signika font-md">
-                      Or 3 interest free payments of ₹433
+                  <div className="hidden">
+                    <p className="text-sm font-monserrat font-light mt-3">
+                      Tax included.
                     </p>
-                    <img src={brand} alt="" className="w-12 mt-4" />
-                    <img src={info} alt="" className="mt-4" />
-                  </div>
-                  <div data-aos="zoom-in" data-aos-duration="2000">
-                    <img src={payment} alt="" className="w-72 h-12" />
+                    <div className="flex flex-row gap-x-1">
+                      <p className="mt-4 font-signika font-md">
+                        Or 3 interest free payments of ₹433
+                      </p>
+                      <img src={brand} alt="" className="w-12 mt-4" />
+                      <img src={info} alt="" className="mt-4" />
+                    </div>
+                    <div data-aos="zoom-in" data-aos-duration="2000">
+                      <img src={payment} alt="" className="w-72 h-12" />
+                    </div>
                   </div>
                   {/* <div className="mt-5 flex flex-row gap-x-3">
                   <img src={discount} alt="" className="w-6 h-6 mt-2" />
@@ -678,9 +681,7 @@ const Cart = () => {
                       )}
                     </button>
                   </div>
-                  <p className="text-md font-signika mt-4">
-                    {item.product_description}
-                  </p>
+                  <ProductDetailsCard product={item} />
                   <button className="text-sm flex items-center font-monserrat gap-x-2 text-bg-green hover:bg-bg-green hover:text-white py-2 px-4 border-2 border-bg-green rounded-lg hover:shadow-md">
                     <a
                       href={window.location.href}
@@ -1197,12 +1198,12 @@ const Cart = () => {
                   data-aos-anchor-placement="top-bottom"
                   data-aos-duration="3000"
                 >
-                  <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 justify-center gap-4">
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 xl:grid-cols-6 gap-6 lg:gap-6">
                     {relatedProducts.map((product) => (
                       <ProductList
                         key={product.product_id}
                         product={product}
-                        className="min-h-[350px] md:min-h-[500px]"
+                        className="min-h-[250px] sm:min-h-[300px] md:min-h-[350px]"
                       />
                     ))}
                   </div>
