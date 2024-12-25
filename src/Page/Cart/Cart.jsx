@@ -251,30 +251,51 @@ const Cart = () => {
       return false;
     }
 
-    const itemToAdd = {
-      email: userContext.user[0].email,
-      product_id: item.product_id,
-      quantity: quantity.toString(),
-      size: selectedSize,
-    };
-
     try {
-      await dispatch(addItemAsync(itemToAdd)).unwrap();
-      // Fetch updated cart items after adding
-      await dispatch(fetchCartItemsAsync(userContext.user[0].email));
-      toast.success("Item added to cart", {
-        style: {
-          backgroundColor: "#064C3A",
-          color: "#FFFFFF",
-          fontFamily: "signika",
-        },
-        position: "bottom-right",
-      });
-      return true;
+      if (userContext?.user?.[0]?.email) {
+        const itemToAdd = {
+          email: userContext.user[0].email ? userContext.user[0].email : "",
+          product_id: item.product_id,
+          quantity: quantity.toString(),
+          size: selectedSize,
+        };
+        await dispatch(addItemAsync(itemToAdd)).unwrap();
+        // Fetch updated cart items after adding
+        await dispatch(fetchCartItemsAsync(userContext.user[0].email));
+        toast.success("Item added to cart", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+        return true;
+      } else {
+        throw new Error("User not logged in!");
+      }
     } catch (error) {
-      console.error("Failed to add item to cart:", error);
+      console.error("Failed to add item to cart:", error.message);
       if (error?.message.includes("Insufficient")) {
         toast.error("Insufficient Product Stock! Try again later", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+      } else if (error?.message.includes("User not logged in!")) {
+        toast.error("Please log in to add items to cart", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+      } else if (error.message.includes("Product already exists in the cart")) {
+        toast.error("Product already exists in the cart", {
           style: {
             backgroundColor: "#064C3A",
             color: "#FFFFFF",

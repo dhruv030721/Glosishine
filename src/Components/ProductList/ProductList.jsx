@@ -54,7 +54,7 @@ const ProductList = ({
     e.stopPropagation();
 
     if (!email) {
-      toast.error("Please log in to add items to your watchlist", {
+      toast.error("Please log in to manage your watchlist", {
         style: {
           backgroundColor: "#064C3A",
           color: "#FFFFFF",
