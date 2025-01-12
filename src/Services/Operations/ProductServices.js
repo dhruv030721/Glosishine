@@ -12,6 +12,7 @@ import {
 } from "../Apis";
 import Cookies from "js-cookie"; // Make sure to install and import js-cookie
 
+// Product Services
 export async function addProduct({ productData }) {
   let formData = new FormData();
   const sizestring = productData.size.join();
@@ -48,6 +49,7 @@ export async function addProduct({ productData }) {
   const response = await apiConnector(
     "POST",
     productendpoints.ADDPRODUCTS_API,
+    "admin",
     formData
   );
   return response;
@@ -102,6 +104,7 @@ export async function updateProduct(data) {
 
   const response = await apiConnector(
     "POST",
+    "admin",
     productendpoints.UPDATEPRODUCT_API,
     formData
   );
@@ -112,6 +115,7 @@ export async function deleteProduct(productid) {
   // console.log(productid);
   const response = await apiConnector(
     "GET",
+    "admin",
     productendpoints.DELETEPRODUCT_API + productid
   );
   return response;
@@ -132,6 +136,7 @@ export async function addReview(data, id, rating) {
   });
   const response = await apiConnector(
     "POST",
+    "user",
     reviewendpoints.ADDREVIEW_API,
     formdata
   );
@@ -163,6 +168,7 @@ export async function getNewDropProduct() {
 export async function updateNewDropStatus(id, status) {
   const response = await apiConnector(
     "POST",
+    "admin",
     productendpoints.NEWDROPSTATUS_API,
     { product_id: id, status }
   );
@@ -174,6 +180,7 @@ export const getFavProduct = async (email) => {
   try {
     const response = await apiConnector(
       "POST",
+      "user",
       favproductendpoints.GETFAVPRODUCT_API,
       { email }
     );
@@ -196,6 +203,7 @@ export const addFavProduct = async (email, product_id) => {
 
     const response = await apiConnector(
       "POST",
+      "user",
       favproductendpoints.ADDFAVPRODUCTS_API,
       JSON.stringify(requestBody),
       {
@@ -231,11 +239,13 @@ export const addFavProduct = async (email, product_id) => {
 export async function deleteFavProduct(product_id, email) {
   const response = await apiConnector(
     "DELETE",
+    "user",
     favproductendpoints.DELETEFAVPRODUCT_API,
     { email, product_id }
   );
   return response;
 }
+
 //Cart Products
 export const getCartProduct = async (email) => {
   try {
@@ -244,6 +254,7 @@ export const getCartProduct = async (email) => {
 
     const response = await apiConnector(
       "POST",
+      "user",
       cartendpoints.GETCARTPRODUCTS_API,
       { email },
       {
@@ -273,6 +284,7 @@ export const addToCart = async (productData) => {
     };
     const response = await apiConnector(
       "POST",
+      "user",
       cartendpoints.ADDCARTPRODUCTS_API,
       productData,
       headers
@@ -288,6 +300,7 @@ export const removeFromCart = async (email, productId, size) => {
   try {
     const response = await apiConnector(
       "DELETE",
+      "user",
       cartendpoints.DELETECARTPRODUCT_API,
       { email, product_id: productId, size: size },
       {
@@ -305,9 +318,14 @@ export const removeFromCart = async (email, productId, size) => {
 
 export const clearAllCart = async (email) => {
   try {
-    const response = await apiConnector("DELETE", cartendpoints.CLEARCART_API, {
-      email: email,
-    });
+    const response = await apiConnector(
+      "DELETE",
+      "user",
+      cartendpoints.CLEARCART_API,
+      {
+        email: email,
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error clearing cart:", error);
@@ -319,6 +337,7 @@ export const increaseQuantity = async (email, productId) => {
   try {
     const response = await apiConnector(
       "PATCH",
+      "user",
       cartendpoints.INCREASEQUANTITY_API,
       { email, product_id: productId },
       {
@@ -338,6 +357,7 @@ export const decreaseQuantity = async (email, productId) => {
   try {
     const response = await apiConnector(
       "PATCH",
+      "user",
       cartendpoints.DECREASEQUANTITY_API,
       { email, product_id: productId },
       {
@@ -357,6 +377,7 @@ export const decreaseQuantity = async (email, productId) => {
 export const getInventory = async () => {
   const response = await apiConnector(
     "GET",
+    "public",
     inventoryendpoints.GETINVENTORY_API,
     {
       headers: {
@@ -370,6 +391,7 @@ export const getInventory = async () => {
 export const addInventory = async (inventoryData) => {
   const response = await apiConnector(
     "POST",
+    "admin",
     inventoryendpoints.ADDINVENTORY_API,
     inventoryData,
     {
@@ -401,6 +423,7 @@ export const getAllDiscounts = async () => {
 export const updateDiscount = async (formData) => {
   const response = await apiConnector(
     "PATCH",
+    "admin",
     discountendpoints.UPDATEDISCOUNT_API,
     formData,
     {
@@ -415,6 +438,7 @@ export const updateDiscount = async (formData) => {
 export const updateDiscountStatus = async (formData) => {
   const response = await apiConnector(
     "POST",
+    "admin",
     discountendpoints.STATUSUPDATE_API,
     formData,
     {
@@ -429,6 +453,7 @@ export const updateDiscountStatus = async (formData) => {
 export const addDiscount = async (discountData) => {
   const response = await apiConnector(
     "POST",
+    "admin",
     discountendpoints.ADDDISCOUNT_API,
     discountData,
     {
@@ -443,6 +468,7 @@ export const addDiscount = async (discountData) => {
 export const deleteDiscount = async (couponCode_id) => {
   const response = await apiConnector(
     "DELETE",
+    "admin",
     discountendpoints.DELETEDISCOUNT_API,
     { id: couponCode_id },
     {
@@ -457,9 +483,14 @@ export const deleteDiscount = async (couponCode_id) => {
 //payments
 export const createRazorpayOrder = async (amount) => {
   try {
-    const response = await apiConnector("POST", RAZORPAY_API.CREATE_ORDER, {
-      amount,
-    });
+    const response = await apiConnector(
+      "POST",
+      "user",
+      RAZORPAY_API.CREATE_ORDER,
+      {
+        amount,
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Error creating Razorpay order:", error);
@@ -471,6 +502,7 @@ export const verifyRazorpayPayment = async (paymentData) => {
   try {
     const response = await apiConnector(
       "POST",
+      "user",
       RAZORPAY_API.VERIFY_PAYMENT,
       paymentData
     );
@@ -485,6 +517,7 @@ export const verifyRazorpayPayment = async (paymentData) => {
 export const getDashboardData = async () => {
   const response = await apiConnector(
     "GET",
+    "admin",
     dashboardendpoints.GETDASHBOARD_API
   );
   return response.data;

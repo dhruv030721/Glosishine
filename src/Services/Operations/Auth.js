@@ -53,6 +53,7 @@ export async function getUser(email) {
   try {
     const response = await apiConnector(
       "GET",
+      "user",
       `${GETUSER_API}?email=${email}`,
       null,
       headers
@@ -109,7 +110,12 @@ export async function verifyOTP(otp, email) {
 
 export const UpdateBilling = async (billingData) => {
   try {
-    const response = await apiConnector("POST", UPDATEBILLING_API, billingData);
+    const response = await apiConnector(
+      "POST",
+      "user",
+      UPDATEBILLING_API,
+      billingData
+    );
     return response.data;
   } catch (error) {
     console.error("Error updating billing address:", error);
@@ -121,6 +127,7 @@ export const UpdateShipping = async (shippingData) => {
   try {
     const response = await apiConnector(
       "POST",
+      "user",
       UPDATESHIPPING_API,
       shippingData
     );
@@ -132,38 +139,54 @@ export const UpdateShipping = async (shippingData) => {
 };
 
 export async function GetBilling(email) {
-  const response = await apiConnector("POST", GETBILLING_API, { email });
+  const response = await apiConnector("POST", "user", GETBILLING_API, {
+    email,
+  });
   return response;
 }
 
 export async function GetShipping(email) {
-  const response = await apiConnector("POST", GETSHIPPING_API, { email });
+  const response = await apiConnector("POST", "user", GETSHIPPING_API, {
+    email,
+  });
   return response;
 }
 
 export async function AddOrder(orderData) {
-  const response = await apiConnector("POST", ADDORDER_API, orderData);
+  const response = await apiConnector("POST", "user", ADDORDER_API, orderData);
   return response.data;
 }
 
 export async function GetOrders() {
-  const response = await apiConnector("GET", GETORDERS_API);
+  const response = await apiConnector("GET", "admin", GETORDERS_API);
   return response.data;
 }
 
 export async function GetUserOrders(email) {
-  const response = await apiConnector("POST", GETUSERORDERS_API, { email });
+  const response = await apiConnector("POST", "user", GETUSERORDERS_API, {
+    email,
+  });
   return response;
 }
 
 export async function UpdateOrderStatus(orderData) {
-  const response = await apiConnector("POST", UPDATEORDERSTATUS_API, orderData);
+  const response = await apiConnector(
+    "POST",
+    "admin",
+    UPDATEORDERSTATUS_API,
+    orderData
+  );
   return response;
 }
 
 export const SaveBilling = async (billingData) => {
   try {
-    const response = await apiConnector("POST", UPDATEBILLING_API, billingData);
+    const response = await apiConnector(
+      "POST",
+      "admin",
+      UPDATEBILLING_API,
+      billingData
+    );
     return response.data;
   } catch (error) {
     console.error("Error saving billing address:", error);
@@ -175,6 +198,7 @@ export const SaveShipping = async (shippingData) => {
   try {
     const response = await apiConnector(
       "POST",
+      "admin",
       UPDATESHIPPING_API,
       shippingData
     );
@@ -186,6 +210,6 @@ export const SaveShipping = async (shippingData) => {
 };
 
 export const GetAllUsers = async () => {
-  const response = await apiConnector("GET", GETALLUSERS_API);
+  const response = await apiConnector("GET", "admin", GETALLUSERS_API);
   return response.data;
 };
