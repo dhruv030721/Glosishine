@@ -2,10 +2,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { IoMdMail, IoMdLock } from "react-icons/io";
 import { ring2 } from "ldrs";
-import { authendpoints } from "../../Services/Apis";
-import { apiConnector } from "../../Services/Apiconnector";
 import toast from "react-hot-toast";
-import { ChangePassword, verifyOTP } from "../../Services/Operations/Auth";
+import { ChangePassword, SendOTP } from "../../Services/Operations/Auth";
 
 ring2.register();
 
@@ -21,52 +19,44 @@ const ForgotPassword = () => {
   const handleSendOtp = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    toast
-      .promise(apiConnector("GET", `${authendpoints.SEND_OTP}${email}`), {
-        loading: "Sending OTP...",
-        success: (response) => {
-          if (response.data.success) {
-            setStep(2);
-            return "OTP sent to your email";
-          } else {
-            throw new Error(response.data.message || "An error occurred");
-          }
+    try {
+      const response = await SendOTP({ email }); // Pass email as object
+      if (response.data.success) {
+        setStep(2);
+        toast.success("OTP sent to your email", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+      } else {
+        toast.error(response.data.message || "An error occurred", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+      }
+    } catch (error) {
+      console.error("Send OTP error:", error);
+      toast.error(`Error: ${error.response.data.message}`, {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
         },
-        error: (error) => {
-          console.error("Send OTP error:", error);
-          return "An error occurred. Please try again.";
-        },
-      })
-      .finally(() => {
-        setIsLoading(false);
+        position: "bottom-right",
       });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleVerifyOtp = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    toast
-      .promise(verifyOTP(otp, email), {
-        loading: "Verifying OTP...",
-        success: (response) => {
-          if (response.data.success) {
-            setStep(3);
-            return "OTP verified successfully";
-          } else {
-            throw new Error(response.data.message || "Invalid OTP");
-          }
-        },
-        error: (error) => {
-          console.error("Verify OTP error:", error);
-          return "An error occurred. Please try again.";
-        },
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
-
-  const handleChangePassword = async (e) => {
+  const handleResetPassword = async (e) => {
     e.preventDefault();
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match", {
@@ -80,25 +70,44 @@ const ForgotPassword = () => {
       return;
     }
     setIsLoading(true);
-    toast
-      .promise(ChangePassword(email, newPassword), {
-        loading: "Changing password...",
-        success: (response) => {
-          if (response.data.success) {
-            navigate("/login");
-            return "Password changed successfully";
-          } else {
-            throw new Error(response.data.message || "An error occurred");
+    try {
+      const response = await ChangePassword(email, newPassword, otp);
+      if (response.data.success) {
+        toast.success("Password changed successfully", {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+          },
+          position: "bottom-right",
+        });
+        navigate("/login");
+      } else {
+        toast.error(
+          response.data.message || "Invalid OTP or password change failed",
+          {
+            style: {
+              backgroundColor: "#064C3A",
+              color: "#FFFFFF",
+              fontFamily: "signika",
+            },
+            position: "bottom-right",
           }
+        );
+      }
+    } catch (error) {
+      console.error("Change password error:", error);
+      toast.error("An error occurred. Please try again.", {
+        style: {
+          backgroundColor: "#064C3A",
+          color: "#FFFFFF",
+          fontFamily: "signika",
         },
-        error: (error) => {
-          console.error("Change password error:", error);
-          return "An error occurred. Please try again.";
-        },
-      })
-      .finally(() => {
-        setIsLoading(false);
+        position: "bottom-right",
       });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const renderStep = () => {
@@ -145,7 +154,7 @@ const ForgotPassword = () => {
         );
       case 2:
         return (
-          <form className="w-full" onSubmit={handleVerifyOtp}>
+          <form className="w-full" onSubmit={handleResetPassword}>
             <div className="mb-6 space-y-3">
               <div className="space-y-2">
                 <label
@@ -165,19 +174,6 @@ const ForgotPassword = () => {
                   onChange={(e) => setOtp(e.target.value)}
                 />
               </div>
-            </div>
-            <button
-              type="submit"
-              className="ring-offset-background font-monserrat md:text-lg focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-green-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
-            >
-              Verify OTP
-            </button>
-          </form>
-        );
-      case 3:
-        return (
-          <form className="w-full" onSubmit={handleChangePassword}>
-            <div className="mb-6 space-y-3">
               <div className="space-y-2">
                 <label
                   htmlFor="newPassword"
@@ -235,7 +231,7 @@ const ForgotPassword = () => {
               type="submit"
               className="ring-offset-background font-monserrat md:text-lg focus-visible:ring-ring flex h-10 w-full items-center justify-center whitespace-nowrap rounded-md bg-green-900 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-black/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
             >
-              Change Password
+              Reset Password
             </button>
           </form>
         );
@@ -254,18 +250,12 @@ const ForgotPassword = () => {
       <div className="w-full sm:w-2/3 md:w-1/2 lg:w-1/3 bg-white p-8 rounded-xl shadow-md">
         <div className="mb-8 space-y-3 w-full">
           <h2 className="text-2xl font-monserrat sm:text-3xl md:text-4xl font-semibold text-center text-gray-900">
-            {step === 1
-              ? "Forgot Password"
-              : step === 2
-              ? "Verify OTP"
-              : "Reset Password"}
+            {step === 1 ? "Forgot Password" : "Reset Password"}
           </h2>
           <p className="text-center text-sm text-gray-600 font-signika">
             {step === 1
               ? "Enter your email address and we'll send you an OTP to reset your password."
-              : step === 2
-              ? "Enter the OTP sent to your email."
-              : "Enter your new password."}
+              : "Enter the OTP and your new password."}
           </p>
         </div>
         {renderStep()}

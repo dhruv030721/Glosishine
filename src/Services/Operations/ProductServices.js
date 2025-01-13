@@ -56,7 +56,11 @@ export async function addProduct({ productData }) {
 }
 
 export async function getProduct() {
-  const response = await apiConnector("GET", productendpoints.GETPRODUCT_API);
+  const response = await apiConnector(
+    "GET",
+    "public",
+    productendpoints.GETPRODUCT_API
+  );
   return response;
 }
 
@@ -146,6 +150,7 @@ export async function addReview(data, id, rating) {
 export async function getReview(id) {
   const response = await apiConnector(
     "GET",
+    "public",
     reviewendpoints.GETREVIEW_API + id
   );
   return response;
@@ -155,6 +160,7 @@ export async function getNewDropProduct() {
   try {
     const response = await apiConnector(
       "GET",
+      "public",
       productendpoints.GETNEWDROPPRODUCT_API
     );
     return response;
@@ -407,6 +413,7 @@ export const addInventory = async (inventoryData) => {
 export const getDiscount = async (couponCode) => {
   const response = await apiConnector(
     "GET",
+    "public",
     discountendpoints.GETDISCOUNT_API + `?coupon_code=${couponCode}`
   );
   return response.data;
@@ -415,6 +422,7 @@ export const getDiscount = async (couponCode) => {
 export const getAllDiscounts = async () => {
   const response = await apiConnector(
     "GET",
+    "public",
     discountendpoints.GETALLDISCOUNTS_API
   );
   return response.data;

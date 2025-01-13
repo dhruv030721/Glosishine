@@ -581,13 +581,7 @@ const Orders = () => {
             </tbody>
           </table>
         ) : (
-          <div className="flex justify-center items-center bg-white rounded-lg p-4">
-            <Typography variant="h6" className="text-bg-green">
-              {searchQuery
-                ? "No orders found matching your search"
-                : "No orders found"}
-            </Typography>
-          </div>
+          ""
         )}
       </div>
     </div>

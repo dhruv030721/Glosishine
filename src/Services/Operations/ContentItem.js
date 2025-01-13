@@ -24,7 +24,11 @@ export async function setContentItem(array, type, section_id) {
 }
 
 export async function getContentItem() {
-  const response = await apiConnector("GET", adminendpoints.GET_CONTENT_ITEM);
+  const response = await apiConnector(
+    "GET",
+    "public",
+    adminendpoints.GET_CONTENT_ITEM
+  );
 
   return response.data.data;
 }

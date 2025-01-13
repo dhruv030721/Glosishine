@@ -102,12 +102,18 @@ const Inventory = () => {
           return acc;
         }, []);
         setInventoryData(groupedData);
+        setLoading(false); // Set loading to false after successful data fetch
       } else {
         console.error("Failed to fetch inventory data:", response.data.message);
+        setLoading(false); // Set loading to false on error
+        if (response.data.message === "No inventory data found!") {
+          setInventoryData([]); // Set empty array if no data
+        }
       }
-      setLoading(false);
     } catch (error) {
       console.error("Error fetching inventory data:", error);
+      setLoading(false); // Set loading to false on error
+      setInventoryData([]); // Set empty array on error
     }
   };
 
@@ -168,7 +174,6 @@ const Inventory = () => {
 
   const renderRow = (item, index) => {
     const productInfo = products.find((p) => p.product_id === item.product_id);
-
     return (
       <React.Fragment key={item.product_id}>
         <tr className="border-y border-gray-200">
@@ -296,40 +301,42 @@ const Inventory = () => {
         </GreenButton>
       </div>
 
-      <Grid container spacing={3} className="mb-4">
-        <Grid item xs={12} sm={6} md={3}>
-          <BorderedCard>
-            <CardContent className="flex items-center p-4">
-              <InventoryIcon
-                fontSize="48"
-                className="text-green-600 bg-green-100 rounded-full text-4xl mr-4 p-2"
-              />
-              <div>
-                <Typography
-                  variant="h6"
-                  className="font-bold text-gray-600 text-sm sm:text-base"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                  }}
-                >
-                  Products
-                </Typography>
-                <Typography
-                  variant="h4"
-                  className="text-green-600 px-2 rounded text-lg sm:text-xl"
-                  sx={{
-                    fontFamily: "montserrat",
-                    fontWeight: "bold",
-                  }}
-                >
-                  {inventoryData.length}
-                </Typography>
-              </div>
-            </CardContent>
-          </BorderedCard>
+      {inventoryData.length > 0 && (
+        <Grid container spacing={3} className="mb-4">
+          <Grid item xs={12} sm={6} md={3}>
+            <BorderedCard>
+              <CardContent className="flex items-center p-4">
+                <InventoryIcon
+                  fontSize="48"
+                  className="text-green-600 bg-green-100 rounded-full text-4xl mr-4 p-2"
+                />
+                <div>
+                  <Typography
+                    variant="h6"
+                    className="font-bold text-gray-600 text-sm sm:text-base"
+                    sx={{
+                      fontFamily: "montserrat",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    Products
+                  </Typography>
+                  <Typography
+                    variant="h4"
+                    className="text-green-600 px-2 rounded text-lg sm:text-xl"
+                    sx={{
+                      fontFamily: "montserrat",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    {inventoryData.length}
+                  </Typography>
+                </div>
+              </CardContent>
+            </BorderedCard>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
 
       <BorderedCard>
         <BorderedTableContainer>
@@ -337,7 +344,15 @@ const Inventory = () => {
             <table className="min-w-full bg-white">
               {renderHeader()}
               <tbody>
-                {inventoryData.map((item, index) => renderRow(item, index))}
+                {inventoryData.length > 0 ? (
+                  inventoryData.map((item, index) => renderRow(item, index))
+                ) : (
+                  <tr>
+                    <td colSpan={4} className="text-center text-bg-green py-4">
+                      No inventory data found!
+                    </td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>

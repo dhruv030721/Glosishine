@@ -54,7 +54,6 @@ const Cart = () => {
   const dispatch = useDispatch();
   const Appcontext = useContext(AppContext);
   const userContext = useContext(AppContext);
-  const email = userContext?.user?.[0]?.email;
 
   // Debugging: Log filterdata to check its value
   const filterdata = Appcontext.getdata.filter(
@@ -99,6 +98,7 @@ const Cart = () => {
   const [deliveryDates, setDeliveryDates] = useState({ start: "", end: "" });
 
   useEffect(() => {
+    const email = userContext?.user?.[0]?.email;
     const calculateDeliveryDates = () => {
       const today = new Date();
       const startDate = new Date(today.setDate(today.getDate() + 3));
@@ -338,33 +338,33 @@ const Cart = () => {
       }
     };
 
-    const checkIfInWatchlist = async () => {
-      try {
-        const favProducts = await getFavProduct(email);
+    const checkWatchlistStatus = async () => {
+      // Only proceed if user email is available
+      if (userContext?.user?.[0]?.email && filterdata?.[0]?.product_id) {
+        try {
+          const favProducts = await getFavProduct(userContext.user[0].email);
 
-        // Check if favProducts.data is an array and then use find method
-        if (Array.isArray(favProducts.data.data)) {
-          const favProduct = favProducts.data.data.find(
-            (favItem) => favItem.product_id === filterdata[0].product_id
-          );
+          if (Array.isArray(favProducts.data.data)) {
+            const favProduct = favProducts.data.data.find(
+              (favItem) => favItem.product_id === filterdata[0].product_id
+            );
 
-          if (favProduct) {
-            setIsInWatchlist(true);
-            setFavProductId(favProduct.id); // Set the 'id' of the favorite product
-          } else {
-            setIsInWatchlist(false);
+            if (favProduct) {
+              setIsInWatchlist(true);
+              setFavProductId(favProduct.id);
+            } else {
+              setIsInWatchlist(false);
+            }
           }
-        } else {
-          console.error("Expected an array for favorite products data.");
+        } catch (error) {
+          console.error("Error fetching favorite products:", error);
         }
-      } catch (error) {
-        console.error("Error fetching favorite products:", error);
       }
     };
 
     fetchData();
-    checkIfInWatchlist();
-  }, []);
+    checkWatchlistStatus();
+  }, [userContext]); // Dependencies include user context and filterdata
 
   const handleClick = async () => {
     if (!userContext?.user?.[0]?.email) {
@@ -688,6 +688,7 @@ const Cart = () => {
                       className={`cursor-pointer group relative flex flex-row gap-x-3 text-black gap-1.5 p-2 items-center justify-center w-full h-12 border ${
                         isInWatchlist ? "border-red-600" : "border-bg-green"
                       } bg-opacity-80 rounded-lg hover:bg-opacity-70 transition font-semibold shadow-md`}
+                      disabled={!userContext?.user?.[0]?.email}
                     >
                       {isInWatchlist ? (
                         <>

@@ -38,7 +38,7 @@ export default class Global {
 }
 
 export async function LoginUser(data) {
-  const response = await apiConnector("POST", LOGIN_API, data);
+  const response = await apiConnector("POST", "public", LOGIN_API, data);
   // Global.token = response.data.token;
   // Global.user = jwtDecode(Global.token);
   // console.log("Global.user", Global.user);
@@ -66,7 +66,7 @@ export async function getUser(email) {
 }
 
 export async function AdminLogin(data) {
-  const response = await apiConnector("POST", ADMIN_LOGIN, data);
+  const response = await apiConnector("POST", "public", ADMIN_LOGIN, data);
   if (response.data.token) {
     setItem("adminToken", response.data.token);
     Global.token = response.data.token;
@@ -76,7 +76,7 @@ export async function AdminLogin(data) {
 }
 
 export async function RegisterUser(data) {
-  const response = await apiConnector("POST", REGISTER_API, data);
+  const response = await apiConnector("POST", "public", REGISTER_API, data);
   return response;
 }
 
@@ -86,25 +86,33 @@ export async function ContinueWithGoogle() {
 }
 
 export async function ForgotPassword(email) {
-  const response = await apiConnector("GET", FORGOTPASSWORD_API + email);
+  const response = await apiConnector(
+    "GET",
+    "public",
+    FORGOTPASSWORD_API + email
+  );
   return response;
 }
 
-export async function ChangePassword(email, password) {
-  const response = await apiConnector("POST", CHANGEPASSWORD_API, {
+export async function ChangePassword(email, password, otp) {
+  const response = await apiConnector("POST", "public", CHANGEPASSWORD_API, {
     email,
     password,
+    otp,
   });
   return response;
 }
 
 export async function SendOTP(user) {
-  const response = await apiConnector("GET", SEND_OTP + user.email);
+  const response = await apiConnector("GET", "public", SEND_OTP + user.email);
   return response;
 }
 
 export async function verifyOTP(otp, email) {
-  const response = await apiConnector("POST", VERIFY_OTP, { otp, email });
+  const response = await apiConnector("POST", "public", VERIFY_OTP, {
+    otp,
+    email,
+  });
   return response;
 }
 
