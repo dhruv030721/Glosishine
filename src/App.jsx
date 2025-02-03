@@ -26,7 +26,7 @@ import ShippingPolicy from "./Page/ShippingPolicy/ShippingPolicy";
 import ReturnExchange from "./Page/ReturnExchange/ReturnExchange";
 import Account from "./Page/Account/Account";
 import Cart from "./Page/Cart/Cart";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState, memo } from "react";
 import ForgotPassword from "./Components/Login/ForgotPassword";
 import Admin from "./Page/Admin/Admin";
 import Mainlayout from "./Page/Layout/Mainlayout";
@@ -68,7 +68,7 @@ function App() {
     (async () => {
       try {
         const data = await getProduct();
-        console.log(data.data.data);
+        // console.log(data.data.data);
         setGetdata(data.data.data);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -78,33 +78,32 @@ function App() {
   // console.log("getdata->", getdata);
 
   useEffect(() => {
-    const token = cookies.get("Access-Token");
-    const admintoken = cookies.get("Admin-Access-Token");
-    setAdminToken(admintoken);
-    setToken(token);
-    if (token) {
-      const user = jwtDecode(token);
-      setUser(user);
-      // console.log("user->", user)
-    } else {
-      setUser(null);
-    }
+    const checkAuth = () => {
+      const token = cookies.get("Access-Token");
+      const admintoken = cookies.get("Admin-Access-Token");
 
-    if (admintoken) {
-      setIsAdminAuthenticated(true);
-    } else {
-      setIsAdminAuthenticated(false);
-      setAdminToken(null);
-    }
+      setAdminToken(admintoken || null);
+      setToken(token || null);
 
-    if (!admintoken) {
-      setAdminToken(null);
-      // navigate('/admin');
-    }
+      if (token) {
+        try {
+          const user = jwtDecode(token);
+          setUser(user);
+        } catch (error) {
+          setUser(null);
+        }
+      } else {
+        setUser(null);
+      }
+
+      setIsAdminAuthenticated(!!admintoken);
+    };
+
+    checkAuth();
   }, []);
 
-  // Updated ProtectedAdminRoute component
-  const ProtectedAdminRoute = ({ children }) => {
+  // Optimize ProtectedAdminRoute
+  const ProtectedAdminRoute = memo(({ children }) => {
     const { isAdminAuthenticated } = useContext(AppContext);
     const location = useLocation();
     const navigate = useNavigate();
@@ -115,20 +114,22 @@ function App() {
         location.pathname.startsWith("/admin") &&
         location.pathname !== "/admin"
       ) {
-        navigate("/admin");
+        navigate("/admin", { replace: true });
       }
-    }, []);
+    }, [isAdminAuthenticated, location.pathname, navigate]);
 
     if (
       !isAdminAuthenticated &&
       location.pathname.startsWith("/admin") &&
       location.pathname !== "/admin"
     ) {
-      return null; // Render nothing while redirecting
+      return null;
     }
 
     return children;
-  };
+  });
+
+  ProtectedAdminRoute.displayName = "ProtectedAdminRoute";
 
   return (
     <>

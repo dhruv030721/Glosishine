@@ -220,9 +220,9 @@ export const addFavProduct = async (email, product_id) => {
     );
 
     // Check for error responses that might come in different formats
-    console.log(response, "fetching");
+    // console.log(response, "fetching");
     if (response?.data?.success) {
-      console.log(response.data, "success");
+      // console.log(response.data, "success");
       return response.data;
     } else if (
       response?.data?.error ||
@@ -339,13 +339,13 @@ export const clearAllCart = async (email) => {
   }
 };
 
-export const increaseQuantity = async (email, productId) => {
+export const increaseQuantity = async (email, productId, size) => {
   try {
     const response = await apiConnector(
       "PATCH",
       "user",
       cartendpoints.INCREASEQUANTITY_API,
-      { email, product_id: productId },
+      { email, product_id: productId, size: size },
       {
         headers: {
           "Content-Type": "application/json",
@@ -359,13 +359,13 @@ export const increaseQuantity = async (email, productId) => {
   }
 };
 
-export const decreaseQuantity = async (email, productId) => {
+export const decreaseQuantity = async (email, productId, size) => {
   try {
     const response = await apiConnector(
       "PATCH",
       "user",
       cartendpoints.DECREASEQUANTITY_API,
-      { email, product_id: productId },
+      { email, product_id: productId, size: size },
       {
         headers: {
           "Content-Type": "application/json",

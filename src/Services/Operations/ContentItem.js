@@ -8,7 +8,7 @@ export async function setContentItem(array, type, section_id) {
   formData.append("type", type);
 
   array.forEach((item) => {
-    console.log(item);
+    // console.log(item);
     if (item.file !== null) {
       formData.append(`content_file[${item.id}]`, item.file);
     }

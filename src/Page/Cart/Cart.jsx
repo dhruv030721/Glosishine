@@ -59,7 +59,7 @@ const Cart = () => {
   const filterdata = Appcontext.getdata.filter(
     (item) => item.product_id === id
   );
-  console.log("Filter Data:", filterdata);
+  // console.log("Filter Data:", filterdata);
 
   // Convert size string to an array
   const availableSizes = filterdata[0]?.size
@@ -67,7 +67,7 @@ const Cart = () => {
     : [];
 
   // Debugging: Log availableSizes to check its value
-  console.log("Available Sizes:", availableSizes);
+  // console.log("Available Sizes:", availableSizes);
 
   const [value, setValue] = useState(1);
   const [isFormVisible, setIsFormVisible] = useState(false);
@@ -410,7 +410,7 @@ const Cart = () => {
         );
 
         // The response data is nested inside response.data
-        console.log(response, "response received");
+        // console.log(response, "response received");
         if (response?.success) {
           toast.success(response?.message || "Product added to watchlist!", {
             style: {

@@ -111,25 +111,25 @@ const Home = () => {
       try {
         // Fetch content items
         const data = await getContentItem();
-        console.log(data, "data");
+        // console.log(data, "data");
 
         const slider1 = data.filter((item) => item.type === "ImageSlider-1");
-        console.log(slider1, "slider1");
+        // console.log(slider1, "slider1");
         const slider2 = data.filter((item) => item.type === "ImageSlider-2");
-        console.log(slider2, "slider2");
+        // console.log(slider2, "slider2");
         const getfeed = data.filter((item) => item.type === "Feed");
-        console.log(getfeed, "getfeed");
+        // console.log(getfeed, "getfeed");
         const advertisement = data.filter(
           (item) => item.type === "Advertisement"
         );
-        console.log(advertisement, "advertisement");
+        // console.log(advertisement, "advertisement");
         const video1 = data.filter((item) => item.type === "Video-1");
         const video2 = data.filter((item) => item.type === "Video-2");
         setImageSlider1(slider1);
-        console.log(imageSlider1, "slider-1");
+        // console.log(imageSlider1, "slider-1");
 
         setImageSlider2(slider2);
-        console.log(imageSlider2, "slider-2");
+        // console.log(imageSlider2, "slider-2");
 
         setFeed(getfeed);
         setAdvertisement(advertisement);
@@ -145,7 +145,7 @@ const Home = () => {
             }
           } catch (error) {
             // Handle 404 or other errors for getFavProduct silently
-            console.log("No favorite products found:", error);
+            // console.log("No favorite products found:", error);
             setWatchlistItems([]);
           }
         }

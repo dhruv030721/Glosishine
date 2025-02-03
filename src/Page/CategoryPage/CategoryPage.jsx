@@ -64,7 +64,7 @@ const CategoryPage = () => {
             setWatchlistItems(favProducts.data.data);
           }
         } catch (error) {
-          console.log("No favorite products found:", error);
+          // console.log("No favorite products found:", error);
           setWatchlistItems([]);
         }
       }

@@ -72,13 +72,13 @@ export const removeItemAsync = createAsyncThunk(
 
 export const updateQuantityAsync = createAsyncThunk(
   "cart/updateQuantity",
-  async ({ email, id, delta }, { getState }) => {
+  async ({ email, id, delta, size }, { getState }) => {
     if (delta > 0) {
-      await increaseQuantity(email, id);
+      await increaseQuantity(email, id, size);
     } else {
-      await decreaseQuantity(email, id);
+      await decreaseQuantity(email, id, size);
     }
-    return { id, delta };
+    return { id, delta, size };
   }
 );
 
@@ -114,8 +114,10 @@ const cartSlice = createSlice({
         );
       })
       .addCase(updateQuantityAsync.fulfilled, (state, action) => {
-        const { id, delta } = action.payload;
-        const item = state.items.find((item) => item.product_id === id);
+        const { id, delta, size } = action.payload;
+        const item = state.items.find(
+          (item) => item.product_id === id && item.size === size
+        );
         if (item) {
           item.quantity += delta;
           // Normalize the quantity if it's within range

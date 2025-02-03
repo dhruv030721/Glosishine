@@ -89,7 +89,11 @@ const CartTable = ({
                           <button
                             className="text-gray-500 border border-gray-300 rounded-l px-2 py-1"
                             onClick={() =>
-                              handleQuantityChange(item?.product_id, -1)
+                              handleQuantityChange(
+                                item?.product_id,
+                                -1,
+                                item?.size
+                              )
                             }
                             disabled={
                               item?.quantity <= 1 ||
@@ -104,7 +108,11 @@ const CartTable = ({
                           <button
                             className="text-gray-500 border border-gray-300 rounded-r px-2 py-1"
                             onClick={() =>
-                              handleQuantityChange(item?.product_id, 1)
+                              handleQuantityChange(
+                                item?.product_id,
+                                1,
+                                item?.size
+                              )
                             }
                             disabled={
                               item?.quantity >= MAX_QUANTITY ||
@@ -134,7 +142,7 @@ const CartTable = ({
                       <button
                         className="text-gray-500 border border-gray-300 rounded-l px-2 py-1"
                         onClick={() =>
-                          handleQuantityChange(item?.product_id, -1)
+                          handleQuantityChange(item?.product_id, -1, item?.size)
                         }
                         disabled={
                           item?.quantity <= 1 || loadingItems[item?.product_id]
@@ -148,7 +156,7 @@ const CartTable = ({
                       <button
                         className="text-gray-500 border border-gray-300 rounded-r px-2 py-1"
                         onClick={() =>
-                          handleQuantityChange(item?.product_id, 1)
+                          handleQuantityChange(item?.product_id, 1, item?.size)
                         }
                         disabled={
                           item?.quantity >= MAX_QUANTITY ||

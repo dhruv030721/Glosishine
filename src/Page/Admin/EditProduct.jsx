@@ -201,7 +201,7 @@ const EditProduct = ({ id }) => {
         {
           loading: "Updating Product...",
           success: (response) => {
-            console.log(response);
+            // console.log(response);
             handleClose();
             // Update the context with the new product data
             context.setGetdata((prevData) =>

@@ -56,7 +56,7 @@ const Register = () => {
             return `${response.data.message}`;
           },
           error: (response) => {
-            console.log(response.data.message);
+            // console.log(response.data.message);
             return `${response.message}`;
           },
         },
@@ -86,7 +86,7 @@ const Register = () => {
         {
           loading: "Processing....",
           success: (response) => {
-            console.log(response);
+            // console.log(response);
             return `${response.data.message}`;
           },
           error: (error) => {
@@ -113,7 +113,7 @@ const Register = () => {
         {
           loading: "Registration Process....",
           success: (response) => {
-            console.log(response);
+            // console.log(response);
             navigate("/login");
             return `${response.data.message}`;
           },

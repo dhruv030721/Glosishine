@@ -124,7 +124,7 @@ export const CartPage = () => {
     setAddressModalOpen(true);
   };
 
-  const handleQuantityChange = (itemId, delta) => {
+  const handleQuantityChange = (itemId, delta, size) => {
     if (!user?.[0]?.email) {
       toast.error("Please log in to update your cart", {
         style: {
@@ -137,7 +137,9 @@ export const CartPage = () => {
       return;
     }
 
-    const item = cartItems.find((item) => item?.product_id === itemId);
+    const item = cartItems.find(
+      (item) => item?.product_id === itemId && item?.size === size
+    );
     if (!item) return;
 
     const newQuantity = item.quantity + delta;
@@ -170,7 +172,12 @@ export const CartPage = () => {
     toast
       .promise(
         dispatch(
-          updateQuantityAsync({ email: user?.[0]?.email, id: itemId, delta })
+          updateQuantityAsync({
+            email: user?.[0]?.email,
+            id: itemId,
+            delta,
+            size: size,
+          })
         ).unwrap(),
         {
           loading: "Updating quantity...",
@@ -186,20 +193,10 @@ export const CartPage = () => {
           position: "bottom-right",
         }
       )
-      .finally(
-        () => {
-          setLoadingItems((prev) => ({ ...prev, [itemId]: false }));
-          fetchCartItems();
-        },
-        {
-          style: {
-            backgroundColor: "#064C3A",
-            color: "#FFFFFF",
-            fontFamily: "signika",
-          },
-          position: "bottom-right",
-        }
-      );
+      .finally(() => {
+        setLoadingItems((prev) => ({ ...prev, [itemId]: false }));
+        fetchCartItems();
+      });
   };
 
   const handleDeleteItem = (itemId, size) => {
@@ -534,7 +531,7 @@ export const CartPage = () => {
   };
 
   const handleAddressUpdate = (type, newAddress) => {
-    console.log("Updating address of type:", type); // Add this log
+    // console.log("Updating address of type:", type); // Add this log
     if (type === "billing") {
       setBillingAddresses((prev) => {
         const index = prev.findIndex((addr) => addr?.id === newAddress?.id);

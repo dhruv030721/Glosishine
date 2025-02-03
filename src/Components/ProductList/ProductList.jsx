@@ -203,7 +203,7 @@ const ProductList = ({
           loading: "Adding product to bag...",
           success: "Product added to bag!",
           error: (err) => {
-            console.log(err);
+            // console.log(err);
             return err.message;
           },
         },

@@ -216,7 +216,7 @@ const SetItems = () => {
       setLoading(true); // Set loading to true when starting to fetch data
       try {
         const data = await getContentItem();
-        console.log("data", data);
+        // console.log("data", data);
         const imageslider1 = data.filter(
           (item) => item.type === "ImageSlider-1"
         );
@@ -230,7 +230,7 @@ const SetItems = () => {
         const feed = data.filter((item) => item.type === "Feed");
         setFeedImg(feed);
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         toast.error("Failed to load content items", {
           position: "bottom-right",
           style: {

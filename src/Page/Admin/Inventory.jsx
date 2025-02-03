@@ -26,6 +26,8 @@ import InputLabel from "@mui/material/InputLabel";
 import FormControl from "@mui/material/FormControl";
 import InventoryIcon from "@mui/icons-material/Inventory";
 import { ring2 } from "ldrs";
+import { addInventory } from "../../Services/Operations/ProductServices";
+import { toast } from "react-hot-toast";
 
 // Styled components for custom button and dialog
 const GreenButton = styled(Button)(({ theme }) => ({
@@ -78,7 +80,7 @@ const Inventory = () => {
   ring2.register();
 
   useEffect(() => {
-    console.log("Products loaded:", products);
+    // console.log("Products loaded:", products);
   }, [products]);
 
   const fetchInventoryData = async () => {
@@ -123,25 +125,47 @@ const Inventory = () => {
 
   const handleAddInventory = async () => {
     try {
-      const response = await axios.post(
-        inventoryendpoints.ADDINVENTORY_API,
-        newInventory
+      const response = await toast.promise(
+        addInventory(newInventory),
+        {
+          loading: "Adding inventory...",
+          success: (response) => {
+            // console.log(response, "response");
+            if (response.success) {
+              setOpenAddDialog(false);
+              setNewInventory({
+                date: "",
+                product_id: "",
+                S: "",
+                M: "",
+                L: "",
+                XL: "",
+                XXL: "",
+              });
+              fetchInventoryData();
+              return "Inventory added successfully";
+            } else {
+              throw new Error(
+                response.data?.message || "Failed to add inventory"
+              );
+            }
+          },
+          error: (error) => {
+            return error.response?.data?.message || "Failed to add inventory";
+          },
+        },
+        {
+          style: {
+            backgroundColor: "#064C3A",
+            color: "#FFFFFF",
+            fontFamily: "signika",
+            fontSize: "14px",
+            fontWeight: "400",
+            lineHeight: "1.5",
+          },
+          position: "bottom-right",
+        }
       );
-      if (response.data.success) {
-        fetchInventoryData();
-        setOpenAddDialog(false);
-        setNewInventory({
-          date: "",
-          product_id: "",
-          S: "",
-          M: "",
-          L: "",
-          XL: "",
-          XXL: "",
-        });
-      } else {
-        console.error("Failed to add inventory:", response.data.message);
-      }
     } catch (error) {
       console.error("Error adding inventory:", error);
     }
@@ -258,7 +282,7 @@ const Inventory = () => {
 
   const handleProductChange = (event) => {
     const selectedProductId = event.target.value || "";
-    console.log("Selected Product ID:", selectedProductId); // Debug log
+    // console.log("Selected Product ID:", selectedProductId); // Debug log
     setNewInventory({ ...newInventory, product_id: selectedProductId });
   };
 
@@ -377,7 +401,10 @@ const Inventory = () => {
                 type="date"
                 value={newInventory.date}
                 onChange={(e) =>
-                  setNewInventory({ ...newInventory, date: e.target.value })
+                  setNewInventory({
+                    ...newInventory,
+                    date: e.target.value,
+                  })
                 }
                 InputLabelProps={{ shrink: true }}
               />
@@ -424,7 +451,10 @@ const Inventory = () => {
                   value={newInventory[size]}
                   disabled={!newInventory.date || !newInventory.product_id}
                   onChange={(e) =>
-                    setNewInventory({ ...newInventory, [size]: e.target.value })
+                    setNewInventory({
+                      ...newInventory,
+                      [size]: e.target.value,
+                    })
                   }
                 />
               </Grid>

@@ -37,7 +37,7 @@ const Login = () => {
             return `${response.data.message}`;
           },
           error: (error) => {
-            console.log(error);
+            // console.log(error);
             // Check if it's a 401 error or if the error response contains specific status
             if (error?.response?.status === 401 || error.status === 401) {
               return "Invalid email or password";

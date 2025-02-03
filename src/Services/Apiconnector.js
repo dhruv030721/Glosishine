@@ -48,7 +48,7 @@ export const apiConnector = async (
       ...authHeaders,
     };
 
-    console.log("Final Headers:", finalHeaders);
+    // console.log("Final Headers:", finalHeaders);
 
     // Make the API call
     const response = await axiosInstance({
