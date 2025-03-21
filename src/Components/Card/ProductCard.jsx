@@ -30,7 +30,7 @@ const ProductCard = ({ product }) => {
         />
       </Link>
       <div className="px-4 py-4">
-        <div className="flex">
+        <div className="flex text-wrap">
           <h1 className="font-bold w-full flex justify-start font-signika text-md mb-2">
             {product.product_name}
           </h1>
